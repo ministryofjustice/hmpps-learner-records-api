@@ -8,3 +8,9 @@ example-api:
   client:
     id: "example-api-client"
     secret: "example-api-client-secret"
+logging:
+  level:
+    root: info
+    web: info
+  file:
+    name: application.log
