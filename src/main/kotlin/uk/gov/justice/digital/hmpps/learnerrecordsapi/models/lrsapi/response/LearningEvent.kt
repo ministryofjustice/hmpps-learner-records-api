@@ -72,4 +72,3 @@ data class LearningEvent(
   @get:XmlElement(name = "LanguageForAssessment", namespace = "http://api.lrs.qcf.gov.uk/model")
   var languageForAssessment: String? = null,
 )
-

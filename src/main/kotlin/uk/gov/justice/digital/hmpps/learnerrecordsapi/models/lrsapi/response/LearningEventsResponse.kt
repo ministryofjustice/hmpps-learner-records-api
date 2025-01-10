@@ -6,5 +6,5 @@ import javax.xml.bind.annotation.XmlRootElement
 @XmlRootElement(name = "GetLearnerLearningEventsResponse", namespace = "http://tempuri.org/")
 data class LearningEventsResponse(
   @get:XmlElement(name = "GetLearnerLearningEventsResult", namespace = "http://tempuri.org/")
-  var learningEventsResult: LearningEventsResult = LearningEventsResult()
+  var learningEventsResult: LearningEventsResult = LearningEventsResult(),
 )

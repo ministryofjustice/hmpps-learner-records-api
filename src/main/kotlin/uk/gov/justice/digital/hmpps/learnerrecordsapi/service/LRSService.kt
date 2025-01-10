@@ -17,15 +17,15 @@ import kotlin.reflect.full.declaredMemberProperties
 class LRSService(
   @Autowired
   private val httpClientConfiguration: HttpClientConfiguration,
-  private val lrsClient: uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface = httpClientConfiguration.retrofit()
-    .create(uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface::class.java),
+  private val lrsClient: LRSApiServiceInterface = httpClientConfiguration.retrofit()
+    .create(LRSApiServiceInterface::class.java),
   @Autowired
-  private val appConfig: AppConfig
+  private val appConfig: AppConfig,
 ) {
 
   private val log: LoggerUtil = LoggerUtil(javaClass)
 
-  suspend fun findLearner(findLearnerByDemographicsRequest: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest): FindLearnerByDemographicsResponse {
+  suspend fun findLearner(findLearnerByDemographicsRequest: FindLearnerByDemographicsRequest): FindLearnerByDemographicsResponse {
     log.debug("Transforming inbound request object to LRS request object")
     val requestBody = findLearnerByDemographicsRequest.extractFromRequest().transformToLRSRequest(appConfig.ukprn(), appConfig.password())
 
@@ -38,8 +38,8 @@ class LRSService(
     return convertLrsResponseToOurResponse(findLearnerByDemographicsRequest, lrsResponse)
   }
 
-  private fun computeMismatchedFields(request: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest, lrsResponse: FindLearnerResponse): MutableMap<String, MutableList<String>> {
-    val requestFieldNames = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest::class.declaredMemberProperties.associateBy { it.name }
+  private fun computeMismatchedFields(request: FindLearnerByDemographicsRequest, lrsResponse: FindLearnerResponse): MutableMap<String, MutableList<String>> {
+    val requestFieldNames = FindLearnerByDemographicsRequest::class.declaredMemberProperties.associateBy { it.name }
     val learnerFieldNames = Learner::class.declaredMemberProperties.associateBy { it.name }
     val sharedFieldNames = requestFieldNames.keys.intersect(learnerFieldNames.keys)
 
@@ -60,15 +60,18 @@ class LRSService(
     return mismatchedFields
   }
 
-  private fun convertLrsResponseToOurResponse(request: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest, response: FindLearnerResponse): FindLearnerByDemographicsResponse {
+  private fun convertLrsResponseToOurResponse(request: FindLearnerByDemographicsRequest, response: FindLearnerResponse): FindLearnerByDemographicsResponse {
     val responseType = ResponseType.fromLrsResponseCode(response.responseCode)
     val isPossibleMatch = responseType == ResponseType.POSSIBLE_MATCH
     return FindLearnerByDemographicsResponse(
       searchParameters = request,
       responseType = responseType,
-      mismatchedFields = if (isPossibleMatch) { computeMismatchedFields(request, response) } else { null },
-      matchedLearners = response.learners
+      mismatchedFields = if (isPossibleMatch) {
+        computeMismatchedFields(request, response)
+      } else {
+        null
+      },
+      matchedLearners = response.learners,
     )
   }
-
 }

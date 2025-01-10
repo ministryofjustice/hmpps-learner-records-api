@@ -11,16 +11,16 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULN
 
 @Service
 class PLRService(
-    @Autowired
+  @Autowired
   private val httpClientConfiguration: HttpClientConfiguration,
-    private val lrsClient: uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface = httpClientConfiguration.retrofit()
-    .create(uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface::class.java),
-    @Autowired
-  private val appConfig: AppConfig
+  private val lrsClient: LRSApiServiceInterface = httpClientConfiguration.retrofit()
+    .create(LRSApiServiceInterface::class.java),
+  @Autowired
+  private val appConfig: AppConfig,
 ) {
   private val log: LoggerUtil = LoggerUtil(javaClass)
 
-  suspend fun getPLR(getPLRByULNRequest: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest): LearningEventsResult {
+  suspend fun getPLR(getPLRByULNRequest: GetPLRByULNRequest): LearningEventsResult {
     log.debug("Transforming inbound request object to LRS request object")
     val requestBody = getPLRByULNRequest.extractFromRequest().transformToLRSRequest(appConfig.ukprn(), appConfig.password(), appConfig.vendorId())
     log.debug("Calling LRS API")

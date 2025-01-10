@@ -32,7 +32,7 @@ class GetPLRByULNRequest(
       familyName = familyName,
       uln = uln,
       dateOfBirth = dateOfBirth,
-      gender = gender
+      gender = gender,
     )
   }
 }

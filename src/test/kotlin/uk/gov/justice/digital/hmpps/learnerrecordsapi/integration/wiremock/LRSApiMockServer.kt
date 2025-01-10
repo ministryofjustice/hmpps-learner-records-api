@@ -33,7 +33,7 @@ class LRSApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("exact_match_ful")
+              readTemplateToString("exact_match_ful"),
             )
             .withStatus(200),
         ),
@@ -48,7 +48,7 @@ class LRSApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("possible_match_two_learners_ful")
+              readTemplateToString("possible_match_two_learners_ful"),
             )
             .withStatus(200),
         ),
@@ -63,7 +63,7 @@ class LRSApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("no_match_ful")
+              readTemplateToString("no_match_ful"),
             )
             .withStatus(200),
         ),
@@ -75,8 +75,8 @@ class LRSApiMockServer : WireMockServer(8082) {
       post(urlPathMatching(basePath))
         .willReturn(
           aResponse()
-            .withStatus(400)
-        )
+            .withStatus(400),
+        ),
     )
   }
 
@@ -85,11 +85,10 @@ class LRSApiMockServer : WireMockServer(8082) {
       post(urlPathMatching(basePath))
         .willReturn(
           aResponse()
-            .withStatus(500)
-        )
+            .withStatus(500),
+        ),
     )
   }
-
 }
 
 class LRSApiExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {

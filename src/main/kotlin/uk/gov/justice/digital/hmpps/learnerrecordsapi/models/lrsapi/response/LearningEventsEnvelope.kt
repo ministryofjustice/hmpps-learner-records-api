@@ -6,5 +6,5 @@ import javax.xml.bind.annotation.XmlRootElement
 @XmlRootElement(name = "Envelope", namespace = "http://schemas.xmlsoap.org/soap/envelope/")
 data class LearningEventsEnvelope(
   @get:XmlElement(name = "Body", namespace = "http://schemas.xmlsoap.org/soap/envelope/")
-  var body: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsBody = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsBody()
+  var body: LearningEventsBody = LearningEventsBody(),
 )

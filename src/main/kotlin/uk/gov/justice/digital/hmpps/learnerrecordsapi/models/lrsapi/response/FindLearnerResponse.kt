@@ -24,5 +24,5 @@ data class FindLearnerResponse(
   var lastKnownPostCode: String = "",
 
   @get:XmlElement(name = "Learner")
-  var learners: List<Learner>? = null
+  var learners: List<Learner>? = null,
 )

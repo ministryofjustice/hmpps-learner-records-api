@@ -18,7 +18,6 @@ private const val PROTOCOL = "TLS"
 class SSLContextProvider(private val pfxFilePath: String) {
 
   fun createSSLContext(): SSLContext {
-
     val logger = LoggerFactory.getLogger(SSLContextProvider::class.java)
 
     val passwordEnv =
@@ -47,9 +46,9 @@ class SSLContextProvider(private val pfxFilePath: String) {
   fun getTrustManager(): X509TrustManager {
     val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
     trustManagerFactory.init(
-        KeyStore.getInstance(PFX_FILE_TYPE).apply {
-            load(FileInputStream(pfxFilePath), System.getenv(PFX_FILE_PASSWORD).toCharArray())
-        },
+      KeyStore.getInstance(PFX_FILE_TYPE).apply {
+        load(FileInputStream(pfxFilePath), System.getenv(PFX_FILE_PASSWORD).toCharArray())
+      },
     )
     return trustManagerFactory.trustManagers[0] as X509TrustManager
   }

@@ -2,7 +2,10 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 
 import org.apache.commons.lang3.StringUtils
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatus.*
+import org.springframework.http.HttpStatus.BAD_REQUEST
+import org.springframework.http.HttpStatus.FORBIDDEN
+import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
+import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -44,7 +47,6 @@ class HmppsBoldLrsExceptionHandler {
     return ResponseEntity(errorResponse, BAD_REQUEST)
   }
 
-
   @ExceptionHandler(IllegalStateException::class)
   fun handleNoResourceFoundException(
     ex: IllegalStateException,
@@ -61,7 +63,6 @@ class HmppsBoldLrsExceptionHandler {
     return ResponseEntity(errorResponse, NOT_FOUND)
   }
 
-
   @ExceptionHandler(AccessDeniedException::class)
   fun handleAccessDeniedException(
     ex: AccessDeniedException,
@@ -77,7 +78,6 @@ class HmppsBoldLrsExceptionHandler {
     log.error("Forbidden (403) returned: {}", ex)
     return ResponseEntity(errorResponse, FORBIDDEN)
   }
-
 
   @ExceptionHandler(Exception::class)
   fun handleException(

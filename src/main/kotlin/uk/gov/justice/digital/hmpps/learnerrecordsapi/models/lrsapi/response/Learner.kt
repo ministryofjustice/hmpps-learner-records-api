@@ -96,6 +96,5 @@ data class Learner(
   var tierLevel: String? = null,
 
   @get:XmlElement(name = "LinkedULNs")
-  var linkedULNs: String? = null
+  var linkedULNs: String? = null,
 )
-
