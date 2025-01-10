@@ -8,3 +8,7 @@ example-api:
   client:
     id: "example-api-client"
     secret: "example-api-client-secret"
+
+lrs:
+  base-url: "https://cmp-ws.dev.lrs.education.gov.uk"
+  pfx-path: "WebServiceClientCert.pfx"

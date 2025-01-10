@@ -1,0 +1,29 @@
+{
+    "request": {
+        "method": "POST",
+        "headers": {
+            "Content-Type": {
+                "contains": "xml"
+            }
+        },
+        "bodyPatterns": [
+            {
+                "matchesXPath": "//Envelope/Body/FindLearnerByDemographics"
+            },
+            {
+                "matchesXPath": {
+                    "expression": "//Envelope/Body/FindLearnerByDemographics/FindType",
+                    "equalToXml": "<FindType>CHK</FindType>"
+                }
+            }
+        ],
+        "url": "/LearnerService.svc"
+    },
+    "response": {
+        "status": 200,
+        "bodyFileName": "FindLearnerByDemographics/exact_match_chk.xml",
+        "headers": {
+            "Content-Type": "text/xml"
+        }
+    }
+}

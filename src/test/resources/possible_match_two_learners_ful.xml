@@ -1,0 +1,76 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body>
+        <ns2:FindLearnerResponse xmlns:ns2="http://api.lrs.miap.gov.uk/findmsg">
+            <ResponseCode>WSRC0003</ResponseCode>
+            <FamilyName>{{soapXPath request.body '/FindLearnerByDemographics/FamilyName/text()'}}</FamilyName>
+            <GivenName>{{soapXPath request.body '/FindLearnerByDemographics/GivenName/text()'}}</GivenName>
+            <DateOfBirth>{{soapXPath request.body '/FindLearnerByDemographics/DateOfBirth/text()'}}</DateOfBirth>
+            <Gender>{{soapXPath request.body '/FindLearnerByDemographics/Gender/text()'}}</Gender>
+            <LastKnownPostCode>{{soapXPath request.body '/FindLearnerByDemographics/LastKnownPostCode/text()'}}</LastKnownPostCode>
+            <Learner>
+                <CreatedDate>2024-01-01</CreatedDate>
+                <LastUpdatedDate>2024-01-01</LastUpdatedDate>
+                <ULN>1234567890</ULN>
+                <Title>Ms</Title>
+                <GivenName>GN</GivenName>
+                <MiddleOtherName>MON</MiddleOtherName>
+                <FamilyName>FN</FamilyName>
+                <PreferredGivenName>PGN</PreferredGivenName>
+                <PreviousFamilyName>PFN</PreviousFamilyName>
+                <FamilyNameAtAge16>FNAA16</FamilyNameAtAge16>
+                <SchoolAtAge16>SAA16</SchoolAtAge16>
+                <LastKnownAddressLine1>LKAL1</LastKnownAddressLine1>
+                <LastKnownAddressLine2>LKAL2</LastKnownAddressLine2>
+                <LastKnownAddressTown>LKAT</LastKnownAddressTown>
+                <LastKnownAddressCountyOrCity>LKACOC</LastKnownAddressCountyOrCity>
+                <LastKnownPostCode>CV49EA</LastKnownPostCode>
+                <Nationality>N</Nationality>
+                <DateOfAddressCapture>2024-01-01</DateOfAddressCapture>
+                <DateOfBirth>2024-01-01</DateOfBirth>
+                <PlaceOfBirth>POB</PlaceOfBirth>
+                <Gender>2</Gender>
+                <EmailAddress>email@example.com</EmailAddress>
+                <ScottishCandidateNumber>123456789</ScottishCandidateNumber>
+                <VerificationType>1</VerificationType>
+                <TierLevel>0</TierLevel>
+                <AbilityToShare>1</AbilityToShare>
+                <LearnerStatus>1</LearnerStatus>
+                <LinkedULNs xmlns="http://api.lrs.miap.gov.uk/learner"/>
+                <Notes/>
+                <VersionNumber>1</VersionNumber>
+            </Learner>
+            <Learner>
+                <CreatedDate>2024-01-01</CreatedDate>
+                <LastUpdatedDate>2024-01-01</LastUpdatedDate>
+                <ULN>1234567890</ULN>
+                <Title>Ms</Title>
+                <GivenName>GN</GivenName>
+                <MiddleOtherName>MON</MiddleOtherName>
+                <FamilyName>FN</FamilyName>
+                <PreferredGivenName>PGN</PreferredGivenName>
+                <PreviousFamilyName>PFN</PreviousFamilyName>
+                <FamilyNameAtAge16>FNAA16</FamilyNameAtAge16>
+                <SchoolAtAge16>SAA16</SchoolAtAge16>
+                <LastKnownAddressLine1>LKAL1</LastKnownAddressLine1>
+                <LastKnownAddressLine2>LKAL2</LastKnownAddressLine2>
+                <LastKnownAddressTown>LKAT</LastKnownAddressTown>
+                <LastKnownAddressCountyOrCity>LKACOC</LastKnownAddressCountyOrCity>
+                <LastKnownPostCode>CV49EA</LastKnownPostCode>
+                <Nationality>N</Nationality>
+                <DateOfAddressCapture>2024-01-01</DateOfAddressCapture>
+                <DateOfBirth>2024-01-01</DateOfBirth>
+                <PlaceOfBirth>POB</PlaceOfBirth>
+                <Gender>2</Gender>
+                <EmailAddress>email@example.com</EmailAddress>
+                <ScottishCandidateNumber>123456789</ScottishCandidateNumber>
+                <VerificationType>1</VerificationType>
+                <TierLevel>0</TierLevel>
+                <AbilityToShare>1</AbilityToShare>
+                <LearnerStatus>1</LearnerStatus>
+                <LinkedULNs xmlns="http://api.lrs.miap.gov.uk/learner"/>
+                <Notes/>
+                <VersionNumber>1</VersionNumber>
+            </Learner>
+        </ns2:FindLearnerResponse>
+    </soapenv:Body>
+</soapenv:Envelope>

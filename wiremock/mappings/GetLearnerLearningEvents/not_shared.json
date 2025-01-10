@@ -1,0 +1,28 @@
+{
+    "request": {
+        "method": "POST",
+        "headers": {
+            "Content-Type": {
+                "contains": "xml"
+            }
+        },
+        "bodyPatterns": [
+            {
+                "matchesXPath": "//Envelope/Body/GetLearnerLearningEvents"
+            },            {
+                "matchesXPath": {
+                    "expression": "//Envelope/Body/GetLearnerLearningEvents/GivenName",
+                    "equalToXml": "<GivenName>Not_Shared</GivenName>"
+                }
+            }
+        ],
+        "url": "/LearnerService.svc"
+    },
+    "response": {
+        "status": 200,
+        "bodyFileName": "GetLearnerLearningEvents/not_shared.xml",
+        "headers": {
+            "Content-Type": "text/xml"
+        }
+    }
+}

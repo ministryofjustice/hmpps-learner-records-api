@@ -1,0 +1,18 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body>
+        <FindLearnerByDemographicsResponse>
+            <FindLearnerByDemographicsResult>
+                <ResponseCode>WSRC0004</ResponseCode>
+                <GivenName>{{soapXPath request.body '/FindLearnerByDemographics/GivenName/text()'}}</GivenName>
+                <FamilyName>{{soapXPath request.body '/FindLearnerByDemographics/FamilyName/text()'}}</FamilyName>
+                <PreviousFamilyName>Learner</PreviousFamilyName>
+                <DateOfBirth>{{soapXPath request.body '/FindLearnerByDemographics/DateOfBirth/text()'}}</DateOfBirth>
+                <Gender>{{soapXPath request.body '/FindLearnerByDemographics/Gender/text()'}}</Gender>
+                <LastKnownPostcode>AA1 1AA</LastKnownPostcode>
+                <SchoolAtAge16>School Name, Fake Street, AA22 2AA</SchoolAtAge16>
+                <PlaceOfBirth>Town Name</PlaceOfBirth>
+                <EmailAddress>test.learner@website.com</EmailAddress>
+            </FindLearnerByDemographicsResult>
+        </FindLearnerByDemographicsResponse>
+    </soapenv:Body>
+</soapenv:Envelope>

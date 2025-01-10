@@ -1,0 +1,29 @@
+{
+    "request": {
+        "method": "POST",
+        "headers": {
+            "Content-Type": {
+                "contains": "xml"
+            }
+        },
+        "bodyPatterns": [
+            {
+                "matchesXPath": "//Envelope/Body/GetLearnerLearningEvents"
+            },
+            {
+                "matchesXPath": {
+                    "expression": "//Envelope/Body/GetLearnerLearningEvents/getType",
+                    "equalToXml": "<getType>BRIEF</getType>"
+                }
+            }
+        ],
+        "url": "/LearnerService.svc"
+    },
+    "response": {
+        "status": 200,
+        "bodyFileName": "GetLearnerLearningEvents/exact_match_brief.xml",
+        "headers": {
+            "Content-Type": "text/xml"
+        }
+    }
+}

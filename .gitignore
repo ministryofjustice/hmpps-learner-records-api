@@ -71,3 +71,15 @@ sonar-project.properties
 
 #Helm
 **/Chart.lock
+
+# Mac finder file
+.DS_Store
+
+# Certificate files
+*.pfx
+
+# env files
+.env*
+
+# Scratch File
+scratch

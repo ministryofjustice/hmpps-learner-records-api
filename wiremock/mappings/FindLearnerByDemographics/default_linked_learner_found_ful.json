@@ -1,0 +1,35 @@
+{
+    "request": {
+        "method": "POST",
+        "headers": {
+            "Content-Type": {
+                "contains": "xml"
+            }
+        },
+        "bodyPatterns": [
+            {
+                "matchesXPath": "//Envelope/Body/FindLearnerByDemographics"
+            },
+            {
+                "matchesXPath": {
+                    "expression": "//Envelope/Body/FindLearnerByDemographics/FindType",
+                    "equalToXml": "<FindType>FUL</FindType>"
+                }
+            },
+            {
+                "matchesXPath": {
+                    "expression": "//Envelope/Body/FindLearnerByDemographics/GivenName",
+                    "equalToXml": "<GivenName>Test_Linked_Learner_Found</GivenName>"
+                }
+            }
+        ],
+        "url": "/LearnerService.svc"
+    },
+    "response": {
+        "status": 200,
+        "bodyFileName": "FindLearnerByDemographics/linked_learner_found_ful.xml",
+        "headers": {
+            "Content-Type": "text/xml"
+        }
+    }
+}
