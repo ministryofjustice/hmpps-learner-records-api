@@ -1,4 +1,5 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi
+
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
@@ -33,29 +34,34 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                 "gender": "2",
                 "lastKnownPostCode": "ZZ12ZZ"
               }
-            """
-          )
-        ]
-      )
-    ]
+            """,
+          ),
+        ],
+      ),
+    ],
   ),
   security = [SecurityRequirement(name = "template-kotlin-ui-role")],
   responses = [
     ApiResponse(
       responseCode = "200",
       description = "Successful response, response type may vary - e.g Possible Match.",
-      content = [Content(mediaType = "application/json", schema = Schema(implementation = FindLearnerByDemographicsResponse::class))]
+      content = [
+        Content(
+          mediaType = "application/json",
+          schema = Schema(implementation = FindLearnerByDemographicsResponse::class),
+        ),
+      ],
     ),
     ApiResponse(
       responseCode = "401",
       description = "Unauthorized to access this endpoint",
-      content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]
+      content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
     ),
     ApiResponse(
       responseCode = "403",
       description = "Forbidden to access this endpoint",
-      content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]
+      content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
     ),
-  ]
+  ],
 )
 annotation class FindByDemographicApi

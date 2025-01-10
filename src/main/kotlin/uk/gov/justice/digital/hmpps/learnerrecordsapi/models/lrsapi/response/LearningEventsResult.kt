@@ -17,5 +17,5 @@ data class LearningEventsResult(
 
   @get:XmlElementWrapper(name = "LearnerRecord", namespace = "http://api.lrs.qcf.gov.uk/model")
   @get:XmlElement(name = "LearningEvent", namespace = "http://api.lrs.qcf.gov.uk/model")
-  var learnerRecord: List<LearningEvent> = mutableListOf()
+  var learnerRecord: List<LearningEvent> = mutableListOf(),
 )

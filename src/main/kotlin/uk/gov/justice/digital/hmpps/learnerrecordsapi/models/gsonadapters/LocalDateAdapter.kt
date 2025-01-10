@@ -1,6 +1,6 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters
 
-import com.google.gson.*
+import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import java.time.LocalDate

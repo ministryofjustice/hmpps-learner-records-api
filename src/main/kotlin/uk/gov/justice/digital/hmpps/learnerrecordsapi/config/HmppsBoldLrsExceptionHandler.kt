@@ -2,7 +2,6 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 
 import org.apache.commons.lang3.StringUtils
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatus.*
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -34,16 +33,15 @@ class HmppsBoldLrsExceptionHandler {
     val erroredFields = bindingResult.fieldErrors.map { it.field }
 
     val errorResponse = ErrorResponse(
-      status = BAD_REQUEST,
+      status = HttpStatus.BAD_REQUEST,
       errorCode = "Validation Failed",
       userMessage = "Please correct the error and retry",
       developerMessage = "Validation(s) failed for $erroredFields",
       moreInfo = "Validation(s) failed for $erroredFields with reason(s): $errors",
     )
     log.error("Validation(s) failed for $erroredFields with reason(s): $errors", ex)
-    return ResponseEntity(errorResponse, BAD_REQUEST)
+    return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
-
 
   @ExceptionHandler(IllegalStateException::class)
   fun handleNoResourceFoundException(
@@ -51,16 +49,15 @@ class HmppsBoldLrsExceptionHandler {
     request: WebRequest,
   ): ResponseEntity<Any> {
     val errorResponse = ErrorResponse(
-      status = NOT_FOUND,
+      status = HttpStatus.NOT_FOUND,
       errorCode = "No Resource Found",
       userMessage = "No resource found failure: ${ex.message}",
       developerMessage = "Requested Resource Not found on the server",
       moreInfo = "Requested Resource Not found on the server",
     )
     log.error("Requested Resource was not Found {}", ex)
-    return ResponseEntity(errorResponse, NOT_FOUND)
+    return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
   }
-
 
   @ExceptionHandler(AccessDeniedException::class)
   fun handleAccessDeniedException(
@@ -68,16 +65,15 @@ class HmppsBoldLrsExceptionHandler {
     request: WebRequest,
   ): ResponseEntity<Any> {
     val errorResponse = ErrorResponse(
-      status = FORBIDDEN,
+      status = HttpStatus.FORBIDDEN,
       errorCode = "Forbidden - Access Denied",
       userMessage = "Forbidden: ${ex.message}",
       developerMessage = "Forbidden - Access Denied",
       moreInfo = "Forbidden - Access Denied",
     )
     log.error("Forbidden (403) returned: {}", ex)
-    return ResponseEntity(errorResponse, FORBIDDEN)
+    return ResponseEntity(errorResponse, HttpStatus.FORBIDDEN)
   }
-
 
   @ExceptionHandler(Exception::class)
   fun handleException(
@@ -85,13 +81,13 @@ class HmppsBoldLrsExceptionHandler {
     request: WebRequest,
   ): ResponseEntity<Any> {
     val errorResponse = ErrorResponse(
-      status = INTERNAL_SERVER_ERROR,
+      status = HttpStatus.INTERNAL_SERVER_ERROR,
       errorCode = "Unexpected error",
       userMessage = "Unexpected error: ${ex.message}",
       developerMessage = "Unexpected error: ${ex.message}",
       moreInfo = "Unexpected error",
     )
     log.error("Unexpected Error: {}", ex)
-    return ResponseEntity(errorResponse, INTERNAL_SERVER_ERROR)
+    return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
   }
 }

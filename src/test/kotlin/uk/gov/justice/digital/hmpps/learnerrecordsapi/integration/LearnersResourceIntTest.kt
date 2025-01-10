@@ -73,7 +73,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       val expectedResponse = FindLearnerByDemographicsResponse(
         searchParameters = findLearnerByDemographicsRequest,
         responseType = ResponseType.EXACT_MATCH,
-        matchedLearners = listOf(learner)
+        matchedLearners = listOf(learner),
       )
 
       val actualResponse = webTestClient.post()
@@ -103,9 +103,9 @@ class LearnersResourceIntTest : IntegrationTestBase() {
           ("familyName" to mutableListOf("FN", "FN")),
           ("gender" to mutableListOf("2", "2")),
           ("givenName" to mutableListOf("GN", "GN")),
-          ("lastKnownPostCode" to mutableListOf("CV49EA", "CV49EA"))
+          ("lastKnownPostCode" to mutableListOf("CV49EA", "CV49EA")),
         ),
-        matchedLearners = listOf(learner, learner)
+        matchedLearners = listOf(learner, learner),
       )
 
       val actualResponse = webTestClient.post()
@@ -129,25 +129,25 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       lrsApiMock.stubPossibleMatchTwoLearners()
 
       val requestWithTwoMismatches = findLearnerByDemographicsRequest.copy(
-          givenName = "Mismatch",
-          familyName = "Mismatch",
-          lastKnownPostCode = "CV49EA",
-          gender = 2
-        )
+        givenName = "Mismatch",
+        familyName = "Mismatch",
+        lastKnownPostCode = "CV49EA",
+        gender = 2,
+      )
 
       val expectedResponse = FindLearnerByDemographicsResponse(
         searchParameters = findLearnerByDemographicsRequest.copy(
           givenName = "Mismatch",
           familyName = "Mismatch",
           lastKnownPostCode = "CV49EA",
-          gender = 2
+          gender = 2,
         ),
         responseType = ResponseType.POSSIBLE_MATCH,
         mismatchedFields = mutableMapOf(
           ("familyName" to mutableListOf("FN", "FN")),
           ("givenName" to mutableListOf("GN", "GN")),
         ),
-        matchedLearners = listOf(learner, learner)
+        matchedLearners = listOf(learner, learner),
       )
 
       val actualResponse = webTestClient.post()
@@ -172,7 +172,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
       val expectedResponse = FindLearnerByDemographicsResponse(
         searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.NO_MATCH
+        responseType = ResponseType.NO_MATCH,
       )
 
       val actualResponse = webTestClient.post()
@@ -198,7 +198,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       "Person",
       LocalDate.parse("2024-01-01"),
       1,
-      "CV49EE"
+      "CV49EE",
     )
 
   val learner = Learner(
