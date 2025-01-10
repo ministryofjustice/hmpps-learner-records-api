@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Pattern
-import uk.gov.justice.digital.hmpps.bold.lrs.models.lrsapi.request.FindLearnerByDemographicsLRSRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.FindLearnerByDemographicsLRSRequest
 import java.time.LocalDate
 
 // Example model for the request

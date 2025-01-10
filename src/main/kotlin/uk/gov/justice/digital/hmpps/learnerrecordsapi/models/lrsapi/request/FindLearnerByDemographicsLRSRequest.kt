@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.bold.lrs.models.lrsapi.request
+package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request
 
 import jakarta.validation.constraints.Size
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
