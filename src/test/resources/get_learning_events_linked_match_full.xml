@@ -1,0 +1,36 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body>
+        <GetLearnerLearningEventsResponse xmlns="http://tempuri.org/">
+            <GetLearnerLearningEventsResult xmlns:a="http://api.lrs.qcf.gov.uk/model" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                <a:ResponseCode>WSRC0022</a:ResponseCode>
+                <a:FoundULN>6666666666</a:FoundULN>
+                <a:IncomingULN>{{soapXPath request.body '/GetLearnerLearningEvents/uln/text()'}}</a:IncomingULN>
+                <a:LearnerRecord>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-09-26</a:AchievementAwardDate>
+                        <a:AchievementProviderName>TEST90000051</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>UNKNOWN</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>UNKNWN</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>W</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-31 16:47:04</a:DateLoaded>
+                        <a:Grade>9999999999</a:Grade>
+                        <a:ID>4284</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate>2010-09-26</a:ParticipationEndDate>
+                        <a:ParticipationStartDate>2010-09-01</a:ParticipationStartDate>
+                        <a:QualificationType>NVQ/GNVQ Key Skills Unit</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>02</a:ReturnNumber>
+                        <a:Source>ILR</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>Key Skills in Application of Number - level 1</a:Subject>
+                        <a:SubjectCode>1000323X</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                </a:LearnerRecord>
+            </GetLearnerLearningEventsResult>
+        </GetLearnerLearningEventsResponse>
+    </s:Body>
+</s:Envelope>

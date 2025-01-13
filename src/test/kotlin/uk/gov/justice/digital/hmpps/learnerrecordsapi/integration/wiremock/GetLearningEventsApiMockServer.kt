@@ -11,9 +11,9 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 
-class LRSApiMockServer : WireMockServer(8082) {
+class GetLearningEventsApiMockServer : WireMockServer(8082) {
 
-  private val basePath = "/LearnerService.svc"
+  private val basePath = "/LearnerServiceR9.svc"
 
   init {
     this.start()
@@ -25,7 +25,7 @@ class LRSApiMockServer : WireMockServer(8082) {
     return InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()
   }
 
-  fun stubExactMatch() {
+  fun stubExactMatchFull() {
     stubFor(
       post(urlPathMatching(basePath))
         .willReturn(
@@ -33,14 +33,14 @@ class LRSApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("exact_match_ful")
+              readTemplateToString("get_learning_events_exact_match_full")
             )
             .withStatus(200),
         ),
     )
   }
 
-  fun stubPossibleMatchTwoLearners() {
+  fun stubLinkedMatchFull() {
     stubFor(
       post(urlPathMatching(basePath))
         .willReturn(
@@ -48,14 +48,14 @@ class LRSApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("possible_match_two_learners_ful")
+              readTemplateToString("get_learning_events_linked_match_full")
             )
             .withStatus(200),
         ),
     )
   }
 
-  fun stubNoMatch() {
+  fun stubNotShared() {
     stubFor(
       post(urlPathMatching(basePath))
         .willReturn(
@@ -63,7 +63,21 @@ class LRSApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("no_match_ful")
+              readTemplateToString("get_learning_events_not_shared")
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+  fun stubNotVerified() {
+    stubFor(
+      post(urlPathMatching(basePath))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("get_learning_events_not_verified")
             )
             .withStatus(200),
         ),
@@ -92,13 +106,13 @@ class LRSApiMockServer : WireMockServer(8082) {
 
 }
 
-class LRSApiExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
+class GetLearningEventsApiExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
   companion object {
     @JvmField
-    val lrsApiMock = LRSApiMockServer()
+    val getLearningEventsApiMock = GetLearningEventsApiMockServer()
   }
 
-  override fun beforeAll(context: ExtensionContext): Unit = lrsApiMock.start()
-  override fun beforeEach(context: ExtensionContext): Unit = lrsApiMock.resetAll()
-  override fun afterAll(context: ExtensionContext): Unit = lrsApiMock.stop()
+  override fun beforeAll(context: ExtensionContext): Unit = getLearningEventsApiMock.start()
+  override fun beforeEach(context: ExtensionContext): Unit = getLearningEventsApiMock.resetAll()
+  override fun afterAll(context: ExtensionContext): Unit = getLearningEventsApiMock.stop()
 }

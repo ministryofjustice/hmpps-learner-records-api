@@ -52,7 +52,7 @@ The service `LRSService` has a method called `findLearner` which accepts a singl
 
 The service has an instance of `retrofit` which provides a way to interface with the LRS API.
 
-`retrofit` along with `JAXBConverter`, the models under the `models.lrsapi` package, and the interface `LRSApiServiceInterface` handles all the heavy lifting when it comes to partsing `XML` responses from the LRS API.
+`retrofit` along with `JAXBConverter`, the models under the `models.lrsapi` package, and the interface `LRSApiServiceInterface` handles all the heavy lifting when it comes to parsing `XML` responses from the LRS API.
 
 When `findLearner` is called, retrofit is used to make a call to the LRS API. The service returns the response as a model `FindLearnerResponse`.
 
@@ -140,12 +140,12 @@ Run the following command:
 
 If you encounter issues, make sure gradle is set up properly in IntelliJ for this project.
 
-First, right click the `test` package and select `run ‘Tests in ‘hmpps-temp…’` This will run tests, and you will notice they will fail.
+First, right-click the `test` package and select `run ‘Tests in ‘hmpps-temp…’` This will run tests, and you will notice they will fail.
 
 Next, in the top right corner of IntelliJ, to the left of the green play button, click the dropdown and then select `Edit Configurations`.
 
 Select the ‘hmpps-learner-records-api.test’ configuration, ensure that `Run` is populated with `:test`, the gradle project is `kotlin-template-experimental-lrs` and the environment variables, mentioned above, are also set here. Click `Apply` then `OK`.
 
-Again, right click the `test` package and select `run ‘Tests in ‘hmpps-temp…’ - They should now be running in IntelliJ.
+Again, right-click the `test` package and select `run ‘Tests in ‘hmpps-temp…’ - They should now be running in IntelliJ.
 
 Other steps may be required to enable debugging within IntelliJ.

@@ -6,11 +6,10 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.FindLearnerByDemographicsApiExtension.Companion.findLearnerByDemographicsApiMock
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ResponseType
 import java.time.LocalDate
@@ -28,7 +27,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return 500 with an appropriate error response if LRS returns a BadRequest`() {
-      lrsApiMock.stubPostBadRequest()
+      findLearnerByDemographicsApiMock.stubPostBadRequest()
 
       val actualResponse = webTestClient.post()
         .uri("/learners")
@@ -48,7 +47,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
-      lrsApiMock.stubPostServerError()
+      findLearnerByDemographicsApiMock.stubPostServerError()
 
       val actualResponse = webTestClient.post()
         .uri("/learners")
@@ -68,7 +67,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response when LRS returns an exact match`() {
-      lrsApiMock.stubExactMatch()
+      findLearnerByDemographicsApiMock.stubExactMatch()
 
       val expectedResponse = FindLearnerByDemographicsResponse(
         searchParameters = findLearnerByDemographicsRequest,
@@ -94,7 +93,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response when LRS returns a possible match with two learners`() {
-      lrsApiMock.stubPossibleMatchTwoLearners()
+      findLearnerByDemographicsApiMock.stubPossibleMatchTwoLearners()
 
       val expectedResponse = FindLearnerByDemographicsResponse(
         searchParameters = findLearnerByDemographicsRequest,
@@ -126,7 +125,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return appropriate mismatched fields when there is a possible match`() {
-      lrsApiMock.stubPossibleMatchTwoLearners()
+      findLearnerByDemographicsApiMock.stubPossibleMatchTwoLearners()
 
       val requestWithTwoMismatches = findLearnerByDemographicsRequest.copy(
           givenName = "Mismatch",
@@ -168,7 +167,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response when LRS returns a no match response`() {
-      lrsApiMock.stubNoMatch()
+      findLearnerByDemographicsApiMock.stubNoMatch()
 
       val expectedResponse = FindLearnerByDemographicsResponse(
         searchParameters = findLearnerByDemographicsRequest,
