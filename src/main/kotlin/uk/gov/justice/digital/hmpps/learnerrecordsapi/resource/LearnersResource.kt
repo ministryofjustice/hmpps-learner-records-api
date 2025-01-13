@@ -27,5 +27,4 @@ class LearnersResource(
     log.inboundRequest(requestModelObject = findLearnerByDemographicsRequest)
     return gson.toJson(lrsService.findLearner(findLearnerByDemographicsRequest))
   }
-
 }

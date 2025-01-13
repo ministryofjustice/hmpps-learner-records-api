@@ -33,7 +33,7 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("get_learning_events_exact_match_full")
+              readTemplateToString("get_learning_events_exact_match_full"),
             )
             .withStatus(200),
         ),
@@ -48,7 +48,7 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("get_learning_events_linked_match_full")
+              readTemplateToString("get_learning_events_linked_match_full"),
             )
             .withStatus(200),
         ),
@@ -63,7 +63,7 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("get_learning_events_not_shared")
+              readTemplateToString("get_learning_events_not_shared"),
             )
             .withStatus(200),
         ),
@@ -77,7 +77,7 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("get_learning_events_not_verified")
+              readTemplateToString("get_learning_events_not_verified"),
             )
             .withStatus(200),
         ),
@@ -89,8 +89,8 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
       post(urlPathMatching(basePath))
         .willReturn(
           aResponse()
-            .withStatus(400)
-        )
+            .withStatus(400),
+        ),
     )
   }
 
@@ -99,14 +99,16 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
       post(urlPathMatching(basePath))
         .willReturn(
           aResponse()
-            .withStatus(500)
-        )
+            .withStatus(500),
+        ),
     )
   }
-
 }
 
-class GetLearningEventsApiExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
+class GetLearningEventsApiExtension :
+  BeforeAllCallback,
+  AfterAllCallback,
+  BeforeEachCallback {
   companion object {
     @JvmField
     val getLearningEventsApiMock = GetLearningEventsApiMockServer()

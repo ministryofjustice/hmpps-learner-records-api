@@ -4,11 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ResponseType
 import kotlin.reflect.full.declaredMemberProperties
@@ -20,7 +18,7 @@ class LRSService(
   private val lrsClient: uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface = httpClientConfiguration.retrofit()
     .create(uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface::class.java),
   @Autowired
-  private val appConfig: AppConfig
+  private val appConfig: AppConfig,
 ) {
 
   private val log: LoggerUtil = LoggerUtil(javaClass)
@@ -66,9 +64,12 @@ class LRSService(
     return FindLearnerByDemographicsResponse(
       searchParameters = request,
       responseType = responseType,
-      mismatchedFields = if (isPossibleMatch) { computeMismatchedFields(request, response) } else { null },
-      matchedLearners = response.learners
+      mismatchedFields = if (isPossibleMatch) {
+        computeMismatchedFields(request, response)
+      } else {
+        null
+      },
+      matchedLearners = response.learners,
     )
   }
-
 }

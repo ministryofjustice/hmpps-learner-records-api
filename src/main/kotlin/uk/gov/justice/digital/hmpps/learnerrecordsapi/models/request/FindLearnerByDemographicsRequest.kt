@@ -34,13 +34,11 @@ data class FindLearnerByDemographicsRequest(
   @SerializedName("lastKnownPostcode")
   val lastKnownPostCode: String,
 ) {
-  fun extractFromRequest(): FindLearnerByDemographicsLRSRequest {
-    return FindLearnerByDemographicsLRSRequest(
-      givenName = givenName,
-      familyName = familyName,
-      dateOfBirth = dateOfBirth,
-      gender = gender,
-      lastKnownPostCode = lastKnownPostCode
-    )
-  }
+  fun extractFromRequest(): FindLearnerByDemographicsLRSRequest = FindLearnerByDemographicsLRSRequest(
+    givenName = givenName,
+    familyName = familyName,
+    dateOfBirth = dateOfBirth,
+    gender = gender,
+    lastKnownPostCode = lastKnownPostCode,
+  )
 }

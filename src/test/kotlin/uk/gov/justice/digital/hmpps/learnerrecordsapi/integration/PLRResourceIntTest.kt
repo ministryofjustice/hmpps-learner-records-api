@@ -74,24 +74,26 @@ class PLRResourceIntTest : IntegrationTestBase() {
         "WSRC0004",
         "1234567890",
         "1234567890",
-        listOf(LearningEvent(
-          id = "28538264",
-          achievementProviderUkprn = "90000051",
-          achievementProviderName = "TEST90000051",
-          awardingOrganisationName = "Pearson Education Ltd",
-          qualificationType = "",
-          subjectCode = "K/501/5773",
-          achievementAwardDate = "2010-01-01",
-          credits = "2",
-          source = "QCFU",
-          dateLoaded = "2014-05-21 14:49:01",
-          underDataChallenge = "N",
-          level = "Entry Level",
-          status = "F",
-          subject = "Introduction to Construction Work: Entry 3",
-          grade = "Pass",
-          awardingOrganisationUkprn = "90000051"
-        ))
+        listOf(
+          LearningEvent(
+            id = "28538264",
+            achievementProviderUkprn = "90000051",
+            achievementProviderName = "TEST90000051",
+            awardingOrganisationName = "Pearson Education Ltd",
+            qualificationType = "",
+            subjectCode = "K/501/5773",
+            achievementAwardDate = "2010-01-01",
+            credits = "2",
+            source = "QCFU",
+            dateLoaded = "2014-05-21 14:49:01",
+            underDataChallenge = "N",
+            level = "Entry Level",
+            status = "F",
+            subject = "Introduction to Construction Work: Entry 3",
+            grade = "Pass",
+            awardingOrganisationUkprn = "90000051",
+          ),
+        ),
       )
 
       val actualResponse = webTestClient.post()
@@ -118,28 +120,30 @@ class PLRResourceIntTest : IntegrationTestBase() {
         "WSRC0022",
         "6666666666",
         "1234567890",
-        listOf(LearningEvent(
-          id = "4284",
-          achievementProviderUkprn = "10032743",
-          achievementProviderName = "TEST90000051",
-          awardingOrganisationName = "UNKNOWN",
-          qualificationType = "NVQ/GNVQ Key Skills Unit",
-          subjectCode = "1000323X",
-          achievementAwardDate = "2010-09-26",
-          credits = "0",
-          source = "ILR",
-          dateLoaded = "2012-05-31 16:47:04",
-          underDataChallenge = "N",
-          level = "",
-          status = "F",
-          subject = "Key Skills in Application of Number - level 1",
-          grade = "9999999999",
-          awardingOrganisationUkprn = "UNKNWN",
-          collectionType = "W",
-          returnNumber = "02",
-          participationStartDate = "2010-09-01",
-          participationEndDate = "2010-09-26",
-        ))
+        listOf(
+          LearningEvent(
+            id = "4284",
+            achievementProviderUkprn = "10032743",
+            achievementProviderName = "TEST90000051",
+            awardingOrganisationName = "UNKNOWN",
+            qualificationType = "NVQ/GNVQ Key Skills Unit",
+            subjectCode = "1000323X",
+            achievementAwardDate = "2010-09-26",
+            credits = "0",
+            source = "ILR",
+            dateLoaded = "2012-05-31 16:47:04",
+            underDataChallenge = "N",
+            level = "",
+            status = "F",
+            subject = "Key Skills in Application of Number - level 1",
+            grade = "9999999999",
+            awardingOrganisationUkprn = "UNKNWN",
+            collectionType = "W",
+            returnNumber = "02",
+            participationStartDate = "2010-09-01",
+            participationEndDate = "2010-09-26",
+          ),
+        ),
       )
 
       val actualResponse = webTestClient.post()
@@ -166,7 +170,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
         "WSEC0206",
         "",
         "1234567890",
-        emptyList()
+        emptyList(),
       )
 
       val actualResponse = webTestClient.post()
@@ -193,7 +197,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
         "WSEC0208",
         "",
         "1234567890",
-        emptyList()
+        emptyList(),
       )
 
       val actualResponse = webTestClient.post()
@@ -218,5 +222,6 @@ class PLRResourceIntTest : IntegrationTestBase() {
     "Some Family Name",
     "1234567890",
     null,
-    null)
+    null,
+  )
 }

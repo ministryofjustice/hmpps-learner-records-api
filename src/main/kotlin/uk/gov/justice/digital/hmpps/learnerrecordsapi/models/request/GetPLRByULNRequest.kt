@@ -26,13 +26,11 @@ class GetPLRByULNRequest(
   @SerializedName("gender")
   val gender: Int?,
 ) {
-  fun extractFromRequest(): GetLearnerLearningEventsLRSRequest {
-    return GetLearnerLearningEventsLRSRequest(
-      givenName = givenName,
-      familyName = familyName,
-      uln = uln,
-      dateOfBirth = dateOfBirth,
-      gender = gender
-    )
-  }
+  fun extractFromRequest(): GetLearnerLearningEventsLRSRequest = GetLearnerLearningEventsLRSRequest(
+    givenName = givenName,
+    familyName = familyName,
+    uln = uln,
+    dateOfBirth = dateOfBirth,
+    gender = gender,
+  )
 }
