@@ -1,9 +1,7 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import com.github.tomakehurst.wiremock.client.WireMock.post
-import com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
@@ -11,8 +9,9 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 
-class GetLearningEventsApiMockServer : WireMockServer(8082) {
+class LRSApiMockServer : WireMockServer(8082) {
 
+  private val basePathLearnerByDemographics = "/LearnerService.svc"
   private val basePath = "/LearnerServiceR9.svc"
 
   init {
@@ -25,7 +24,7 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
     return InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()
   }
 
-  fun stubExactMatchFull() {
+  fun stubLearningEventsExactMatchFull() {
     stubFor(
       post(urlPathMatching(basePath))
         .willReturn(
@@ -40,7 +39,7 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
     )
   }
 
-  fun stubLinkedMatchFull() {
+  fun stubLearningEventsLinkedMatchFull() {
     stubFor(
       post(urlPathMatching(basePath))
         .willReturn(
@@ -55,7 +54,7 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
     )
   }
 
-  fun stubNotShared() {
+  fun stubLearningEventsNotShared() {
     stubFor(
       post(urlPathMatching(basePath))
         .willReturn(
@@ -69,7 +68,7 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
         ),
     )
   }
-  fun stubNotVerified() {
+  fun stubLearningEventsNotVerified() {
     stubFor(
       post(urlPathMatching(basePath))
         .willReturn(
@@ -84,9 +83,54 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
     )
   }
 
+  fun stubLearnerByDemographicsExactMatch() {
+    stubFor(
+      post(urlPathMatching(basePathLearnerByDemographics))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("find_by_demographic_exact_match_ful"),
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+
+  fun stubLearnerByDemographicsPossibleMatchTwoLearners() {
+    stubFor(
+      post(urlPathMatching(basePathLearnerByDemographics))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("find_by_demographic_possible_match_two_learners_ful"),
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+
+  fun stubLearnerByDemographicsNoMatch() {
+    stubFor(
+      post(urlPathMatching(basePathLearnerByDemographics))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("find_by_demographic_no_match_ful"),
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+
   fun stubPostBadRequest() {
     stubFor(
-      post(urlPathMatching(basePath))
+      post(anyUrl())
         .willReturn(
           aResponse()
             .withStatus(400),
@@ -96,7 +140,7 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
 
   fun stubPostServerError() {
     stubFor(
-      post(urlPathMatching(basePath))
+      post(anyUrl())
         .willReturn(
           aResponse()
             .withStatus(500),
@@ -105,16 +149,16 @@ class GetLearningEventsApiMockServer : WireMockServer(8082) {
   }
 }
 
-class GetLearningEventsApiExtension :
+class LRSApiExtension :
   BeforeAllCallback,
   AfterAllCallback,
   BeforeEachCallback {
   companion object {
     @JvmField
-    val getLearningEventsApiMock = GetLearningEventsApiMockServer()
+    val lrsApiMock = LRSApiMockServer()
   }
 
-  override fun beforeAll(context: ExtensionContext): Unit = getLearningEventsApiMock.start()
-  override fun beforeEach(context: ExtensionContext): Unit = getLearningEventsApiMock.resetAll()
-  override fun afterAll(context: ExtensionContext): Unit = getLearningEventsApiMock.stop()
+  override fun beforeAll(context: ExtensionContext): Unit = lrsApiMock.start()
+  override fun beforeEach(context: ExtensionContext): Unit = lrsApiMock.resetAll()
+  override fun afterAll(context: ExtensionContext): Unit = lrsApiMock.stop()
 }

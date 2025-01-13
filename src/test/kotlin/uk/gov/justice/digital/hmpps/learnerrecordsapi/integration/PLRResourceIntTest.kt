@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.GetLearningEventsApiExtension.Companion.getLearningEventsApiMock
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
@@ -28,7 +28,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return 500 with an appropriate error response if LRS returns a BadRequest`() {
-      getLearningEventsApiMock.stubPostBadRequest()
+      lrsApiMock.stubPostBadRequest()
 
       val actualResponse = webTestClient.post()
         .uri("/plr")
@@ -48,7 +48,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
-      getLearningEventsApiMock.stubPostServerError()
+      lrsApiMock.stubPostServerError()
 
       val actualResponse = webTestClient.post()
         .uri("/plr")
@@ -68,7 +68,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response when LRS returns an exact match for FULL type`() {
-      getLearningEventsApiMock.stubExactMatchFull()
+      lrsApiMock.stubLearningEventsExactMatchFull()
 
       val expectedResponse = LearningEventsResult(
         "WSRC0004",
@@ -114,7 +114,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response when LRS returns a linked learner response`() {
-      getLearningEventsApiMock.stubLinkedMatchFull()
+      lrsApiMock.stubLearningEventsLinkedMatchFull()
 
       val expectedResponse = LearningEventsResult(
         "WSRC0022",
@@ -164,7 +164,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response when LRS returns a not shared response`() {
-      getLearningEventsApiMock.stubNotShared()
+      lrsApiMock.stubLearningEventsNotShared()
 
       val expectedResponse = LearningEventsResult(
         "WSEC0206",
@@ -191,7 +191,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response when LRS returns a not verified response`() {
-      getLearningEventsApiMock.stubNotVerified()
+      lrsApiMock.stubLearningEventsNotVerified()
 
       val expectedResponse = LearningEventsResult(
         "WSEC0208",
