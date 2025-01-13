@@ -17,6 +17,12 @@ on:
         default: false
         type: boolean
 
+env:
+  ORG_PASSWORD: testPassword
+  UK_PRN: testUKPrn
+  PFX_FILE_PASSWORD: testPassword
+  VENDOR_ID: 04
+
 permissions:
   contents: read
   packages: write
