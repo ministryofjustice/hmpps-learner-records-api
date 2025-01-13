@@ -22,7 +22,7 @@ class SSLContextConfiguration(private val pfxFilePath: String) {
 
     val passwordEnv =
       System.getenv(PFX_FILE_PASSWORD)
-        ?: throw IllegalArgumentException("Password environment variable not found.")
+        ?: throw IllegalArgumentException("Password for Certificate environment variable not found.")
     val password = passwordEnv.toCharArray()
 
     logger.info("Loading PFX file from path: $pfxFilePath")
