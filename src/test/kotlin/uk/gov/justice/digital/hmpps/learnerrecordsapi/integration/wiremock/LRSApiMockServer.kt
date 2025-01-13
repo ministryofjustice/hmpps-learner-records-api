@@ -70,6 +70,36 @@ class LRSApiMockServer : WireMockServer(8082) {
     )
   }
 
+  fun stubLinkedLearner() {
+    stubFor(
+      post(urlPathMatching(basePath))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("linked_learner_ful"),
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+
+  fun stubTooManyMatches() {
+    stubFor(
+      post(urlPathMatching(basePath))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("too_many_matches_ful"),
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+
   fun stubPostBadRequest() {
     stubFor(
       post(urlPathMatching(basePath))
