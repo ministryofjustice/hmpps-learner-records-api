@@ -1,5 +1,11 @@
 name: Pipeline [test -> build -> deploy]
 
+env:
+  PFX_FILE_PASSWORD: ${{ vars.PFX_FILE_PASSWORD}}
+  UK_PRN: ${{ vars.UK_PRN}}
+  ORG_PASSWORD: ${{ vars.ORG_PASSWORD}}
+  VENDOR_ID: ${{ vars.VENDOR_ID}}
+
 on:
   push:
     branches:
@@ -19,11 +25,6 @@ on:
 permissions:
   contents: read
   packages: write
-env:
-  PFX_FILE_PASSWORD: ${{ secrets.PFX_FILE_PASSWORD}}
-  UK_PRN: ${{ secrets.UK_PRN}}
-  ORG_PASSWORD: ${{ secrets.ORG_PASSWORD}}
-  VENDOR_ID: ${{ secrets.VENDOR_ID}}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
