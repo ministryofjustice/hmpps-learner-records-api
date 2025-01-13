@@ -16,7 +16,11 @@ interface LRSApiServiceInterface {
   @POST("LearnerService.svc")
   suspend fun findLearnerByDemographics(@Body body: RequestBody): Response<FindLearnerEnvelope>
 
-  @Headers("Accept: application/xml", "SOAPAction: http://tempuri.org/ILearnerServiceR9/GetLearnerLearningEvents", "Content-Type: text/xml")
+  @Headers(
+    "Accept: application/xml",
+    "SOAPAction: http://tempuri.org/ILearnerServiceR9/GetLearnerLearningEvents",
+    "Content-Type: text/xml",
+  )
   @POST("LearnerServiceR9.svc")
   suspend fun getLearnerLearningEvents(@Body body: RequestBody): Response<LearningEventsEnvelope>
 }

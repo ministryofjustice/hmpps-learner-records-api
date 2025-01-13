@@ -75,8 +75,8 @@ class FindLearnerByDemographicsApiMockServer : WireMockServer(8082) {
       post(urlPathMatching(basePath))
         .willReturn(
           aResponse()
-            .withStatus(400)
-        )
+            .withStatus(400),
+        ),
     )
   }
 
@@ -85,14 +85,16 @@ class FindLearnerByDemographicsApiMockServer : WireMockServer(8082) {
       post(urlPathMatching(basePath))
         .willReturn(
           aResponse()
-            .withStatus(500)
-        )
+            .withStatus(500),
+        ),
     )
   }
-
 }
 
-class FindLearnerByDemographicsApiExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
+class FindLearnerByDemographicsApiExtension :
+  BeforeAllCallback,
+  AfterAllCallback,
+  BeforeEachCallback {
   companion object {
     @JvmField
     val findLearnerByDemographicsApiMock = FindLearnerByDemographicsApiMockServer()

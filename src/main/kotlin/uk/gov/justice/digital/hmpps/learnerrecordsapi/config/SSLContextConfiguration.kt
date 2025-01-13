@@ -15,14 +15,14 @@ private const val PFX_FILE_TYPE = "PKCS12"
 
 private const val PROTOCOL = "TLS"
 
-class SSLContextProvider(private val pfxFilePath: String) {
+class SSLContextConfiguration(private val pfxFilePath: String) {
 
   fun createSSLContext(): SSLContext {
-
-    val logger = LoggerFactory.getLogger(SSLContextProvider::class.java)
+    val logger = LoggerFactory.getLogger(SSLContextConfiguration::class.java)
 
     val passwordEnv =
-      System.getenv(PFX_FILE_PASSWORD) ?: throw IllegalArgumentException("Password environment variable not found.")
+      System.getenv(PFX_FILE_PASSWORD)
+        ?: throw IllegalArgumentException("Password environment variable not found.")
     val password = passwordEnv.toCharArray()
 
     logger.info("Loading PFX file from path: $pfxFilePath")
@@ -47,9 +47,9 @@ class SSLContextProvider(private val pfxFilePath: String) {
   fun getTrustManager(): X509TrustManager {
     val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
     trustManagerFactory.init(
-        KeyStore.getInstance(PFX_FILE_TYPE).apply {
-            load(FileInputStream(pfxFilePath), System.getenv(PFX_FILE_PASSWORD).toCharArray())
-        },
+      KeyStore.getInstance(PFX_FILE_TYPE).apply {
+        load(FileInputStream(pfxFilePath), System.getenv(PFX_FILE_PASSWORD).toCharArray())
+      },
     )
     return trustManagerFactory.trustManagers[0] as X509TrustManager
   }

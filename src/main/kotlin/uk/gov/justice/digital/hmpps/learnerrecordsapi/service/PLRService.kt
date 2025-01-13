@@ -20,7 +20,8 @@ class PLRService(
 
   suspend fun getPLR(getPLRByULNRequest: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest): LearningEventsResult {
     log.debug("Transforming inbound request object to LRS request object")
-    val requestBody = getPLRByULNRequest.extractFromRequest().transformToLRSRequest(appConfig.ukprn(), appConfig.password(), appConfig.vendorId())
+    val requestBody = getPLRByULNRequest.extractFromRequest()
+      .transformToLRSRequest(appConfig.ukprn(), appConfig.password(), appConfig.vendorId())
     log.debug("Calling LRS API")
     val plrResponse = lrsClient.getLearnerLearningEvents(requestBody)
 

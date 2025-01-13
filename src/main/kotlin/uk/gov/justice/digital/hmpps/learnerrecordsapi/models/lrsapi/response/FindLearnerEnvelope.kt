@@ -6,5 +6,5 @@ import javax.xml.bind.annotation.XmlRootElement
 @XmlRootElement(name = "Envelope", namespace = "http://schemas.xmlsoap.org/soap/envelope/")
 data class FindLearnerEnvelope(
   @get:XmlElement(name = "Body", namespace = "http://schemas.xmlsoap.org/soap/envelope/")
-  var body: FindLearnerBody = FindLearnerBody()
+  var body: FindLearnerBody = FindLearnerBody(),
 )

@@ -32,29 +32,34 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                 "familyName": "Carroll",
                 "uln": "4444599390"
               }
-            """
-          )
-        ]
-      )
-    ]
+            """,
+          ),
+        ],
+      ),
+    ],
   ),
   security = [SecurityRequirement(name = "template-kotlin-ui-role")],
   responses = [
     ApiResponse(
       responseCode = "200",
       description = "The request was successful and a response was returned.",
-      content = [Content(mediaType = "application/json", schema = Schema(implementation = FindLearnerByDemographicsResponse::class))]
+      content = [
+        Content(
+          mediaType = "application/json",
+          schema = Schema(implementation = FindLearnerByDemographicsResponse::class),
+        ),
+      ],
     ),
     ApiResponse(
       responseCode = "401",
       description = "Unauthorized to access this endpoint",
-      content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]
+      content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
     ),
     ApiResponse(
       responseCode = "403",
       description = "Forbidden to access this endpoint",
-      content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))]
+      content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
     ),
-  ]
+  ],
 )
 annotation class FindByULNApi
