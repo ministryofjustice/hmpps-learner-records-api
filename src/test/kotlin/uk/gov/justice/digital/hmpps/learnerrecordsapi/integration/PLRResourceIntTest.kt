@@ -9,15 +9,16 @@ import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResult
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ResponseType
 import java.time.LocalDate
 
-class LearnersResourceIntTest : IntegrationTestBase() {
+class PLRResourceIntTest : IntegrationTestBase() {
 
   @Nested
-  @DisplayName("POST /learners")
+  @DisplayName("POST /plr")
   inner class LearnersEndpoint {
 
     val gson = GsonBuilder()
@@ -30,9 +31,9 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       lrsApiMock.stubPostBadRequest()
 
       val actualResponse = webTestClient.post()
-        .uri("/learners")
+        .uri("/plr")
         .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(findLearnerByDemographicsRequest)
+        .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
@@ -50,9 +51,9 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       lrsApiMock.stubPostServerError()
 
       val actualResponse = webTestClient.post()
-        .uri("/learners")
+        .uri("/plr")
         .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(findLearnerByDemographicsRequest)
+        .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
@@ -66,19 +67,39 @@ class LearnersResourceIntTest : IntegrationTestBase() {
     }
 
     @Test
-    fun `should return OK and the correct response when LRS returns an exact match`() {
-      lrsApiMock.stubLearnerByDemographicsExactMatch()
+    fun `should return OK and the correct response when LRS returns an exact match for FULL type`() {
+      lrsApiMock.stubLearningEventsExactMatchFull()
 
-      val expectedResponse = FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.EXACT_MATCH,
-        matchedLearners = listOf(learner),
+      val expectedResponse = LearningEventsResult(
+        "WSRC0004",
+        "1234567890",
+        "1234567890",
+        listOf(
+          LearningEvent(
+            id = "28538264",
+            achievementProviderUkprn = "90000051",
+            achievementProviderName = "TEST90000051",
+            awardingOrganisationName = "Pearson Education Ltd",
+            qualificationType = "",
+            subjectCode = "K/501/5773",
+            achievementAwardDate = "2010-01-01",
+            credits = "2",
+            source = "QCFU",
+            dateLoaded = "2014-05-21 14:49:01",
+            underDataChallenge = "N",
+            level = "Entry Level",
+            status = "F",
+            subject = "Introduction to Construction Work: Entry 3",
+            grade = "Pass",
+            awardingOrganisationUkprn = "90000051",
+          ),
+        ),
       )
 
       val actualResponse = webTestClient.post()
-        .uri("/learners")
+        .uri("/plr")
         .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(findLearnerByDemographicsRequest)
+        .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
@@ -92,25 +113,43 @@ class LearnersResourceIntTest : IntegrationTestBase() {
     }
 
     @Test
-    fun `should return OK and the correct response when LRS returns a possible match with two learners`() {
-      lrsApiMock.stubLearnerByDemographicsPossibleMatchTwoLearners()
+    fun `should return OK and the correct response when LRS returns a linked learner response`() {
+      lrsApiMock.stubLearningEventsLinkedMatchFull()
 
-      val expectedResponse = FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.POSSIBLE_MATCH,
-        mismatchedFields = mutableMapOf(
-          ("familyName" to mutableListOf("FN", "FN")),
-          ("gender" to mutableListOf("2", "2")),
-          ("givenName" to mutableListOf("GN", "GN")),
-          ("lastKnownPostCode" to mutableListOf("CV49EA", "CV49EA")),
+      val expectedResponse = LearningEventsResult(
+        "WSRC0022",
+        "6666666666",
+        "1234567890",
+        listOf(
+          LearningEvent(
+            id = "4284",
+            achievementProviderUkprn = "10032743",
+            achievementProviderName = "TEST90000051",
+            awardingOrganisationName = "UNKNOWN",
+            qualificationType = "NVQ/GNVQ Key Skills Unit",
+            subjectCode = "1000323X",
+            achievementAwardDate = "2010-09-26",
+            credits = "0",
+            source = "ILR",
+            dateLoaded = "2012-05-31 16:47:04",
+            underDataChallenge = "N",
+            level = "",
+            status = "F",
+            subject = "Key Skills in Application of Number - level 1",
+            grade = "9999999999",
+            awardingOrganisationUkprn = "UNKNWN",
+            collectionType = "W",
+            returnNumber = "02",
+            participationStartDate = "2010-09-01",
+            participationEndDate = "2010-09-26",
+          ),
         ),
-        matchedLearners = listOf(learner, learner),
       )
 
       val actualResponse = webTestClient.post()
-        .uri("/learners")
+        .uri("/plr")
         .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(findLearnerByDemographicsRequest)
+        .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
@@ -124,35 +163,20 @@ class LearnersResourceIntTest : IntegrationTestBase() {
     }
 
     @Test
-    fun `should return appropriate mismatched fields when there is a possible match`() {
-      lrsApiMock.stubLearnerByDemographicsPossibleMatchTwoLearners()
+    fun `should return OK and the correct response when LRS returns a not shared response`() {
+      lrsApiMock.stubLearningEventsNotShared()
 
-      val requestWithTwoMismatches = findLearnerByDemographicsRequest.copy(
-        givenName = "Mismatch",
-        familyName = "Mismatch",
-        lastKnownPostCode = "CV49EA",
-        gender = 2,
-      )
-
-      val expectedResponse = FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest.copy(
-          givenName = "Mismatch",
-          familyName = "Mismatch",
-          lastKnownPostCode = "CV49EA",
-          gender = 2,
-        ),
-        responseType = ResponseType.POSSIBLE_MATCH,
-        mismatchedFields = mutableMapOf(
-          ("familyName" to mutableListOf("FN", "FN")),
-          ("givenName" to mutableListOf("GN", "GN")),
-        ),
-        matchedLearners = listOf(learner, learner),
+      val expectedResponse = LearningEventsResult(
+        "WSEC0206",
+        "",
+        "1234567890",
+        emptyList(),
       )
 
       val actualResponse = webTestClient.post()
-        .uri("/learners")
+        .uri("/plr")
         .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(requestWithTwoMismatches)
+        .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
@@ -166,18 +190,20 @@ class LearnersResourceIntTest : IntegrationTestBase() {
     }
 
     @Test
-    fun `should return OK and the correct response when LRS returns a no match response`() {
-      lrsApiMock.stubLearnerByDemographicsNoMatch()
+    fun `should return OK and the correct response when LRS returns a not verified response`() {
+      lrsApiMock.stubLearningEventsNotVerified()
 
-      val expectedResponse = FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.NO_MATCH,
+      val expectedResponse = LearningEventsResult(
+        "WSEC0208",
+        "",
+        "1234567890",
+        emptyList(),
       )
 
       val actualResponse = webTestClient.post()
-        .uri("/learners")
+        .uri("/plr")
         .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(findLearnerByDemographicsRequest)
+        .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
@@ -191,43 +217,11 @@ class LearnersResourceIntTest : IntegrationTestBase() {
     }
   }
 
-  val findLearnerByDemographicsRequest =
-    uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest(
-      "Some",
-      "Person",
-      LocalDate.parse("2024-01-01"),
-      1,
-      "CV49EE",
-    )
-
-  val learner = Learner(
-    createdDate = "2024-01-01",
-    lastUpdatedDate = "2024-01-01",
-    uln = "1234567890",
-    versionNumber = "1",
-    title = "Ms",
-    givenName = "GN",
-    middleOtherName = "MON",
-    familyName = "FN",
-    preferredGivenName = "PGN",
-    previousFamilyName = "PFN",
-    familyNameAtAge16 = "FNAA16",
-    schoolAtAge16 = "SAA16",
-    lastKnownAddressLine1 = "LKAL1",
-    lastKnownAddressLine2 = "LKAL2",
-    lastKnownAddressTown = "LKAT",
-    lastKnownAddressCountyOrCity = "LKACOC",
-    lastKnownPostCode = "CV49EA",
-    dateOfAddressCapture = "2024-01-01",
-    dateOfBirth = "2024-01-01",
-    placeOfBirth = "POB",
-    gender = "2",
-    emailAddress = "email@example.com",
-    nationality = "N",
-    scottishCandidateNumber = "123456789",
-    abilityToShare = "1",
-    learnerStatus = "1",
-    verificationType = "1",
-    tierLevel = "0",
+  val getLearningEventsRequest = GetPLRByULNRequest(
+    "Some Given Name",
+    "Some Family Name",
+    "1234567890",
+    null,
+    null,
   )
 }

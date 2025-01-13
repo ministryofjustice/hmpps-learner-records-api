@@ -10,13 +10,12 @@ Auth has been temporarily commented out.
 
 This service runs on `http://localhost:8080` by default.
 
-### `POST /learners`
+### `POST:/learners`
 This endpoint is to search for learners by their demographic information.
 The search may yield varied results, such as an exact match or possible matches.
 The response contains a ULN for each learner found, which may be used on another endpoint to retrieve their respective PLNs.
 
 #### How it works:
-
 
 The controller `LearnersResource` accepts a request with a `json` body taking the form of our model `FindLearnerByDemographicRequest`.
 
@@ -52,16 +51,63 @@ The service `LRSService` has a method called `findLearner` which accepts a singl
 
 The service has an instance of `retrofit` which provides a way to interface with the LRS API.
 
-`retrofit` along with `JAXBConverter`, the models under the `models.lrsapi` package, and the interface `LRSApiServiceInterface` handles all the heavy lifting when it comes to partsing `XML` responses from the LRS API.
+`retrofit` along with `JAXBConverter`, the models under the `models.lrsapi` package, and the interface `LRSApiServiceInterface` handles all the heavy lifting when it comes to parsing `XML` responses from the LRS API.
 
 When `findLearner` is called, retrofit is used to make a call to the LRS API. The service returns the response as a model `FindLearnerResponse`.
 
 The controller parses this into `json` and responds with that to the user.
 
-### `POST /plr`
+### `POST:/plr`
 
-TBD
+The `/plr` endpoint is used to request a Learner's learning events by their Unique Learner Number (ULN).
 
+Generally when using a valid ULN there should be no issues with this request, but there are a few possible responses.
+* Exact Match
+* Linked Learner Match
+* Learner opted to not share data
+* Learner could not be verified
+
+Example JSON Body
+```json
+{
+  "givenName": "Connor",
+  "familyName": "Carroll",
+  "uln": "4444599390"
+}
+```
+
+Example JSON Response
+```json
+{
+  "responseCode": "WSRC0004",
+  "foundUln": "6936002314",
+  "incomingUln": "4444599390",
+  "learnerRecord": [
+    {
+      "id": "1234",
+      "achievementProviderUkprn": "11111112",
+      "achievementProviderName": "PRIMARY SCHOOL",
+      "awardingOrganisationName": "UNKNOWN",
+      "qualificationType": "NVQ/GNVQ Key Skills Unit",
+      "subjectCode": "1000123A",
+      "achievementAwardDate": "2010-01-01",
+      "credits": "0",
+      "source": "ILR",
+      "dateLoaded": "2012-05-31 16:47:04",
+      "underDataChallenge": "N",
+      "level": "",
+      "status": "F",
+      "subject": "Key Skills",
+      "grade": "9999999999",
+      "awardingOrganisationUkprn": "UNKNWN",
+      "collectionType": "W",
+      "returnNumber": "02",
+      "participationStartDate": "2010-09-01",
+      "participationEndDate": "2010-09-26"
+    }
+  ]
+}
+```
 
 ## API Documentation
 
@@ -76,6 +122,7 @@ Ask a member of the Development team for the values for these fields place it in
 ```
 UK_PRN=
 ORG_PASSWORD=
+VENDOR_ID=
 PFX_FILE_PASSWORD=
 SPRING_PROFILES_ACTIVE=
 ```
@@ -130,22 +177,27 @@ Ensure no docker services are running as there may be port collisions.
 
 Open a terminal either in IntelliJ or in a separate window, ensuring you are in the repo directory.
 
-Ensure that you have set the environment variables above.
+Either ensure that you have set the environment variables above or if you would prefer not to set them, you can prefix the command with the following: 
+```bash
+ORG_PASSWORD={pass};PFX_FILE_PASSWORD={pass};SPRING_PROFILES_ACTIVE=local;UK_PRN={pass}
+```
 
 Run the following command:
 
-`./gradlew test`
+```bash
+./gradlew test
+```
 
 ## Testing using IntelliJ:
 
 If you encounter issues, make sure gradle is set up properly in IntelliJ for this project.
 
-First, right click the `test` package and select `run ‘Tests in ‘hmpps-temp…’` This will run tests, and you will notice they will fail.
+First, right-click the `test` package and select `run ‘Tests in ‘hmpps-temp…’` This will run tests, and you will notice they will fail.
 
 Next, in the top right corner of IntelliJ, to the left of the green play button, click the dropdown and then select `Edit Configurations`.
 
 Select the ‘hmpps-learner-records-api.test’ configuration, ensure that `Run` is populated with `:test`, the gradle project is `kotlin-template-experimental-lrs` and the environment variables, mentioned above, are also set here. Click `Apply` then `OK`.
 
-Again, right click the `test` package and select `run ‘Tests in ‘hmpps-temp…’ - They should now be running in IntelliJ.
+Again, right-click the `test` package and select `run ‘Tests in ‘hmpps-temp…’ - They should now be running in IntelliJ.
 
 Other steps may be required to enable debugging within IntelliJ.

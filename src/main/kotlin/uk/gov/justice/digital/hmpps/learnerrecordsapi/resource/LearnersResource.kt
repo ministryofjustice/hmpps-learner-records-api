@@ -22,7 +22,7 @@ class LearnersResource(
   @Tag(name = "Learners")
   @FindByDemographicApi
   suspend fun findByDemographic(
-    @RequestBody @Valid findLearnerByDemographicsRequest: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest,
+    @RequestBody @Valid findLearnerByDemographicsRequest: FindLearnerByDemographicsRequest,
   ): String {
     log.inboundRequest(requestModelObject = findLearnerByDemographicsRequest)
     return gson.toJson(lrsService.findLearner(findLearnerByDemographicsRequest))
