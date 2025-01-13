@@ -45,17 +45,19 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         .expectStatus()
 
       return when (expectedStatus) {
-        200 -> executedRequest
-          .isOk
-          .expectBody()
-          .returnResult()
-          .responseBody?.toString(Charsets.UTF_8)
+        200 ->
+          executedRequest
+            .isOk
+            .expectBody()
+            .returnResult()
+            .responseBody?.toString(Charsets.UTF_8)
 
-        500 -> executedRequest
-          .is5xxServerError
-          .expectBody()
-          .returnResult()
-          .responseBody?.toString(Charsets.UTF_8)
+        500 ->
+          executedRequest
+            .is5xxServerError
+            .expectBody()
+            .returnResult()
+            .responseBody?.toString(Charsets.UTF_8)
         else ->
           throw RuntimeException("Unimplemented Expected Status")
       }
@@ -103,14 +105,16 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         abilityToShare = "1",
         learnerStatus = "1",
         verificationType = "1",
-        tierLevel = "0"
+        tierLevel = "0",
       )
 
-      val expectedResponse = gson.toJson(FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.EXACT_MATCH,
-        matchedLearners = listOf(expectedExactMatchLearner),
-      ))
+      val expectedResponse = gson.toJson(
+        FindLearnerByDemographicsResponse(
+          searchParameters = findLearnerByDemographicsRequest,
+          responseType = ResponseType.EXACT_MATCH,
+          matchedLearners = listOf(expectedExactMatchLearner),
+        ),
+      )
 
       assertThat(actualResponse()).isEqualTo(expectedResponse)
     }
@@ -153,7 +157,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
           tierLevel = "2",
           abilityToShare = "1",
           learnerStatus = "1",
-          versionNumber = "1"
+          versionNumber = "1",
         ),
         Learner(
           createdDate = "2012-05-25",
@@ -181,19 +185,21 @@ class LearnersResourceIntTest : IntegrationTestBase() {
           tierLevel = "2",
           abilityToShare = "1",
           learnerStatus = "1",
-          versionNumber = "1"
+          versionNumber = "1",
         ),
       )
 
-      val expectedResponse = gson.toJson(FindLearnerByDemographicsResponse(
-        searchParameters = requestWithTwoMismatches,
-        responseType = ResponseType.POSSIBLE_MATCH,
-        mismatchedFields = mutableMapOf(
-          ("dateOfBirth" to mutableListOf("1995-06-28","1995-06-28")),
-          ("lastKnownPostCode" to mutableListOf("SO40 4JX")),
+      val expectedResponse = gson.toJson(
+        FindLearnerByDemographicsResponse(
+          searchParameters = requestWithTwoMismatches,
+          responseType = ResponseType.POSSIBLE_MATCH,
+          mismatchedFields = mutableMapOf(
+            ("dateOfBirth" to mutableListOf("1995-06-28", "1995-06-28")),
+            ("lastKnownPostCode" to mutableListOf("SO40 4JX")),
+          ),
+          matchedLearners = expectedPossibleMatchLearners,
         ),
-        matchedLearners = expectedPossibleMatchLearners,
-      ))
+      )
 
       assertThat(actualResponse(requestWithTwoMismatches)).isEqualTo(expectedResponse)
     }
@@ -202,10 +208,12 @@ class LearnersResourceIntTest : IntegrationTestBase() {
     fun `should return OK and the correct response when LRS returns a no match response`() {
       lrsApiMock.stubNoMatch()
 
-      val expectedResponse = gson.toJson(FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.NO_MATCH,
-      ))
+      val expectedResponse = gson.toJson(
+        FindLearnerByDemographicsResponse(
+          searchParameters = findLearnerByDemographicsRequest,
+          responseType = ResponseType.NO_MATCH,
+        ),
+      )
 
       assertThat(actualResponse()).isEqualTo(expectedResponse)
     }
@@ -243,11 +251,13 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         tierLevel = "0",
       )
 
-      val expectedResponse = gson.toJson(FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.LINKED_LEARNER_FOUND,
-        matchedLearners = mutableListOf(expectedLinkedLearner)
-      ))
+      val expectedResponse = gson.toJson(
+        FindLearnerByDemographicsResponse(
+          searchParameters = findLearnerByDemographicsRequest,
+          responseType = ResponseType.LINKED_LEARNER_FOUND,
+          matchedLearners = mutableListOf(expectedLinkedLearner),
+        ),
+      )
 
       assertThat(actualResponse()).isEqualTo(expectedResponse)
     }
@@ -256,10 +266,12 @@ class LearnersResourceIntTest : IntegrationTestBase() {
     fun `should return OK and the correct response when LRS returns a too many matches response`() {
       lrsApiMock.stubTooManyMatches()
 
-      val expectedResponse = gson.toJson(FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.TOO_MANY_MATCHES
-      ))
+      val expectedResponse = gson.toJson(
+        FindLearnerByDemographicsResponse(
+          searchParameters = findLearnerByDemographicsRequest,
+          responseType = ResponseType.TOO_MANY_MATCHES,
+        ),
+      )
 
       assertThat(actualResponse()).isEqualTo(expectedResponse)
     }
