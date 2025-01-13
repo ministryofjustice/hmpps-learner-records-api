@@ -16,10 +16,10 @@ class HttpClientConfiguration(
 ) {
   fun sslHttpClient(): OkHttpClient {
     log.info("Building HTTP Client With SSL")
-    val sslContextProvider = SSLContextProvider(pfxFilePath)
-    val sslContext = sslContextProvider.createSSLContext()
+    val sslContextConfiguration = SSLContextConfiguration(pfxFilePath)
+    val sslContext = sslContextConfiguration.createSSLContext()
 
-    val trustManager = sslContextProvider.getTrustManager()
+    val trustManager = sslContextConfiguration.getTrustManager()
 
     val loggingInterceptor = HttpLoggingInterceptor()
     loggingInterceptor.level = Level.BODY

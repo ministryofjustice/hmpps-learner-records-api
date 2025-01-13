@@ -1,10 +1,10 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request
 
+import jakarta.validation.constraints.Size
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.time.LocalDate
-import jakarta.validation.constraints.Size
 
 // We supply the ukprn and orgPassword - need to store this somewhere safe and call it
 // When user first uses microservice the username will be in the header of the request, we need to store this value and then input this value in the request to the LRS API
@@ -42,8 +42,7 @@ data class FindLearnerByDemographicsLRSRequest(
   @field:Size(max = 10)
   val uln: String? = null,
 ) {
-  fun transformToLRSRequest(ukprn: String, password: String): RequestBody {
-    return """
+  fun transformToLRSRequest(ukprn: String, password: String): RequestBody = """
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:fin="http://api.lrs.miap.gov.uk/findmsg">
         <soapenv:Header/>
         <soapenv:Body>
@@ -65,5 +64,4 @@ data class FindLearnerByDemographicsLRSRequest(
         </soapenv:Body>
       </soapenv:Envelope>
       """.toRequestBody("text/xml".toMediaTypeOrNull())
-  }
 }

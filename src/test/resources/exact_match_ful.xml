@@ -6,7 +6,8 @@
             <GivenName>{{soapXPath request.body '/FindLearnerByDemographics/GivenName/text()'}}</GivenName>
             <DateOfBirth>{{soapXPath request.body '/FindLearnerByDemographics/DateOfBirth/text()'}}</DateOfBirth>
             <Gender>{{soapXPath request.body '/FindLearnerByDemographics/Gender/text()'}}</Gender>
-            <LastKnownPostCode>{{soapXPath request.body '/FindLearnerByDemographics/LastKnownPostCode/text()'}}</LastKnownPostCode>
+            <LastKnownPostCode>{{soapXPath request.body '/FindLearnerByDemographics/LastKnownPostCode/text()'}}
+            </LastKnownPostCode>
             <Learner>
                 <CreatedDate>2024-01-01</CreatedDate>
                 <LastUpdatedDate>2024-01-01</LastUpdatedDate>
