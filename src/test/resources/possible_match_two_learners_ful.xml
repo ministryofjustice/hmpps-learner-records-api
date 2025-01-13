@@ -2,38 +2,34 @@
     <soapenv:Body>
         <ns2:FindLearnerResponse xmlns:ns2="http://api.lrs.miap.gov.uk/findmsg">
             <ResponseCode>WSRC0003</ResponseCode>
-            <FamilyName>{{soapXPath request.body '/FindLearnerByDemographics/FamilyName/text()'}}</FamilyName>
-            <GivenName>{{soapXPath request.body '/FindLearnerByDemographics/GivenName/text()'}}</GivenName>
-            <DateOfBirth>{{soapXPath request.body '/FindLearnerByDemographics/DateOfBirth/text()'}}</DateOfBirth>
-            <Gender>{{soapXPath request.body '/FindLearnerByDemographics/Gender/text()'}}</Gender>
-            <LastKnownPostCode>{{soapXPath request.body '/FindLearnerByDemographics/LastKnownPostCode/text()'}}
-            </LastKnownPostCode>
+            <FamilyName>Cheng</FamilyName>
+            <GivenName>Anna</GivenName>
+            <DateOfBirth>1995-06-28</DateOfBirth>
+            <Gender>2</Gender>
+            <LastKnownPostCode>ZZ12ZZ</LastKnownPostCode>
             <Learner>
-                <CreatedDate>2024-01-01</CreatedDate>
-                <LastUpdatedDate>2024-01-01</LastUpdatedDate>
-                <ULN>1234567890</ULN>
-                <Title>Ms</Title>
-                <GivenName>GN</GivenName>
-                <MiddleOtherName>MON</MiddleOtherName>
-                <FamilyName>FN</FamilyName>
-                <PreferredGivenName>PGN</PreferredGivenName>
-                <PreviousFamilyName>PFN</PreviousFamilyName>
-                <FamilyNameAtAge16>FNAA16</FamilyNameAtAge16>
-                <SchoolAtAge16>SAA16</SchoolAtAge16>
-                <LastKnownAddressLine1>LKAL1</LastKnownAddressLine1>
-                <LastKnownAddressLine2>LKAL2</LastKnownAddressLine2>
-                <LastKnownAddressTown>LKAT</LastKnownAddressTown>
-                <LastKnownAddressCountyOrCity>LKACOC</LastKnownAddressCountyOrCity>
-                <LastKnownPostCode>CV49EA</LastKnownPostCode>
-                <Nationality>N</Nationality>
-                <DateOfAddressCapture>2024-01-01</DateOfAddressCapture>
-                <DateOfBirth>2024-01-01</DateOfBirth>
-                <PlaceOfBirth>POB</PlaceOfBirth>
+                <CreatedDate>2012-05-25</CreatedDate>
+                <LastUpdatedDate>2012-05-25</LastUpdatedDate>
+                <ULN>1964986809</ULN>
+                <Title>Miss</Title>
+                <GivenName>Anna</GivenName>
+                <MiddleOtherName>Joanna</MiddleOtherName>
+                <FamilyName>Cheng</FamilyName>
+                <PreferredGivenName>Anna</PreferredGivenName>
+                <FamilyNameAtAge16>CHENG</FamilyNameAtAge16>
+                <SchoolAtAge16>Ellern Mede School </SchoolAtAge16>
+                <LastKnownAddressLine1>1 ILFRACOMBE GARDENS</LastKnownAddressLine1>
+                <LastKnownAddressTown>WHITLEY BAY</LastKnownAddressTown>
+                <LastKnownAddressCountyOrCity>TYNE AND WEAR</LastKnownAddressCountyOrCity>
+                <LastKnownPostCode>NE26 3ND</LastKnownPostCode>
+                <DateOfAddressCapture>2010-09-07</DateOfAddressCapture>
+                <DateOfBirth>1995-06-28</DateOfBirth>
+                <PlaceOfBirth>Chard </PlaceOfBirth>
                 <Gender>2</Gender>
-                <EmailAddress>email@example.com</EmailAddress>
-                <ScottishCandidateNumber>123456789</ScottishCandidateNumber>
-                <VerificationType>1</VerificationType>
-                <TierLevel>0</TierLevel>
+                <EmailAddress>anna.cheng@yahoo.compatibilitytest.co.uk</EmailAddress>
+                <ScottishCandidateNumber>820208781</ScottishCandidateNumber>
+                <VerificationType>5</VerificationType>
+                <TierLevel>2</TierLevel>
                 <AbilityToShare>1</AbilityToShare>
                 <LearnerStatus>1</LearnerStatus>
                 <LinkedULNs xmlns="http://api.lrs.miap.gov.uk/learner"/>
@@ -41,31 +37,29 @@
                 <VersionNumber>1</VersionNumber>
             </Learner>
             <Learner>
-                <CreatedDate>2024-01-01</CreatedDate>
-                <LastUpdatedDate>2024-01-01</LastUpdatedDate>
-                <ULN>1234567890</ULN>
-                <Title>Ms</Title>
-                <GivenName>GN</GivenName>
-                <MiddleOtherName>MON</MiddleOtherName>
-                <FamilyName>FN</FamilyName>
-                <PreferredGivenName>PGN</PreferredGivenName>
-                <PreviousFamilyName>PFN</PreviousFamilyName>
-                <FamilyNameAtAge16>FNAA16</FamilyNameAtAge16>
-                <SchoolAtAge16>SAA16</SchoolAtAge16>
-                <LastKnownAddressLine1>LKAL1</LastKnownAddressLine1>
-                <LastKnownAddressLine2>LKAL2</LastKnownAddressLine2>
-                <LastKnownAddressTown>LKAT</LastKnownAddressTown>
-                <LastKnownAddressCountyOrCity>LKACOC</LastKnownAddressCountyOrCity>
-                <LastKnownPostCode>CV49EA</LastKnownPostCode>
-                <Nationality>N</Nationality>
-                <DateOfAddressCapture>2024-01-01</DateOfAddressCapture>
-                <DateOfBirth>2024-01-01</DateOfBirth>
-                <PlaceOfBirth>POB</PlaceOfBirth>
+                <CreatedDate>2012-05-25</CreatedDate>
+                <LastUpdatedDate>2012-05-25</LastUpdatedDate>
+                <ULN>8383558804</ULN>
+                <Title>Miss</Title>
+                <GivenName>Anna</GivenName>
+                <MiddleOtherName>Joanna</MiddleOtherName>
+                <FamilyName>Cheng</FamilyName>
+                <PreferredGivenName>Anna</PreferredGivenName>
+                <FamilyNameAtAge16>CHENG</FamilyNameAtAge16>
+                <SchoolAtAge16>Ellern Mede School </SchoolAtAge16>
+                <LastKnownAddressLine1>14 LARKSPUR DRIVE</LastKnownAddressLine1>
+                <LastKnownAddressLine2>MARCHWOOD</LastKnownAddressLine2>
+                <LastKnownAddressTown>SOUTHAMPTON</LastKnownAddressTown>
+                <LastKnownAddressCountyOrCity>HAMPSHIRE</LastKnownAddressCountyOrCity>
+                <LastKnownPostCode>SO40 4JX</LastKnownPostCode>
+                <DateOfAddressCapture>2010-09-07</DateOfAddressCapture>
+                <DateOfBirth>1995-06-28</DateOfBirth>
+                <PlaceOfBirth>Chard </PlaceOfBirth>
                 <Gender>2</Gender>
-                <EmailAddress>email@example.com</EmailAddress>
-                <ScottishCandidateNumber>123456789</ScottishCandidateNumber>
-                <VerificationType>1</VerificationType>
-                <TierLevel>0</TierLevel>
+                <EmailAddress>anna.cheng@yahoo.compatibilitytest.co.uk</EmailAddress>
+                <ScottishCandidateNumber>820208781</ScottishCandidateNumber>
+                <VerificationType>5</VerificationType>
+                <TierLevel>2</TierLevel>
                 <AbilityToShare>1</AbilityToShare>
                 <LearnerStatus>1</LearnerStatus>
                 <LinkedULNs xmlns="http://api.lrs.miap.gov.uk/learner"/>
