@@ -198,6 +198,6 @@ Next, in the top right corner of IntelliJ, to the left of the green play button,
 
 Select the ‘hmpps-learner-records-api.test’ configuration, ensure that `Run` is populated with `:test`, the gradle project is `kotlin-template-experimental-lrs` and the environment variables, mentioned above, are also set here. Click `Apply` then `OK`.
 
-Again, right-click the `test` package and select `run ‘Tests in ‘hmpps-temp…’ - They should now be running in IntelliJ.
+Again, right click the `test` package and select `run ‘Tests in ‘hmpps-temp…’ - They should now be running in IntelliJ.
 
 Other steps may be required to enable debugging within IntelliJ.
