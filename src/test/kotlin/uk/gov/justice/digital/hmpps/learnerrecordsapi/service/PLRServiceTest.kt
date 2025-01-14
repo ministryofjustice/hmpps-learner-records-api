@@ -40,7 +40,6 @@ class PLRServiceTest {
   @Test
   fun `should return LRS request object`(): Unit = runTest {
     val env = LearningEventsEnvelope()
-//    val expectedResult = env.body.learningEventsResponse.learningEventsResult
     val body = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest(
       givenName = "test",
       familyName = "test",
