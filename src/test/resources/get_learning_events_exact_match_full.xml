@@ -1,0 +1,31 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body>
+        <GetLearnerLearningEventsResponse xmlns="http://tempuri.org/">
+            <GetLearnerLearningEventsResult xmlns:a="http://api.lrs.qcf.gov.uk/model" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                <a:FoundULN>{{soapXPath request.body '/GetLearnerLearningEvents/uln/text()'}}</a:FoundULN>
+                <a:IncomingULN>{{soapXPath request.body '/GetLearnerLearningEvents/uln/text()'}}</a:IncomingULN>
+                <a:ResponseCode>WSRC0004</a:ResponseCode>
+                <a:LearnerRecord>
+                    <a:LearningEvent>
+                        <a:ID>28538264</a:ID>
+                        <a:AchievementProviderUkprn>90000051</a:AchievementProviderUkprn>
+                        <a:AchievementProviderName>TEST90000051</a:AchievementProviderName>
+                        <a:AwardingOrganisationName>Pearson Education Ltd</a:AwardingOrganisationName>
+                        <a:QualificationType></a:QualificationType>
+                        <a:SubjectCode>K/501/5773</a:SubjectCode>
+                        <a:AchievementAwardDate>2010-01-01</a:AchievementAwardDate>
+                        <a:Credits>2</a:Credits>
+                        <a:Source>QCFU</a:Source>
+                        <a:DateLoaded>2014-05-21 14:49:01</a:DateLoaded>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                        <a:Level>Entry Level</a:Level>
+                        <a:Status>F</a:Status>
+                        <a:Subject>Introduction to Construction Work: Entry 3</a:Subject>
+                        <a:Grade>Pass</a:Grade>
+                        <a:AwardingOrganisationUkprn>90000051</a:AwardingOrganisationUkprn>
+                    </a:LearningEvent>
+                </a:LearnerRecord>
+            </GetLearnerLearningEventsResult>
+        </GetLearnerLearningEventsResponse>
+    </s:Body>
+</s:Envelope>
