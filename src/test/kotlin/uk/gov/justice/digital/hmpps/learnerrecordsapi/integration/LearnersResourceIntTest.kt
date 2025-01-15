@@ -12,7 +12,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.Respon
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
+
 import java.time.LocalDate
 
 class LearnersResourceIntTest : IntegrationTestBase() {
@@ -23,7 +24,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     private val gson = GsonBuilder()
       .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
-      .registerTypeAdapter(ResponseType::class.java, ResponseTypeAdapter().nullSafe())
+      .registerTypeAdapter(LRSResponseType::class.java, ResponseTypeAdapter().nullSafe())
       .create()
 
     private val findLearnerByDemographicsRequest =
@@ -77,7 +78,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response when LRS returns an exact match`() {
-      lrsApiMock.stubExactMatch()
+      lrsApiMock.stubLearnerByDemographicsExactMatch()
 
       val expectedExactMatchLearner = Learner(
         createdDate = "2012-05-25",
@@ -111,7 +112,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       val expectedResponse = gson.toJson(
         FindLearnerByDemographicsResponse(
           searchParameters = findLearnerByDemographicsRequest,
-          responseType = ResponseType.EXACT_MATCH,
+          responseType = LRSResponseType.EXACT_MATCH,
           matchedLearners = listOf(expectedExactMatchLearner),
         ),
       )
@@ -121,7 +122,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response with appropriate mismatched fields when LRS returns a possible match with two learners`() {
-      lrsApiMock.stubPossibleMatchTwoLearners()
+      lrsApiMock.stubLearnerByDemographicsPossibleMatchTwoLearners()
 
       val requestWithTwoMismatches = findLearnerByDemographicsRequest.copy(
         givenName = "Anna",
@@ -192,7 +193,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       val expectedResponse = gson.toJson(
         FindLearnerByDemographicsResponse(
           searchParameters = requestWithTwoMismatches,
-          responseType = ResponseType.POSSIBLE_MATCH,
+          responseType = LRSResponseType.POSSIBLE_MATCH,
           mismatchedFields = mutableMapOf(
             ("dateOfBirth" to mutableListOf("1995-06-28", "1995-06-28")),
             ("lastKnownPostCode" to mutableListOf("SO40 4JX")),
@@ -206,12 +207,12 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response when LRS returns a no match response`() {
-      lrsApiMock.stubNoMatch()
+      lrsApiMock.stubLearnerByDemographicsNoMatch()
 
       val expectedResponse = gson.toJson(
         FindLearnerByDemographicsResponse(
           searchParameters = findLearnerByDemographicsRequest,
-          responseType = ResponseType.NO_MATCH,
+          responseType = LRSResponseType.NO_MATCH,
         ),
       )
 
@@ -254,7 +255,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       val expectedResponse = gson.toJson(
         FindLearnerByDemographicsResponse(
           searchParameters = findLearnerByDemographicsRequest,
-          responseType = ResponseType.LINKED_LEARNER_FOUND,
+          responseType = LRSResponseType.LINKED_LEARNER,
           matchedLearners = mutableListOf(expectedLinkedLearner),
         ),
       )
@@ -269,7 +270,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       val expectedResponse = gson.toJson(
         FindLearnerByDemographicsResponse(
           searchParameters = findLearnerByDemographicsRequest,
-          responseType = ResponseType.TOO_MANY_MATCHES,
+          responseType = LRSResponseType.TOO_MANY_MATCHES,
         ),
       )
 

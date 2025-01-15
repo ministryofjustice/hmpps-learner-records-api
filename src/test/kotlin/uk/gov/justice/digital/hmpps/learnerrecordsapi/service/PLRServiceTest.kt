@@ -14,6 +14,8 @@ import retrofit2.Response
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsEnvelope
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.GetPLRByULNResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
@@ -38,13 +40,19 @@ class PLRServiceTest {
   @Test
   fun `should return LRS request object`(): Unit = runTest {
     val env = LearningEventsEnvelope()
-    val expectedResult = env.body.learningEventsResponse.learningEventsResult
     val body = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest(
       givenName = "test",
       familyName = "test",
       uln = "test",
       dateOfBirth = LocalDate.of(1980, 1, 1),
       gender = 1,
+    )
+    val expectedResult = GetPLRByULNResponse(
+      searchParameters = body,
+      responseType = LRSResponseType.UNKNOWN_RESPONSE_TYPE,
+      foundUln = env.body.learningEventsResponse.learningEventsResult.foundUln,
+      incomingUln = env.body.learningEventsResponse.learningEventsResult.incomingUln,
+      learnerRecord = env.body.learningEventsResponse.learningEventsResult.learnerRecord,
     )
 
     `when`(appConfigMock.ukprn()).thenReturn("test")

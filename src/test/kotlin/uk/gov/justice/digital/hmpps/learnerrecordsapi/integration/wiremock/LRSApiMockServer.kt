@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
 import org.junit.jupiter.api.extension.AfterAllCallback
@@ -13,7 +14,8 @@ import java.nio.charset.StandardCharsets
 
 class LRSApiMockServer : WireMockServer(8082) {
 
-  private val basePath = "/LearnerService.svc"
+  private val basePathLearnerByDemographics = "/LearnerService.svc"
+  private val basePath = "/LearnerServiceR9.svc"
 
   init {
     this.start()
@@ -25,7 +27,7 @@ class LRSApiMockServer : WireMockServer(8082) {
     return InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()
   }
 
-  fun stubExactMatch() {
+  fun stubLearningEventsExactMatchFull() {
     stubFor(
       post(urlPathMatching(basePath))
         .willReturn(
@@ -33,14 +35,14 @@ class LRSApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("exact_match_ful"),
+              readTemplateToString("get_learning_events_exact_match_full"),
             )
             .withStatus(200),
         ),
     )
   }
 
-  fun stubPossibleMatchTwoLearners() {
+  fun stubLearningEventsLinkedMatchFull() {
     stubFor(
       post(urlPathMatching(basePath))
         .willReturn(
@@ -48,14 +50,14 @@ class LRSApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("possible_match_two_learners_ful"),
+              readTemplateToString("get_learning_events_linked_match_full"),
             )
             .withStatus(200),
         ),
     )
   }
 
-  fun stubNoMatch() {
+  fun stubLearningEventsNotShared() {
     stubFor(
       post(urlPathMatching(basePath))
         .willReturn(
@@ -63,7 +65,66 @@ class LRSApiMockServer : WireMockServer(8082) {
             .withHeader("Content-Type", "text/xml")
             .withTransformers("response-template")
             .withBody(
-              readTemplateToString("no_match_ful"),
+              readTemplateToString("get_learning_events_not_shared"),
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+  fun stubLearningEventsNotVerified() {
+    stubFor(
+      post(urlPathMatching(basePath))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("get_learning_events_not_verified"),
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+
+  fun stubLearnerByDemographicsExactMatch() {
+    stubFor(
+      post(urlPathMatching(basePathLearnerByDemographics))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("find_by_demographic_exact_match_ful"),
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+
+  fun stubLearnerByDemographicsPossibleMatchTwoLearners() {
+    stubFor(
+      post(urlPathMatching(basePathLearnerByDemographics))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("find_by_demographic_possible_match_two_learners_ful"),
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+
+  fun stubLearnerByDemographicsNoMatch() {
+    stubFor(
+      post(urlPathMatching(basePathLearnerByDemographics))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("find_by_demographic_no_match_ful"),
             )
             .withStatus(200),
         ),
@@ -102,7 +163,7 @@ class LRSApiMockServer : WireMockServer(8082) {
 
   fun stubPostBadRequest() {
     stubFor(
-      post(urlPathMatching(basePath))
+      post(anyUrl())
         .willReturn(
           aResponse()
             .withStatus(400),
@@ -112,7 +173,7 @@ class LRSApiMockServer : WireMockServer(8082) {
 
   fun stubPostServerError() {
     stubFor(
-      post(urlPathMatching(basePath))
+      post(anyUrl())
         .willReturn(
           aResponse()
             .withStatus(500),
