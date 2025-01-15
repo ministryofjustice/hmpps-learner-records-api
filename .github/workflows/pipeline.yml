@@ -44,7 +44,7 @@ jobs:
   build:
     name: Build docker image from hmpps-github-actions
     if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
+    uses: ./.github/workflows/docker_build.yml # WORKFLOW_VERSION
     needs:
       - kotlin_validate
     with:
