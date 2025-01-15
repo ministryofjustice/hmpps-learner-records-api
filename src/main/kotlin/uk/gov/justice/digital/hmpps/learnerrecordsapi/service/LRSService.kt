@@ -1,21 +1,18 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 
-import arrow.core.Either
-import arrow.core.computations.either
-import arrow.core.left
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.ErrorEnvelope
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import java.io.StringReader
 import javax.xml.bind.JAXBContext
 import kotlin.reflect.full.declaredMemberProperties
@@ -24,13 +21,22 @@ import kotlin.reflect.full.declaredMemberProperties
 class LRSService(
   @Autowired
   private val httpClientConfiguration: HttpClientConfiguration,
-  private val lrsClient: uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface = httpClientConfiguration.retrofit()
-    .create(uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface::class.java),
+  private val lrsClient: LRSApiServiceInterface = httpClientConfiguration.retrofit()
+    .create(LRSApiServiceInterface::class.java),
   @Autowired
   private val appConfig: AppConfig,
 ) {
 
   private val log: LoggerUtil = LoggerUtil(javaClass)
+
+  private fun parseError(xmlString: String): MIAPAPIException? {
+    val regex = Regex("<ns10:MIAPAPIException[\\s\\S]*?</ns10:MIAPAPIException>")
+    val match = regex.find(xmlString)
+    val relevantXml = match?.value ?: throw IllegalArgumentException("Unparsable LRS Error")
+    val jaxbContext = JAXBContext.newInstance(MIAPAPIException::class.java)
+    val unmarshaller = jaxbContext.createUnmarshaller()
+    return unmarshaller.unmarshal(StringReader(relevantXml)) as MIAPAPIException
+  }
 
   suspend fun findLearner(findLearnerByDemographicsRequest: FindLearnerByDemographicsRequest): FindLearnerByDemographicsResponse {
     log.debug("Transforming inbound request object to LRS request object")
@@ -40,28 +46,21 @@ class LRSService(
     log.debug("Calling LRS API")
 
     val lrsResponse = lrsClient.findLearnerByDemographics(requestBody)
+    val lrsResponseBody = lrsResponse.body()?.body?.findLearnerResponse
 
-    if (lrsResponse.isSuccessful) {
-      val lrsResponseBody = requireNotNull(lrsClient.findLearnerByDemographics(requestBody).body()?.body?.findLearnerResponse) {
-        "There was an error with an upstream service. Please try again later."
-      }
+    if (lrsResponse.isSuccessful && lrsResponseBody != null) {
       return convertLrsResponseToOurResponse(findLearnerByDemographicsRequest, lrsResponseBody)
     } else {
-      val jaxbContext = JAXBContext.newInstance(ErrorEnvelope::class.java)
-      val unmarshaller = jaxbContext.createUnmarshaller()
-      log.error(lrsResponse.errorBody()?.string().toString())
-      val error = unmarshaller.unmarshal(StringReader(lrsResponse.errorBody()?.string().toString())) as ErrorEnvelope
-      val miapApiException = error.body?.fault?.detail?.miapApiException
-      throw LRSException(miapApiException?.errorCode.toString(), miapApiException?.errorActor.toString(), miapApiException?.description.toString(), miapApiException?.furtherDetails.toString(), miapApiException?.errorTimestamp.toString())
+      throw LRSException(parseError(lrsResponse.errorBody()?.string().toString()))
     }
   }
 
   private fun computeMismatchedFields(
-    request: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest,
+    request: FindLearnerByDemographicsRequest,
     lrsResponse: FindLearnerResponse,
   ): MutableMap<String, MutableList<String>> {
     val requestFieldNames =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest::class.declaredMemberProperties.associateBy { it.name }
+      FindLearnerByDemographicsRequest::class.declaredMemberProperties.associateBy { it.name }
     val learnerFieldNames = Learner::class.declaredMemberProperties.associateBy { it.name }
     val sharedFieldNames = requestFieldNames.keys.intersect(learnerFieldNames.keys)
 
@@ -83,11 +82,11 @@ class LRSService(
   }
 
   private fun convertLrsResponseToOurResponse(
-    request: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest,
+    request: FindLearnerByDemographicsRequest,
     response: FindLearnerResponse,
   ): FindLearnerByDemographicsResponse {
-    val responseType = ResponseType.fromLrsResponseCode(response.responseCode)
-    val isPossibleMatch = responseType == ResponseType.POSSIBLE_MATCH
+    val responseType = LRSResponseType.fromLrsResponseCode(response.responseCode)
+    val isPossibleMatch = responseType == LRSResponseType.POSSIBLE_MATCH
     return FindLearnerByDemographicsResponse(
       searchParameters = request,
       responseType = responseType,

@@ -12,7 +12,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.Respon
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import java.time.LocalDate
 
 class LearnersResourceIntTest : IntegrationTestBase() {
@@ -21,214 +21,253 @@ class LearnersResourceIntTest : IntegrationTestBase() {
   @DisplayName("POST /learners")
   inner class LearnersEndpoint {
 
-    val gson = GsonBuilder()
+    private val gson = GsonBuilder()
       .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
-      .registerTypeAdapter(ResponseType::class.java, ResponseTypeAdapter().nullSafe())
+      .registerTypeAdapter(LRSResponseType::class.java, ResponseTypeAdapter().nullSafe())
       .create()
 
-    @Test
-    fun `should return 500 with an appropriate error response if LRS returns a BadRequest`() {
-      lrsApiMock.stubPostBadRequest()
+    private val findLearnerByDemographicsRequest =
+      FindLearnerByDemographicsRequest(
+        "Some",
+        "Person",
+        LocalDate.parse("2024-01-01"),
+        1,
+        "CV49EE",
+      )
 
-      val actualResponse = webTestClient.post()
+    private fun actualResponse(request: FindLearnerByDemographicsRequest = findLearnerByDemographicsRequest, expectedStatus: Int = 200): String? {
+      val executedRequest = webTestClient.post()
         .uri("/learners")
         .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(findLearnerByDemographicsRequest)
+        .bodyValue(request)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
-        .is5xxServerError
-        .expectBody()
-        .returnResult()
-        .responseBody
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).contains("There was an error with an upstream service. Please try again later.")
+      return when (expectedStatus) {
+        200 ->
+          executedRequest
+            .isOk
+            .expectBody()
+            .returnResult()
+            .responseBody?.toString(Charsets.UTF_8)
+
+        500 ->
+          executedRequest
+            .is5xxServerError
+            .expectBody()
+            .returnResult()
+            .responseBody?.toString(Charsets.UTF_8)
+        else ->
+          throw RuntimeException("Unimplemented Expected Status")
+      }
     }
 
     @Test
     fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
-      lrsApiMock.stubPostServerError()
-
-      val actualResponse = webTestClient.post()
-        .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(findLearnerByDemographicsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .is5xxServerError
-        .expectBody()
-        .returnResult()
-        .responseBody
-
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).contains("There was an error with an upstream service. Please try again later.")
+      lrsApiMock.stubLearnerByDemographicsPostServerError()
+      assertThat(actualResponse(expectedStatus = 500)).contains("LRS returned an error: MIAPAPIException")
     }
 
     @Test
     fun `should return OK and the correct response when LRS returns an exact match`() {
-      lrsApiMock.stubExactMatch()
+      lrsApiMock.stubLearnerByDemographicsExactMatch()
 
-      val expectedResponse = FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.EXACT_MATCH,
-        matchedLearners = listOf(learner),
+      val expectedExactMatchLearner = Learner(
+        createdDate = "2012-05-25",
+        lastUpdatedDate = "2012-05-25",
+        uln = "1026893096",
+        versionNumber = "1",
+        title = "Mrs",
+        givenName = "Darcie",
+        middleOtherName = "Isla",
+        familyName = "Tucker",
+        preferredGivenName = "Darcie",
+        previousFamilyName = "CAMPBELL",
+        familyNameAtAge16 = "TUCKER",
+        schoolAtAge16 = "Mill Hill School Foundation ",
+        lastKnownAddressLine1 = "1 JOBS LANE",
+        lastKnownAddressTown = "COVENTRY",
+        lastKnownAddressCountyOrCity = "WEST MIDLANDS",
+        lastKnownPostCode = "CV4 9EE",
+        dateOfAddressCapture = "2009-04-25",
+        dateOfBirth = "1976-08-16",
+        placeOfBirth = "Blean ",
+        gender = "2",
+        emailAddress = "darcie.tucker@aol.compatibilitytest.com",
+        scottishCandidateNumber = "845759406",
+        abilityToShare = "1",
+        learnerStatus = "1",
+        verificationType = "1",
+        tierLevel = "0",
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(findLearnerByDemographicsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
-
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
-    }
-
-    @Test
-    fun `should return OK and the correct response when LRS returns a possible match with two learners`() {
-      lrsApiMock.stubPossibleMatchTwoLearners()
-
-      val expectedResponse = FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.POSSIBLE_MATCH,
-        mismatchedFields = mutableMapOf(
-          ("familyName" to mutableListOf("FN", "FN")),
-          ("gender" to mutableListOf("2", "2")),
-          ("givenName" to mutableListOf("GN", "GN")),
-          ("lastKnownPostCode" to mutableListOf("CV49EA", "CV49EA")),
+      val expectedResponse = gson.toJson(
+        FindLearnerByDemographicsResponse(
+          searchParameters = findLearnerByDemographicsRequest,
+          responseType = LRSResponseType.EXACT_MATCH,
+          matchedLearners = listOf(expectedExactMatchLearner),
         ),
-        matchedLearners = listOf(learner, learner),
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(findLearnerByDemographicsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
-
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+      assertThat(actualResponse()).isEqualTo(expectedResponse)
     }
 
     @Test
-    fun `should return appropriate mismatched fields when there is a possible match`() {
-      lrsApiMock.stubPossibleMatchTwoLearners()
+    fun `should return OK and the correct response with appropriate mismatched fields when LRS returns a possible match with two learners`() {
+      lrsApiMock.stubLearnerByDemographicsPossibleMatchTwoLearners()
 
       val requestWithTwoMismatches = findLearnerByDemographicsRequest.copy(
-        givenName = "Mismatch",
-        familyName = "Mismatch",
-        lastKnownPostCode = "CV49EA",
+        givenName = "Anna",
+        familyName = "Cheng",
+        lastKnownPostCode = "NE26 3ND",
+        dateOfBirth = LocalDate.parse("1995-06-27"),
         gender = 2,
       )
 
-      val expectedResponse = FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest.copy(
-          givenName = "Mismatch",
-          familyName = "Mismatch",
-          lastKnownPostCode = "CV49EA",
-          gender = 2,
+      val expectedPossibleMatchLearners = mutableListOf(
+        Learner(
+          createdDate = "2012-05-25",
+          lastUpdatedDate = "2012-05-25",
+          uln = "1964986809",
+          title = "Miss",
+          givenName = "Anna",
+          middleOtherName = "Joanna",
+          familyName = "Cheng",
+          preferredGivenName = "Anna",
+          familyNameAtAge16 = "CHENG",
+          schoolAtAge16 = "Ellern Mede School ",
+          lastKnownAddressLine1 = "1 ILFRACOMBE GARDENS",
+          lastKnownAddressTown = "WHITLEY BAY",
+          lastKnownAddressCountyOrCity = "TYNE AND WEAR",
+          lastKnownPostCode = "NE26 3ND",
+          dateOfAddressCapture = "2010-09-07",
+          dateOfBirth = "1995-06-28",
+          placeOfBirth = "Chard ",
+          gender = "2",
+          emailAddress = "anna.cheng@yahoo.compatibilitytest.co.uk",
+          scottishCandidateNumber = "820208781",
+          verificationType = "5",
+          tierLevel = "2",
+          abilityToShare = "1",
+          learnerStatus = "1",
+          versionNumber = "1",
         ),
-        responseType = ResponseType.POSSIBLE_MATCH,
-        mismatchedFields = mutableMapOf(
-          ("familyName" to mutableListOf("FN", "FN")),
-          ("givenName" to mutableListOf("GN", "GN")),
+        Learner(
+          createdDate = "2012-05-25",
+          lastUpdatedDate = "2012-05-25",
+          uln = "8383558804",
+          title = "Miss",
+          givenName = "Anna",
+          middleOtherName = "Joanna",
+          familyName = "Cheng",
+          preferredGivenName = "Anna",
+          familyNameAtAge16 = "CHENG",
+          schoolAtAge16 = "Ellern Mede School ",
+          lastKnownAddressLine1 = "14 LARKSPUR DRIVE",
+          lastKnownAddressLine2 = "MARCHWOOD",
+          lastKnownAddressTown = "SOUTHAMPTON",
+          lastKnownAddressCountyOrCity = "HAMPSHIRE",
+          lastKnownPostCode = "SO40 4JX",
+          dateOfAddressCapture = "2010-09-07",
+          dateOfBirth = "1995-06-28",
+          placeOfBirth = "Chard ",
+          gender = "2",
+          emailAddress = "anna.cheng@yahoo.compatibilitytest.co.uk",
+          scottishCandidateNumber = "820208781",
+          verificationType = "5",
+          tierLevel = "2",
+          abilityToShare = "1",
+          learnerStatus = "1",
+          versionNumber = "1",
         ),
-        matchedLearners = listOf(learner, learner),
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(requestWithTwoMismatches)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
+      val expectedResponse = gson.toJson(
+        FindLearnerByDemographicsResponse(
+          searchParameters = requestWithTwoMismatches,
+          responseType = LRSResponseType.POSSIBLE_MATCH,
+          mismatchedFields = mutableMapOf(
+            ("dateOfBirth" to mutableListOf("1995-06-28", "1995-06-28")),
+            ("lastKnownPostCode" to mutableListOf("SO40 4JX")),
+          ),
+          matchedLearners = expectedPossibleMatchLearners,
+        ),
+      )
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+      assertThat(actualResponse(requestWithTwoMismatches)).isEqualTo(expectedResponse)
     }
 
     @Test
     fun `should return OK and the correct response when LRS returns a no match response`() {
-      lrsApiMock.stubNoMatch()
+      lrsApiMock.stubLearnerByDemographicsNoMatch()
 
-      val expectedResponse = FindLearnerByDemographicsResponse(
-        searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.NO_MATCH,
+      val expectedResponse = gson.toJson(
+        FindLearnerByDemographicsResponse(
+          searchParameters = findLearnerByDemographicsRequest,
+          responseType = LRSResponseType.NO_MATCH,
+        ),
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(findLearnerByDemographicsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
+      assertThat(actualResponse()).isEqualTo(expectedResponse)
+    }
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    @Test
+    fun `should return OK and the correct response when LRS returns a linked learner response`() {
+      lrsApiMock.stubLearnerByDemographicsLinkedLearner()
+
+      val expectedLinkedLearner = Learner(
+        createdDate = "2012-05-25",
+        lastUpdatedDate = "2012-05-25",
+        uln = "6936002314",
+        versionNumber = "1",
+        masterSubstituted = "Y",
+        title = "Mr",
+        givenName = "William-Connor",
+        middleOtherName = "Alistair",
+        familyName = "Carroll",
+        preferredGivenName = "Connor",
+        familyNameAtAge16 = "CARROLL",
+        schoolAtAge16 = "Oasis Academy Bristol ",
+        lastKnownAddressLine1 = "28 TOLLOHILL SQUARE",
+        lastKnownAddressTown = "ABERDEEN",
+        lastKnownAddressCountyOrCity = "ABERDEENSHIRE",
+        lastKnownPostCode = "AB12 5EQ",
+        dateOfAddressCapture = "2008-07-13",
+        dateOfBirth = "1985-03-27",
+        placeOfBirth = "Whittlesey ",
+        gender = "1",
+        emailAddress = "william-connor.carroll@inbox.compatibilitytest.com",
+        scottishCandidateNumber = "145589606",
+        abilityToShare = "1",
+        learnerStatus = "1",
+        verificationType = "0",
+        tierLevel = "0",
+      )
+
+      val expectedResponse = gson.toJson(
+        FindLearnerByDemographicsResponse(
+          searchParameters = findLearnerByDemographicsRequest,
+          responseType = LRSResponseType.LINKED_LEARNER,
+          matchedLearners = mutableListOf(expectedLinkedLearner),
+        ),
+      )
+
+      assertThat(actualResponse()).isEqualTo(expectedResponse)
+    }
+
+    @Test
+    fun `should return OK and the correct response when LRS returns a too many matches response`() {
+      lrsApiMock.stubLearnerByDemographicsTooManyMatches()
+
+      val expectedResponse = gson.toJson(
+        FindLearnerByDemographicsResponse(
+          searchParameters = findLearnerByDemographicsRequest,
+          responseType = LRSResponseType.TOO_MANY_MATCHES,
+        ),
+      )
+
+      assertThat(actualResponse()).isEqualTo(expectedResponse)
     }
   }
-
-  val findLearnerByDemographicsRequest =
-    uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest(
-      "Some",
-      "Person",
-      LocalDate.parse("2024-01-01"),
-      1,
-      "CV49EE",
-    )
-
-  val learner = Learner(
-    createdDate = "2024-01-01",
-    lastUpdatedDate = "2024-01-01",
-    uln = "1234567890",
-    versionNumber = "1",
-    title = "Ms",
-    givenName = "GN",
-    middleOtherName = "MON",
-    familyName = "FN",
-    preferredGivenName = "PGN",
-    previousFamilyName = "PFN",
-    familyNameAtAge16 = "FNAA16",
-    schoolAtAge16 = "SAA16",
-    lastKnownAddressLine1 = "LKAL1",
-    lastKnownAddressLine2 = "LKAL2",
-    lastKnownAddressTown = "LKAT",
-    lastKnownAddressCountyOrCity = "LKACOC",
-    lastKnownPostCode = "CV49EA",
-    dateOfAddressCapture = "2024-01-01",
-    dateOfBirth = "2024-01-01",
-    placeOfBirth = "POB",
-    gender = "2",
-    emailAddress = "email@example.com",
-    nationality = "N",
-    scottishCandidateNumber = "123456789",
-    abilityToShare = "1",
-    learnerStatus = "1",
-    verificationType = "1",
-    tierLevel = "0",
-  )
 }
