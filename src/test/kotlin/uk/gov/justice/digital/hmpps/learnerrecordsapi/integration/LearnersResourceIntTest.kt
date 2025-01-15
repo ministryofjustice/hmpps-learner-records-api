@@ -13,7 +13,6 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Lea
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
-
 import java.time.LocalDate
 
 class LearnersResourceIntTest : IntegrationTestBase() {
