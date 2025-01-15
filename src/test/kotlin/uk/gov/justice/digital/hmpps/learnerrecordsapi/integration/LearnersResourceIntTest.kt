@@ -221,7 +221,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response when LRS returns a linked learner response`() {
-      lrsApiMock.stubLinkedLearner()
+      lrsApiMock.stubLearnerByDemographicsLinkedLearner()
 
       val expectedLinkedLearner = Learner(
         createdDate = "2012-05-25",
@@ -265,7 +265,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return OK and the correct response when LRS returns a too many matches response`() {
-      lrsApiMock.stubTooManyMatches()
+      lrsApiMock.stubLearnerByDemographicsTooManyMatches()
 
       val expectedResponse = gson.toJson(
         FindLearnerByDemographicsResponse(
