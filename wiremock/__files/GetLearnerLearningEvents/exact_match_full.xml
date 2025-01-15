@@ -1,0 +1,31 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body>
+        <GetLearnerLearningEventsResponse>
+            <GetLearnerLearningEventsResult>
+                <FoundULN>{{soapXPath request.body '/GetLearnerLearningEvents/uln/text()'}}</FoundULN>
+                <IncomingULN>{{soapXPath request.body '/GetLearnerLearningEvents/uln/text()'}}</IncomingULN>
+                <ResponseCode>WSRC0004</ResponseCode>
+                <LearnerRecord>
+                    <LearningEvent>
+                        <ID>28538264</ID>
+                        <AchievementProviderUkprn>90000051</AchievementProviderUkprn>
+                        <AchievementProviderName>TEST90000051</AchievementProviderName>
+                        <AwardingOrganisationName>Pearson Education Ltd</AwardingOrganisationName>
+                        <QualificationType></QualificationType>
+                        <SubjectCode>K/501/5773</SubjectCode>
+                        <AchievementAwardDate>2010-01-01</AchievementAwardDate>
+                        <Credits>2</Credits>
+                        <Source>QCFU</Source>
+                        <DateLoaded>2014-05-21 14:49:01</DateLoaded>
+                        <UnderDataChallenge>N</UnderDataChallenge>
+                        <Level>Entry Level</Level>
+                        <Status>F</Status>
+                        <Subject>Introduction to Construction Work: Entry 3</Subject>
+                        <Grade>Pass</Grade>
+                        <AwardingOrganisationUkprn>90000051</AwardingOrganisationUkprn>
+                    </LearningEvent>
+                </LearnerRecord>
+            </GetLearnerLearningEventsResult>
+        </GetLearnerLearningEventsResponse>
+    </soapenv:Body>
+</soapenv:Envelope>

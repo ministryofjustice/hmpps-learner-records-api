@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class LearnerRecordsApi
+class HmppsBoldLrsApplication
 
 fun main(args: Array<String>) {
-  runApplication<LearnerRecordsApi>(*args)
+  runApplication<uk.gov.justice.digital.hmpps.learnerrecordsapi.HmppsBoldLrsApplication>(*args)
 }

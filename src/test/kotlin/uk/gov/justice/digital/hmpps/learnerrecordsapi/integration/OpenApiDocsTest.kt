@@ -8,8 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class OpenApiDocsTest : IntegrationTestBase() {
   @LocalServerPort
@@ -31,7 +29,8 @@ class OpenApiDocsTest : IntegrationTestBase() {
       .accept(MediaType.APPLICATION_JSON)
       .exchange()
       .expectStatus().is3xxRedirection
-      .expectHeader().value("Location") { it.contains("/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config") }
+      .expectHeader()
+      .value("Location") { it.contains("/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config") }
   }
 
   @Test
@@ -52,7 +51,7 @@ class OpenApiDocsTest : IntegrationTestBase() {
       .accept(MediaType.APPLICATION_JSON)
       .exchange()
       .expectStatus().isOk
-      .expectBody().jsonPath("info.version").isEqualTo(DateTimeFormatter.ISO_DATE.format(LocalDate.now()))
+      .expectBody().jsonPath("info.version").isEqualTo("v0")
   }
 
   @Test
@@ -70,12 +69,12 @@ class OpenApiDocsTest : IntegrationTestBase() {
     // We therefore need to grab all the valid security requirements and check that each path only contains those items
     val securityRequirements = result.openAPI.security.flatMap { it.keys }
     result.openAPI.paths.forEach { pathItem ->
-      assertThat(pathItem.value.get.security.flatMap { it.keys }).isSubsetOf(securityRequirements)
+      assertThat(pathItem.value.post.security.flatMap { it.keys }).isSubsetOf(securityRequirements)
     }
   }
 
   @ParameterizedTest
-  @CsvSource(value = ["learner-records-api-ui-role, ROLE_TEMPLATE_KOTLIN__UI"])
+  @CsvSource(value = ["template-kotlin-ui-role, ROLE_TEMPLATE_KOTLIN__UI"])
   fun `the security scheme is setup for bearer tokens`(key: String, role: String) {
     webTestClient.get()
       .uri("/v3/api-docs")

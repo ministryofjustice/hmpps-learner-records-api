@@ -1,0 +1,13 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body>
+        <GetLearnerLearningEventsResponse xmlns="http://tempuri.org/">
+            <GetLearnerLearningEventsResult
+            >
+                <ResponseCode>WSEC0206</ResponseCode>
+                <FoundULN/>
+                <IncomingULN>{{soapXPath request.body '/GetLearnerLearningEvents/uln/text()'}}</IncomingULN>
+                <LearnerRecord/>
+            </GetLearnerLearningEventsResult>
+        </GetLearnerLearningEventsResponse>
+    </s:Body>
+</s:Envelope>

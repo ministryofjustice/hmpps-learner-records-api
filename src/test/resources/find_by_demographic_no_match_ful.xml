@@ -1,0 +1,13 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body>
+        <ns2:FindLearnerResponse xmlns:ns2="http://api.lrs.miap.gov.uk/findmsg">
+            <ResponseCode>WSRC0001</ResponseCode>
+            <FamilyName>{{soapXPath request.body '/FindLearnerByDemographics/FamilyName/text()'}}</FamilyName>
+            <GivenName>{{soapXPath request.body '/FindLearnerByDemographics/GivenName/text()'}}</GivenName>
+            <DateOfBirth>{{soapXPath request.body '/FindLearnerByDemographics/DateOfBirth/text()'}}</DateOfBirth>
+            <Gender>{{soapXPath request.body '/FindLearnerByDemographics/Gender/text()'}}</Gender>
+            <LastKnownPostCode>{{soapXPath request.body '/FindLearnerByDemographics/LastKnownPostCode/text()'}}
+            </LastKnownPostCode>
+        </ns2:FindLearnerResponse>
+    </soapenv:Body>
+</soapenv:Envelope>

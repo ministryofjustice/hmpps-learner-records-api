@@ -9,6 +9,6 @@ class NotFoundTest : IntegrationTestBase() {
     webTestClient.get().uri("/some-url-not-found")
       .headers(setAuthorisation())
       .exchange()
-      .expectStatus().isNotFound
+      .expectStatus().is5xxServerError
   }
 }

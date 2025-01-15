@@ -1,0 +1,44 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body>
+        <ns2:FindLearnerResponse xmlns:ns2="http://api.lrs.miap.gov.uk/findmsg">
+            <ResponseCode>WSRC0022</ResponseCode>
+            <FamilyName>Carroll</FamilyName>
+            <GivenName>Connor</GivenName>
+            <DateOfBirth>1985-03-27</DateOfBirth>
+            <Gender>1</Gender>
+            <LastKnownPostCode>AB125EQ</LastKnownPostCode>
+            <Learner>
+                <CreatedDate>2012-05-25</CreatedDate>
+                <LastUpdatedDate>2012-05-25</LastUpdatedDate>
+                <ULN>6936002314</ULN>
+                <MasterSubstituted>Y</MasterSubstituted>
+                <Title>Mr</Title>
+                <GivenName>William-Connor</GivenName>
+                <MiddleOtherName>Alistair</MiddleOtherName>
+                <FamilyName>Carroll</FamilyName>
+                <PreferredGivenName>Connor</PreferredGivenName>
+                <FamilyNameAtAge16>CARROLL</FamilyNameAtAge16>
+                <SchoolAtAge16>Oasis Academy Bristol</SchoolAtAge16>
+                <LastKnownAddressLine1>28 TOLLOHILL SQUARE</LastKnownAddressLine1>
+                <LastKnownAddressTown>ABERDEEN</LastKnownAddressTown>
+                <LastKnownAddressCountyOrCity>ABERDEENSHIRE</LastKnownAddressCountyOrCity>
+                <LastKnownPostCode>AB12 5EQ</LastKnownPostCode>
+                <DateOfAddressCapture>2008-07-13</DateOfAddressCapture>
+                <DateOfBirth>1985-03-27</DateOfBirth>
+                <PlaceOfBirth>Whittlesey</PlaceOfBirth>
+                <Gender>1</Gender>
+                <EmailAddress>william-connor.carroll@inbox.compatibilitytest.com</EmailAddress>
+                <ScottishCandidateNumber>145589606</ScottishCandidateNumber>
+                <VerificationType>0</VerificationType>
+                <TierLevel>0</TierLevel>
+                <AbilityToShare>1</AbilityToShare>
+                <LearnerStatus>1</LearnerStatus>
+                <LinkedULNs xmlns="http://api.lrs.miap.gov.uk/learner">
+                    <ULN xmlns="">4444599390</ULN>
+                </LinkedULNs>
+                <Notes/>
+                <VersionNumber>1</VersionNumber>
+            </Learner>
+        </ns2:FindLearnerResponse>
+    </soapenv:Body>
+</soapenv:Envelope>

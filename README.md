@@ -1,136 +1,203 @@
-# hmpps-learner-records-api
+# ms-bold-lrs-service
 
-[![repo standards badge](https://img.shields.io/badge/endpoint.svg?&style=flat&logo=github&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fhmpps-learner-records-api)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-report/hmpps-learner-records-api "Link to report")
-[![Docker Repository on ghcr](https://img.shields.io/badge/ghcr.io-repository-2496ED.svg?logo=docker)](https://ghcr.io/ministryofjustice/hmpps-learner-records-api)
-[![API docs](https://img.shields.io/badge/API_docs_-view-85EA2D.svg?logo=swagger)](https://hmpps-learner-records-api-dev.hmpps.service.justice.gov.uk/webjars/swagger-ui/index.html?configUrl=/v3/api-docs)
+Generated from https://github.com/ministryofjustice/hmpps-template-kotlin. Please see the readme of that for extra info.
 
-Template github repo used for new Kotlin based projects.
+This is our experimental repo for our microservice, but it is quickly becoming an actual piece of work.
 
-# Instructions
+Auth has been temporarily commented out.
 
-If this is a HMPPS project then the project will be created as part of bootstrapping -
-see [dps-project-bootstrap](https://github.com/ministryofjustice/dps-project-bootstrap). You are able to specify a
-template application using the `github_template_repo` attribute to clone without the need to manually do this yourself
-within GitHub.
+## Endpoints
 
-This project is community managed by the mojdt `#kotlin-dev` slack channel.
-Please raise any questions or queries there. Contributions welcome!
+This service runs on `http://localhost:8080` by default.
 
-Our security policy is located [here](https://github.com/ministryofjustice/hmpps-learner-records-api/security/policy).
+### `POST:/learners`
+This endpoint is to search for learners by their demographic information.
+The search may yield varied results, such as an exact match or possible matches.
+The response contains a ULN for each learner found, which may be used on another endpoint to retrieve their respective PLNs.
 
-Documentation to create new service is located [here](https://tech-docs.hmpps.service.justice.gov.uk/applicationplatform/newservice-GHA/).
+#### How it works:
 
-## Creating a Cloud Platform namespace
+The controller `LearnersResource` accepts a request with a `json` body taking the form of our model `FindLearnerByDemographicRequest`.
 
-When deploying to a new namespace, you may wish to use the
-[templates project namespace](https://github.com/ministryofjustice/cloud-platform-environments/tree/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-templates-dev)
-as the basis for your new namespace. This namespace contains both the kotlin and typescript template projects, 
-which is the usual way that projects are setup.
+Example `json` for use with wiremock (local)
 
-Copy this folder and update all the existing namespace references to correspond to the environment to which you're deploying.
-
-If you only need the kotlin configuration then remove all typescript references and remove the elasticache configuration. 
-
-To ensure the correct github teams can approve releases, you will need to make changes to the configuration in `resources/service-account-github` where the appropriate team names will need to be added (based on [lines 98-100](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-templates-dev/resources/serviceaccount-github.tf#L98) and the reference appended to the teams list below [line 112](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-templates-dev/resources/serviceaccount-github.tf#L112)). Note: hmpps-sre is in this list to assist with deployment issues.
-
-Submit a PR to the Cloud Platform team in
-#ask-cloud-platform. Further instructions from the Cloud Platform team can be found in
-the [Cloud Platform User Guide](https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide)
-
-## Renaming from HMPPS Learner Records Api - github Actions
-
-Once the new repository is deployed. Navigate to the repository in github, and select the `Actions` tab.
-Click the link to `Enable Actions on this repository`.
-
-Find the Action workflow named: `rename-project-create-pr` and click `Run workflow`. This workflow will
-execute the `rename-project.bash` and create Pull Request for you to review. Review the PR and merge.
-
-Note: ideally this workflow would run automatically however due to a recent change github Actions are not
-enabled by default on newly created repos. There is no way to enable Actions other then to click the button in the UI.
-If this situation changes we will update this project so that the workflow is triggered during the bootstrap project.
-Further reading: <https://github.community/t/workflow-isnt-enabled-in-repos-generated-from-template/136421>
-
-The script takes six arguments:
-
-### New project name
-
-This should start with `hmpps-` e.g. `hmpps-prison-visits` so that it can be easily distinguished in github from
-other departments projects. Try to avoid using abbreviations so that others can understand easily what your project is.
-
-### Slack channel for release notifications
-
-By default, release notifications are only enabled for production. The circleci configuration can be amended to send
-release notifications for deployments to other environments if required. Note that if the configuration is amended,
-the slack channel should then be amended to your own team's channel as `dps-releases` is strictly for production release
-notifications. If the slack channel is set to something other than `dps-releases`, production release notifications
-will still automatically go to `dps-releases` as well. This is configured by `releases-slack-channel` in
-`.circleci/config.yml`.
-
-### Slack channel for pipeline security notifications
-
-Ths channel should be specific to your team and is for daily / weekly security scanning job results. It is your team's
-responsibility to keep up-to-date with security issues and update your application so that these jobs pass. You will
-only be notified if the jobs fail. The scan results can always be found in circleci for your project. This is
-configured by `alerts-slack-channel` in `.circleci/config.yml`.
-
-### Non production kubernetes alerts
-
-By default Prometheus alerts are created in the application namespaces to monitor your application e.g. if your
-application is crash looping, there are a significant number of errors from the ingress. Since Prometheus runs in
-cloud platform AlertManager needs to be setup first with your channel. Please see
-[Create your own custom alerts](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html)
-in the Cloud Platform user guide. Once that is setup then the `custom severity label` can be used for
-`alertSeverity` in the `helm_deploy/values-*.yaml` configuration.
-
-Normally it is worth setting up two separate labels and therefore two separate slack channels - one for your production
-alerts and one for your non-production alerts. Using the same channel can mean that production alerts are sometimes
-lost within non-production issues.
-
-### Production kubernetes alerts
-
-This is the severity label for production, determined by the `custom severity label`. See the above
-#non-production-kubernetes-alerts for more information. This is configured in `helm_deploy/values-prod.yaml`.
-
-### Product ID
-
-This is so that we can link a component to a product and thus provide team and product information in the Developer
-Portal. Refer to the developer portal at https://developer-portal.hmpps.service.justice.gov.uk/products to find your
-product id. This is configured in `helm_deploy/<project_name>/values.yaml`.
-
-## Manually branding from template app
-
-Run the `rename-project.bash` without any arguments. This will prompt for the six required parameters and create a PR.
-The script requires a recent version of `bash` to be installed, as well as GNU `sed` in the path.
-
-## TODOs and Examples
-
-We have tried to provide some examples of best practice in the application - so there are lots of TODOs in the code
-where changes are required to meet your requirements. There is an `ExampleResource` that includes best practice and also
-serve as spring security examples. The template typescript project has a demonstration that calls this endpoint as well.
-
-For the demonstration, rather than introducing a dependency on a different service, this application calls out to
-itself. This is only to show a service calling out to another service and is certainly not recommended!
-
-## Running the application locally
-
-The application comes with a `dev` spring profile that includes default settings for running locally. This is not
-necessary when deploying to kubernetes as these values are included in the helm configuration templates -
-e.g. `values-dev.yaml`.
-
-There is also a `docker-compose.yml` that can be used to run a local instance of the template in docker and also an
-instance of HMPPS Auth (required if your service calls out to other services using a token).
-
-```bash
-docker compose pull && docker compose up
+```json
+{
+  "givenName": "Test_Possible_Match_Two_Learners",
+  "familyName": "some_name",
+  "dateOfBirth": "2022-02-02",
+  "gender": "1",
+  "lastKnownPostCode": "1234"
+}
 ```
 
-will build the application and run it and HMPPS Auth within a local docker instance.
+Example `json` for use with Dev API
 
-### Running the application in Intellij
-
-```bash
-docker compose pull && docker compose up --scale hmpps-learner-records-api=0
+```json
+{
+  "givenName": "Darcie",
+  "familyName": "Tucker",
+  "dateOfBirth": "1976-08-16",
+  "gender": "2",
+  "lastKnownPostCode": "CV49EE"
+}
 ```
 
-will just start a docker instance of HMPPS Auth. The application should then be started with a `dev` active profile
-in Intellij.
+The model asserts correct inputs for the request body using validation annotations and correct datatypes. In the event that inputs are malformed, error handlers will catch this and return a `400 Bad Request`.
+
+In the case that the request is accepted, the controller will then call a service object `LRSService` to handle interfacing the LRS API.
+
+The service `LRSService` has a method called `findLearner` which accepts a single argument of type `FindLearnerByDemographicsRequest`.
+
+The service has an instance of `retrofit` which provides a way to interface with the LRS API.
+
+`retrofit` along with `JAXBConverter`, the models under the `models.lrsapi` package, and the interface `LRSApiServiceInterface` handles all the heavy lifting when it comes to parsing `XML` responses from the LRS API.
+
+When `findLearner` is called, retrofit is used to make a call to the LRS API. The service returns the response as a model `FindLearnerResponse`.
+
+The controller parses this into `json` and responds with that to the user.
+
+### `POST:/plr`
+
+The `/plr` endpoint is used to request a Learner's learning events by their Unique Learner Number (ULN).
+
+Generally when using a valid ULN there should be no issues with this request, but there are a few possible responses.
+* Exact Match
+* Linked Learner Match
+* Learner opted to not share data
+* Learner could not be verified
+
+Example JSON Body
+```json
+{
+  "givenName": "Connor",
+  "familyName": "Carroll",
+  "uln": "4444599390"
+}
+```
+
+Example JSON Response
+```json
+{
+  "responseCode": "WSRC0004",
+  "foundUln": "6936002314",
+  "incomingUln": "4444599390",
+  "learnerRecord": [
+    {
+      "id": "1234",
+      "achievementProviderUkprn": "11111112",
+      "achievementProviderName": "PRIMARY SCHOOL",
+      "awardingOrganisationName": "UNKNOWN",
+      "qualificationType": "NVQ/GNVQ Key Skills Unit",
+      "subjectCode": "1000123A",
+      "achievementAwardDate": "2010-01-01",
+      "credits": "0",
+      "source": "ILR",
+      "dateLoaded": "2012-05-31 16:47:04",
+      "underDataChallenge": "N",
+      "level": "",
+      "status": "F",
+      "subject": "Key Skills",
+      "grade": "9999999999",
+      "awardingOrganisationUkprn": "UNKNWN",
+      "collectionType": "W",
+      "returnNumber": "02",
+      "participationStartDate": "2010-09-01",
+      "participationEndDate": "2010-09-26"
+    }
+  ]
+}
+```
+
+## API Documentation
+
+API documentation is available here - http://localhost:8080/swagger-ui/index.html
+
+## Running the application while developing
+
+### Environment Variables
+
+Secrets are stored in the .env file for Local `.env.local` and Development `.env.development`.
+Ask a member of the Development team for the values for these fields place it in the root project directory.
+```
+UK_PRN=
+ORG_PASSWORD=
+VENDOR_ID=
+PFX_FILE_PASSWORD=
+SPRING_PROFILES_ACTIVE=
+```
+
+### LRS Connection Certificate
+
+In order to make a connection to the LRS Development environment (achieved when using the `development` profile) you will require the relevant certificate.
+
+Details for acquiring this certificate can be found [here](https://github.com/moj-analytical-services/dmet-bold/wiki/RR-Pilot-%E2%80%90-LRS-Microservice).
+
+Once downloaded, add the `WebServiceClientCert.pfx` to the root project directory.
+
+
+### Starting the service
+Use the docker compose file to start the services - HMPPS-Auth, Wiremock for mocking LRS API Response and this microservice.
+
+Run:
+```bash
+docker-compose down
+docker-compose --profile=<local/development> --env-file .env.<dev/local> up --build
+```
+
+As mentioned before there are two profiles.
+
+`local` will run:
+1. HMPPS-Auth
+2. Wiremock API
+3. This Service
+
+Or `development` will run
+1. HMPPS-Auth
+2. This Service
+
+_Instead of the wiremock API, this profile will attempt connection to the LRS Dev environment._
+
+
+
+E.g.
+```bash
+docker-compose --profile=local --env-file .env.local up --build
+```
+or
+```bash
+docker-compose --profile=development --env-file .env.development up --build
+```
+
+## Running tests:
+
+Ensure no docker services are running as there may be port collisions.
+
+## Testing in a terminal:
+
+Open a terminal either in IntelliJ or in a separate window, ensuring you are in the repo directory.
+
+Either ensure that you have set the environment variables above or if you would prefer not to set them, you can prefix the command with the following: 
+```bash
+ORG_PASSWORD={pass};PFX_FILE_PASSWORD={pass};SPRING_PROFILES_ACTIVE=local;UK_PRN={pass}
+```
+
+Run the following command:
+
+```bash
+./gradlew test
+```
+
+## Testing using IntelliJ:
+
+If you encounter issues, make sure gradle is set up properly in IntelliJ for this project.
+
+First, right-click the `test` package and select `run ‘Tests in ‘hmpps-temp…’` This will run tests, and you will notice they will fail.
+
+Next, in the top right corner of IntelliJ, to the left of the green play button, click the dropdown and then select `Edit Configurations`.
+
+Select the ‘hmpps-learner-records-api.test’ configuration, ensure that `Run` is populated with `:test`, the gradle project is `kotlin-template-experimental-lrs` and the environment variables, mentioned above, are also set here. Click `Apply` then `OK`.
+
+Again, right click the `test` package and select `run ‘Tests in ‘hmpps-temp…’ - They should now be running in IntelliJ.
+
+Other steps may be required to enable debugging within IntelliJ.

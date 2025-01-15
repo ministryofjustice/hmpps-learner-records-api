@@ -23,15 +23,15 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-# This will cancel all running build/test/release pipelines that are not on the main branch
-# If this pipeline is on the main branch, it will wait until existing runs complete
+  # This will cancel all running build/test/release pipelines that are not on the main branch
+  # If this pipeline is on the main branch, it will wait until existing runs complete
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   helm_lint:
     strategy:
       matrix:
-        environments: ['dev', 'preprod', 'prod']
+        environments: [ 'dev', 'preprod', 'prod' ]
     name: helm lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v2 # WORKFLOW VERSION
     secrets: inherit
@@ -39,7 +39,7 @@ jobs:
       environment: ${{ matrix.environments }}
   kotlin_validate:
     name: Validate the kotlin
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/kotlin_validate.yml@v2 # WORKFLOW_VERSION
+    uses: ./.github/workflows/kotlin_validate.yml # WORKFLOW_VERSION
     secrets: inherit
   build:
     name: Build docker image from hmpps-github-actions

@@ -1,35 +1,60 @@
-version: "3"
 services:
-  hmpps-learner-records-api:
-    build:
-      context: .
-    networks:
-      - hmpps
-    container_name: hmpps-learner-records-api
-    ports:
-      - "8080:8080"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
-    environment:
-      - SERVER_PORT=8080
-      - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
-      # TODO: Remove this URL and replace with outgoing service URLs
-      - EXAMPLE_URL=http://hmpps-learner-records-api:8080
-      - SPRING_PROFILES_ACTIVE=dev
-
   hmpps-auth:
     image: quay.io/hmpps/hmpps-auth:latest
+    profiles:
+      - local
+      - development
     networks:
       - hmpps
     container_name: hmpps-auth
     ports:
       - "8090:8080"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/auth/health" ]
     environment:
       - SERVER_PORT=8080
       - SPRING_PROFILES_ACTIVE=dev
       - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
 
+  lrs-api:
+    image: "wiremock/wiremock:latest"
+    profiles:
+      - local
+    volumes:
+      - ./extensions:/var/wiremock/extensions
+      - ./wiremock/__files:/home/wiremock/__files
+      - ./wiremock/mappings:/home/wiremock/mappings
+    networks:
+      - hmpps
+    container_name: lrs-api
+    ports:
+      - "8082:8080"
+    entrypoint: [ "/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose" ]
+
+  hmpps-learner-records-api:
+    build:
+      context: .
+    profiles:
+      - local
+      - development
+    networks:
+      - hmpps
+    container_name: hmpps-learner-records-api
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health/ping" ]
+    environment:
+      - SERVER_PORT=8080
+      - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
+      # TODO: Remove this URL and replace with outgoing service URLs
+      - EXAMPLE_URL=http://hmpps-learner-records-api:8080
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - UK_PRN=${UK_PRN}
+      - ORG_PASSWORD=${ORG_PASSWORD}
+      - VENDOR_ID=${VENDOR_ID}
+      - PFX_FILE_PASSWORD=${PFX_FILE_PASSWORD}
+
 networks:
   hmpps:
+    driver: bridge

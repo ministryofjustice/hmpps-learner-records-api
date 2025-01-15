@@ -1,5 +1,5 @@
 info.app:
-  name: HMPPS Learner Records Api
+  name: HMPPS Template Kotlin
   version: 1.0
 
 spring:
@@ -66,3 +66,6 @@ management:
     info:
       cache:
         time-to-live: 2000ms
+
+lrs:
+  base-url: http://localhost:8082/
