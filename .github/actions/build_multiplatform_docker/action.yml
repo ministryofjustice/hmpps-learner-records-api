@@ -67,6 +67,7 @@ runs:
       #   if: ${{ inputs.docker_registry  == 'ecr' }}
       #   uses: aws-actions/amazon-ecr-login@v1
     - name: Write Certificate file
+      secrets: inherit
       shell: bash
       run: |
         echo "Decoding the Certificate"
