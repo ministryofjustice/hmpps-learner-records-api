@@ -18,6 +18,8 @@ dependencies {
   implementation("javax.xml.bind:jaxb-api:2.3.1")
   implementation("org.glassfish.jaxb:jaxb-runtime:2.3.5")
   implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+  implementation("io.arrow-kt:arrow-core:1.2.4")
+  implementation("io.arrow-kt:arrow-fx-coroutines:1.2.4")
 
   testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:1.1.0")
   testImplementation("org.wiremock:wiremock-standalone:3.9.2")

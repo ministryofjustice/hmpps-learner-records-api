@@ -85,7 +85,7 @@ class LRSApiMockServer : WireMockServer(8082) {
       post(urlPathMatching(basePath))
         .willReturn(
           aResponse()
-            .withStatus(500),
+            .withStatus(500).withBody(readTemplateToString("error_ful")),
         ),
     )
   }
