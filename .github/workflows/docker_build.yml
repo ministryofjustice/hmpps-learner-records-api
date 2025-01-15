@@ -89,7 +89,8 @@ jobs:
           push: ${{ inputs.push }}
           app_version: ${{ steps.app_version.outputs.version }}
           additional_docker_build_args: ${{ inputs.additional_docker_build_args }}
-
+      - name: Checkout code
+        uses: actions/checkout@v4
       - uses: ./.github/actions/build_multiplatform_docker # WORKFLOW_VERSION
         if: ${{ ( inputs.docker_registry  == 'quay.io' ) && ( inputs.docker_multiplatform )}}
         with:
