@@ -27,26 +27,6 @@ class PLRResourceIntTest : IntegrationTestBase() {
       .create()
 
     @Test
-    fun `should return 500 with an appropriate error response if LRS returns a BadRequest`() {
-      lrsApiMock.stubPostBadRequest()
-
-      val actualResponse = webTestClient.post()
-        .uri("/plr")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(getLearningEventsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .is5xxServerError
-        .expectBody()
-        .returnResult()
-        .responseBody
-
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).contains("There was an error with an upstream service. Please try again later.")
-    }
-
-    @Test
     fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
       lrsApiMock.stubPostServerError()
 

@@ -65,7 +65,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
-      lrsApiMock.stubLearnerByDemographicsPostServerError()
+      lrsApiMock.stubPostServerError()
       assertThat(actualResponse(expectedStatus = 500)).contains("LRS returned an error: MIAPAPIException")
     }
 

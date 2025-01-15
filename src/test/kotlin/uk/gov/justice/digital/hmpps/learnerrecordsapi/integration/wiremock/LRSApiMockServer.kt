@@ -171,7 +171,7 @@ class LRSApiMockServer : WireMockServer(8082) {
     )
   }
 
-  fun stubLearnerByDemographicsPostServerError() {
+  fun stubPostServerError() {
     stubFor(
       post(anyUrl())
         .willReturn(
