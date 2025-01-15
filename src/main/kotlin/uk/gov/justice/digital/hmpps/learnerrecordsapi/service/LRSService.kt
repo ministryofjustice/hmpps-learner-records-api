@@ -8,7 +8,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import kotlin.reflect.full.declaredMemberProperties
 
 @Service
@@ -68,8 +68,8 @@ class LRSService(
     request: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest,
     response: FindLearnerResponse,
   ): FindLearnerByDemographicsResponse {
-    val responseType = ResponseType.fromLrsResponseCode(response.responseCode)
-    val isPossibleMatch = responseType == ResponseType.POSSIBLE_MATCH
+    val responseType = LRSResponseType.fromLrsResponseCode(response.responseCode)
+    val isPossibleMatch = responseType == LRSResponseType.POSSIBLE_MATCH
     return FindLearnerByDemographicsResponse(
       searchParameters = request,
       responseType = responseType,

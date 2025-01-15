@@ -8,15 +8,14 @@ import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import java.time.LocalDate
 
 class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
 
   val gson = GsonBuilder()
     .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
-    .registerTypeAdapter(ResponseType::class.java, ResponseTypeAdapter().nullSafe())
+    .registerTypeAdapter(LRSResponseType::class.java, ResponseTypeAdapter().nullSafe())
     .create()
 
   @Test

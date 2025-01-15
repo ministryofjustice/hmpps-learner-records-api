@@ -10,9 +10,9 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSAp
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResult
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.GetPLRByULNResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import java.time.LocalDate
 
 class PLRResourceIntTest : IntegrationTestBase() {
@@ -23,7 +23,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
     val gson = GsonBuilder()
       .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
-      .registerTypeAdapter(ResponseType::class.java, ResponseTypeAdapter().nullSafe())
+      .registerTypeAdapter(LRSResponseType::class.java, ResponseTypeAdapter().nullSafe())
       .create()
 
     @Test
@@ -70,8 +70,9 @@ class PLRResourceIntTest : IntegrationTestBase() {
     fun `should return OK and the correct response when LRS returns an exact match for FULL type`() {
       lrsApiMock.stubLearningEventsExactMatchFull()
 
-      val expectedResponse = LearningEventsResult(
-        "WSRC0004",
+      val expectedResponse = GetPLRByULNResponse(
+        getLearningEventsRequest,
+        LRSResponseType.EXACT_MATCH,
         "1234567890",
         "1234567890",
         listOf(
@@ -116,8 +117,9 @@ class PLRResourceIntTest : IntegrationTestBase() {
     fun `should return OK and the correct response when LRS returns a linked learner response`() {
       lrsApiMock.stubLearningEventsLinkedMatchFull()
 
-      val expectedResponse = LearningEventsResult(
-        "WSRC0022",
+      val expectedResponse = GetPLRByULNResponse(
+        getLearningEventsRequest,
+        LRSResponseType.LINKED_LEARNER,
         "6666666666",
         "1234567890",
         listOf(
@@ -166,8 +168,9 @@ class PLRResourceIntTest : IntegrationTestBase() {
     fun `should return OK and the correct response when LRS returns a not shared response`() {
       lrsApiMock.stubLearningEventsNotShared()
 
-      val expectedResponse = LearningEventsResult(
-        "WSEC0206",
+      val expectedResponse = GetPLRByULNResponse(
+        getLearningEventsRequest,
+        LRSResponseType.NOT_SHARED,
         "",
         "1234567890",
         emptyList(),
@@ -193,8 +196,9 @@ class PLRResourceIntTest : IntegrationTestBase() {
     fun `should return OK and the correct response when LRS returns a not verified response`() {
       lrsApiMock.stubLearningEventsNotVerified()
 
-      val expectedResponse = LearningEventsResult(
-        "WSEC0208",
+      val expectedResponse = GetPLRByULNResponse(
+        getLearningEventsRequest,
+        LRSResponseType.NOT_VERIFIED,
         "",
         "1234567890",
         emptyList(),

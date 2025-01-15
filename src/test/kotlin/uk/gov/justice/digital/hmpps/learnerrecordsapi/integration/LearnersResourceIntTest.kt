@@ -11,7 +11,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalD
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import java.time.LocalDate
 
 class LearnersResourceIntTest : IntegrationTestBase() {
@@ -22,7 +22,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
     val gson = GsonBuilder()
       .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
-      .registerTypeAdapter(ResponseType::class.java, ResponseTypeAdapter().nullSafe())
+      .registerTypeAdapter(LRSResponseType::class.java, ResponseTypeAdapter().nullSafe())
       .create()
 
     @Test
@@ -71,7 +71,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
       val expectedResponse = FindLearnerByDemographicsResponse(
         searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.EXACT_MATCH,
+        responseType = LRSResponseType.EXACT_MATCH,
         matchedLearners = listOf(learner),
       )
 
@@ -97,7 +97,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
       val expectedResponse = FindLearnerByDemographicsResponse(
         searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.POSSIBLE_MATCH,
+        responseType = LRSResponseType.POSSIBLE_MATCH,
         mismatchedFields = mutableMapOf(
           ("familyName" to mutableListOf("FN", "FN")),
           ("gender" to mutableListOf("2", "2")),
@@ -141,7 +141,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
           lastKnownPostCode = "CV49EA",
           gender = 2,
         ),
-        responseType = ResponseType.POSSIBLE_MATCH,
+        responseType = LRSResponseType.POSSIBLE_MATCH,
         mismatchedFields = mutableMapOf(
           ("familyName" to mutableListOf("FN", "FN")),
           ("givenName" to mutableListOf("GN", "GN")),
@@ -171,7 +171,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
       val expectedResponse = FindLearnerByDemographicsResponse(
         searchParameters = findLearnerByDemographicsRequest,
-        responseType = ResponseType.NO_MATCH,
+        responseType = LRSResponseType.NO_MATCH,
       )
 
       val actualResponse = webTestClient.post()
