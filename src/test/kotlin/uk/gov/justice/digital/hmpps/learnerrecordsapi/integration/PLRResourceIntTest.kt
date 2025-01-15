@@ -28,7 +28,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return 500 with an appropriate error response if LRS returns a BadRequest`() {
-      lrsApiMock.stubLearnerByDemographicsPostServerErrorNoDetail()
+      lrsApiMock.stubPostBadRequest()
 
       val actualResponse = webTestClient.post()
         .uri("/plr")
@@ -48,7 +48,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
     @Test
     fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
-      lrsApiMock.stubLearnerByDemographicsPostServerError()
+      lrsApiMock.stubPostServerError()
 
       val actualResponse = webTestClient.post()
         .uri("/plr")
