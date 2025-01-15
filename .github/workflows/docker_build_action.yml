@@ -1,34 +1,36 @@
 name: Build and push multi-platform docker image to registry
 description: action to build and push a multi-platform docker image
 
-inputs:
-  repository_name:
-    description: Repository name
-    required: true
-  docker_registry:
-    description: Docker registry
-    required: true
-  registry_org:
-    description: Docker registry organisation
-    required: true
-  additional_docker_tag:
-    description: Additional docker tag that can be used to specify stable tags
-    required: false
-  additional_docker_build_args:
-    description: Additional docker build args
-    required: false
-  push:
-    description: Push docker image to registry flag
-    required: true
-  app_version:
-    description: App version
-    required: true
-  HMPPS_QUAYIO_USER:
-    description: Docker registry username
-    required: false
-  HMPPS_QUAYIO_TOKEN:
-    description: Docker registry token
-    required: false
+on:
+  workflow_call:
+    inputs:
+      repository_name:
+        description: Repository name
+        required: true
+      docker_registry:
+        description: Docker registry
+        required: true
+      registry_org:
+        description: Docker registry organisation
+        required: true
+      additional_docker_tag:
+        description: Additional docker tag that can be used to specify stable tags
+        required: false
+      additional_docker_build_args:
+        description: Additional docker build args
+        required: false
+      push:
+        description: Push docker image to registry flag
+        required: true
+      app_version:
+        description: App version
+        required: true
+      HMPPS_QUAYIO_USER:
+        description: Docker registry username
+        required: false
+      HMPPS_QUAYIO_TOKEN:
+        description: Docker registry token
+        required: false
 
 
 runs:
