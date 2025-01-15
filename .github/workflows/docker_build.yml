@@ -79,8 +79,8 @@ jobs:
           additional_docker_build_args: ${{ inputs.additional_docker_build_args }}
           # git_head_ref: ${{ github.head_ref }}
           # git_branch_ref: ${{ github.ref_name }}
-
-      - uses: ./.github/workflows/docker_build_action.yml # WORKFLOW_VERSION
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/docker_build_action.yml # WORKFLOW_VERSION
         if: ${{ ( inputs.docker_registry  == 'ghcr.io' ) && ( inputs.docker_multiplatform )}}
         with:
           repository_name: ${{ github.event.repository.name }}
