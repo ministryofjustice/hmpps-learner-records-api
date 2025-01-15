@@ -256,12 +256,6 @@ fun readResourceFile(fileName: String): String {
                 }
               """,
             ),
-            ExampleObject(
-              name = "Exact Match Response",
-              value = """
-                
-              """,
-            ),
           ],
         ),
       ],
