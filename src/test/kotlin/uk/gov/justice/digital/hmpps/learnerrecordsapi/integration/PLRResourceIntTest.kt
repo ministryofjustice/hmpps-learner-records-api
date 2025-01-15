@@ -43,7 +43,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
         .responseBody
 
       val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).contains("There was an error with an upstream service. Please try again later.")
+      assertThat(actualResponseString).contains("LRS returned an error: MIAPAPIException")
     }
 
     @Test
