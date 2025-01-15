@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets
 class LRSApiMockServer : WireMockServer(8082) {
 
   private val basePathLearnerByDemographics = "/LearnerService.svc"
-  private val basePath = "/LearnerServiceR9.svc"
+  private val basePathLearningEvents = "/LearnerServiceR9.svc"
 
   init {
     this.start()
@@ -29,7 +29,7 @@ class LRSApiMockServer : WireMockServer(8082) {
 
   fun stubLearningEventsExactMatchFull() {
     stubFor(
-      post(urlPathMatching(basePath))
+      post(urlPathMatching(basePathLearningEvents))
         .willReturn(
           aResponse()
             .withHeader("Content-Type", "text/xml")
@@ -44,7 +44,7 @@ class LRSApiMockServer : WireMockServer(8082) {
 
   fun stubLearningEventsLinkedMatchFull() {
     stubFor(
-      post(urlPathMatching(basePath))
+      post(urlPathMatching(basePathLearningEvents))
         .willReturn(
           aResponse()
             .withHeader("Content-Type", "text/xml")
@@ -59,7 +59,7 @@ class LRSApiMockServer : WireMockServer(8082) {
 
   fun stubLearningEventsNotShared() {
     stubFor(
-      post(urlPathMatching(basePath))
+      post(urlPathMatching(basePathLearningEvents))
         .willReturn(
           aResponse()
             .withHeader("Content-Type", "text/xml")
@@ -73,7 +73,7 @@ class LRSApiMockServer : WireMockServer(8082) {
   }
   fun stubLearningEventsNotVerified() {
     stubFor(
-      post(urlPathMatching(basePath))
+      post(urlPathMatching(basePathLearningEvents))
         .willReturn(
           aResponse()
             .withHeader("Content-Type", "text/xml")
@@ -125,6 +125,36 @@ class LRSApiMockServer : WireMockServer(8082) {
             .withTransformers("response-template")
             .withBody(
               readTemplateToString("find_by_demographic_no_match_ful"),
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+
+  fun stubLearnerByDemographicsLinkedLearner() {
+    stubFor(
+      post(urlPathMatching(basePathLearnerByDemographics))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("find_by_demographic_linked_learner_ful"),
+            )
+            .withStatus(200),
+        ),
+    )
+  }
+
+  fun stubLearnerByDemographicsTooManyMatches() {
+    stubFor(
+      post(urlPathMatching(basePathLearnerByDemographics))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "text/xml")
+            .withTransformers("response-template")
+            .withBody(
+              readTemplateToString("find_by_demographic_too_many_matches_ful"),
             )
             .withStatus(200),
         ),

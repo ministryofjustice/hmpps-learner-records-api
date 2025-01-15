@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response
 
 enum class LRSResponseType(val englishName: String, val lrsResponseCode: String) {
   NO_MATCH("No Match", "WSRC0001"),
+  TOO_MANY_MATCHES("Too Many Matches", "WSRC0002"),
   POSSIBLE_MATCH("Possible Match", "WSRC0003"),
   EXACT_MATCH("Exact Match", "WSRC0004"),
   LINKED_LEARNER("Linked Learner Match", "WSRC0022"),
