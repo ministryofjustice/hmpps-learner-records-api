@@ -6,7 +6,8 @@
             <GivenName>{{soapXPath request.body '/FindLearnerByDemographics/GivenName/text()'}}</GivenName>
             <DateOfBirth>{{soapXPath request.body '/FindLearnerByDemographics/DateOfBirth/text()'}}</DateOfBirth>
             <Gender>{{soapXPath request.body '/FindLearnerByDemographics/Gender/text()'}}</Gender>
-            <LastKnownPostCode>{{soapXPath request.body '/FindLearnerByDemographics/LastKnownPostCode/text()'}}</LastKnownPostCode>
+            <LastKnownPostCode>{{soapXPath request.body '/FindLearnerByDemographics/LastKnownPostCode/text()'}}
+            </LastKnownPostCode>
             <Learner>
                 <CreatedDate>2012-05-25</CreatedDate>
                 <LastUpdatedDate>2012-05-25</LastUpdatedDate>
@@ -18,14 +19,14 @@
                 <PreferredGivenName>Darcie</PreferredGivenName>
                 <PreviousFamilyName>CAMPBELL</PreviousFamilyName>
                 <FamilyNameAtAge16>TUCKER</FamilyNameAtAge16>
-                <SchoolAtAge16>Mill Hill School Foundation </SchoolAtAge16>
+                <SchoolAtAge16>Mill Hill School Foundation</SchoolAtAge16>
                 <LastKnownAddressLine1>1 JOBS LANE</LastKnownAddressLine1>
                 <LastKnownAddressTown>COVENTRY</LastKnownAddressTown>
                 <LastKnownAddressCountyOrCity>WEST MIDLANDS</LastKnownAddressCountyOrCity>
                 <LastKnownPostCode>CV4 9EE</LastKnownPostCode>
                 <DateOfAddressCapture>2009-04-25</DateOfAddressCapture>
                 <DateOfBirth>1976-08-16</DateOfBirth>
-                <PlaceOfBirth>Blean </PlaceOfBirth>
+                <PlaceOfBirth>Blean</PlaceOfBirth>
                 <Gender>2</Gender>
                 <EmailAddress>darcie.tucker@aol.compatibilitytest.com</EmailAddress>
                 <ScottishCandidateNumber>845759406</ScottishCandidateNumber>
