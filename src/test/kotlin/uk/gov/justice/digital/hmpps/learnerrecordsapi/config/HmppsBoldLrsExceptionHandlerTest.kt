@@ -44,7 +44,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
       .expectStatus()
-      .is4xxClientError
+      .isBadRequest
       .expectBody()
       .returnResult()
       .responseBody
@@ -79,7 +79,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
       .expectStatus()
-      .is4xxClientError
+      .isBadRequest
       .expectBody()
       .returnResult()
       .responseBody
@@ -114,7 +114,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
       .expectStatus()
-      .is4xxClientError
+      .isBadRequest
       .expectBody()
       .returnResult()
       .responseBody
@@ -149,7 +149,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
       .expectStatus()
-      .is4xxClientError
+      .isBadRequest
       .expectBody()
       .returnResult()
       .responseBody
@@ -161,11 +161,11 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
   @Test
   fun `should return No Resource errors when an unknown resource is called`() {
     val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
-      HttpStatus.INTERNAL_SERVER_ERROR,
-      "Unexpected error",
-      "Unexpected error: No static resource someotherEndpoint.",
-      "Unexpected error: No static resource someotherEndpoint.",
-      "Unexpected error",
+      HttpStatus.NOT_FOUND,
+      "No Resource Found",
+      "No resource found failure: No static resource someotherEndpoint.",
+      "Requested Resource not found on the server",
+      moreInfo = "Requested Resource not found on the server",
     )
 
     val findLearnerByDemographicsRequest =
@@ -184,8 +184,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
       .expectStatus()
-// TODO - look into this error, probably should be 404
-      .is5xxServerError
+      .isNotFound
       .expectBody()
       .returnResult()
       .responseBody

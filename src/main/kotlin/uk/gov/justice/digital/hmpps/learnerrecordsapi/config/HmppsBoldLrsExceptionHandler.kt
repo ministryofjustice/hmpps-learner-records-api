@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
+import org.springframework.web.servlet.resource.NoResourceFoundException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 
 @RestControllerAdvice
@@ -43,19 +44,19 @@ class HmppsBoldLrsExceptionHandler {
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
-  @ExceptionHandler(IllegalStateException::class)
+  @ExceptionHandler(NoResourceFoundException::class)
   fun handleNoResourceFoundException(
-    ex: IllegalStateException,
+    ex: NoResourceFoundException,
     request: WebRequest,
   ): ResponseEntity<Any> {
     val errorResponse = ErrorResponse(
       status = HttpStatus.NOT_FOUND,
       errorCode = "No Resource Found",
       userMessage = "No resource found failure: ${ex.message}",
-      developerMessage = "Requested Resource Not found on the server",
-      moreInfo = "Requested Resource Not found on the server",
+      developerMessage = "Requested Resource not found on the server",
+      moreInfo = "Requested Resource not found on the server",
     )
-    log.error("Requested Resource was not Found {}", ex)
+    log.error("Requested Resource was not found {}", ex)
     return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
   }
 
