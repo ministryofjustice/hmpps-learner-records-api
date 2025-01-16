@@ -12,7 +12,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.FindByDemographicA
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LRSService
 
 @RestController
-@PreAuthorize("hasRole('ROLE_TEMPLATE_KOTLIN__UI')")
+//@PreAuthorize("hasRole('ROLE_TEMPLATE_KOTLIN__UI')")
 @RequestMapping(value = ["/learners"], produces = ["application/json"])
 class LearnersResource(
   private val lrsService: LRSService,
