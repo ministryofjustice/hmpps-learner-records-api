@@ -81,6 +81,11 @@ jobs:
           # git_branch_ref: ${{ github.ref_name }}
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Write Certificate file
+        shell: bash
+        run: |
+          echo "Decoding the Certificate"
+          echo "${{ secrets.CERTIFICATE }}" | base64 --decode > WebServiceClientCert.pfx
       - uses: ./.github/actions/build_multiplatform_docker # WORKFLOW_VERSION
         if: ${{ ( inputs.docker_registry  == 'ghcr.io' ) && ( inputs.docker_multiplatform )}}
         with:
