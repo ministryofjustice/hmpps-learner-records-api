@@ -31,7 +31,9 @@ on:
       HMPPS_QUAYIO_TOKEN:
         description: Docker registry token
         required: false
-
+      certificate:
+        description: secret certificate
+        required: true
 
 runs:
   using: "composite"
@@ -65,6 +67,11 @@ runs:
       # - name: Login to Amazon ECR
       #   if: ${{ inputs.docker_registry  == 'ecr' }}
       #   uses: aws-actions/amazon-ecr-login@v1
+    - name: Write Certificate file
+      shell: bash
+      run: |
+        echo "Decoding the Certificate"
+        echo "${{ inputs.CERTIFICATE }}" | base64 --decode > WebServiceClientCert.pfx
     - name: Build Docker images
       uses: docker/build-push-action@v6
       with:
