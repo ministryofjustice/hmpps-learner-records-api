@@ -192,4 +192,43 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
     assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
   }
+
+  @Test
+  fun `should return bad request when a mandatory input is not provided`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.BAD_REQUEST,
+      "Unreadable HTTP message",
+      "Unreadable HTTP message",
+      "JSON parse error: Instantiation of " +
+        "[simple type, class uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest] " +
+        "value failed for JSON property givenName due to missing (therefore NULL) value " +
+        "for creator parameter givenName which is a non-nullable type",
+      "Unreadable HTTP message",
+    )
+
+    val requestJsonWithoutGivenName = """
+      {
+        "lastName": "Tucker",
+        "dateOfBirth": "2024-01-01",
+        "gender": 1,
+        "postcode": "CV49EE"
+      }
+    """
+
+    val actualResponse = webTestClient.post()
+      .uri("/learners")
+      .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+      .contentType(MediaType.APPLICATION_JSON)
+      .bodyValue(requestJsonWithoutGivenName)
+      .accept(MediaType.parseMediaType("application/json"))
+      .exchange()
+      .expectStatus()
+      .isBadRequest
+      .expectBody()
+      .returnResult()
+      .responseBody
+
+    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
+    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+  }
 }

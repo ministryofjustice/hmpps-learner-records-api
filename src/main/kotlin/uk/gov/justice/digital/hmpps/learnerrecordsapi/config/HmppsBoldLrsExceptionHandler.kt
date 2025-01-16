@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 import org.apache.commons.lang3.StringUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -74,6 +75,22 @@ class HmppsBoldLrsExceptionHandler {
     )
     log.error("Forbidden (403) returned: {}", ex)
     return ResponseEntity(errorResponse, HttpStatus.FORBIDDEN)
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException::class)
+  fun handleUnreadableHttpMessage(
+    ex: HttpMessageNotReadableException,
+    request: WebRequest,
+  ): ResponseEntity<Any> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.BAD_REQUEST,
+      errorCode = "Unreadable HTTP message",
+      userMessage = "Unreadable HTTP message",
+      developerMessage = "${ex.message}",
+      moreInfo = "Unreadable HTTP message",
+    )
+    log.error("Unexpected Error: {}", ex)
+    return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
   @ExceptionHandler(Exception::class)
