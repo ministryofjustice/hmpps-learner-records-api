@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.resource.NoResourceFoundException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 
 @RestControllerAdvice
 class HmppsBoldLrsExceptionHandler {
@@ -106,6 +107,22 @@ class HmppsBoldLrsExceptionHandler {
       moreInfo = "Unexpected error",
     )
     log.error("Unexpected Error: {}", ex)
+    return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
+  }
+
+  @ExceptionHandler(LRSException::class)
+  fun handleLRSException(
+    ex: LRSException,
+    request: WebRequest,
+  ): ResponseEntity<Any> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.INTERNAL_SERVER_ERROR,
+      errorCode = "LRS Error",
+      userMessage = "${ex.message}",
+      developerMessage = "${ex.message}",
+      moreInfo = "LRS Error",
+    )
+    log.error(ex.message.orEmpty())
     return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
   }
 }
