@@ -29,7 +29,7 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
     .components(
       Components().addSecuritySchemes(
         "template-kotlin-ui-role",
-        SecurityScheme().addBearerJwtRequirement("ROLE_TEMPLATE_KOTLIN__UI"),
+        SecurityScheme().addBearerJwtRequirement("ROLE_LEARNER_RECORDS_SEARCH__RW"),
       ),
     )
     .addSecurityItem(SecurityRequirement().addList("template-kotlin-ui-role", listOf("read")))

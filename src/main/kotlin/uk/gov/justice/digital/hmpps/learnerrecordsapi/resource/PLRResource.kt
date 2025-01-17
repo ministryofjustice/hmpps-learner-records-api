@@ -10,7 +10,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.FindByULNApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.PLRService
 
 @RestController
-@PreAuthorize("hasRole('ROLE_TEMPLATE_KOTLIN__UI')")
+@PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__RW')")
 @RequestMapping(value = ["/plr"], produces = ["application/json"])
 class PLRResource(
   private val plrService: PLRService,

@@ -69,7 +69,7 @@ runs:
       shell: bash
       run: |
         echo "Decoding the Certificate"
-        echo "${{ inputs.CERTIFICATE }}" | base64 --decode > WebServiceClientCert.pfx
+        echo "${{ inputs.certificate }}" | base64 --decode > WebServiceClientCert.pfx
     - name: Build Docker images
       uses: docker/build-push-action@v6
       with:
