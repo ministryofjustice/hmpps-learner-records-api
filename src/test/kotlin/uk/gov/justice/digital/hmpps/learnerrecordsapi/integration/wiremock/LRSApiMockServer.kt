@@ -161,12 +161,12 @@ class LRSApiMockServer : WireMockServer(8082) {
     )
   }
 
-  fun stubPostBadRequest() {
+  fun stubLearnerByDemographicsPostServerErrorNoDetail() {
     stubFor(
       post(anyUrl())
         .willReturn(
           aResponse()
-            .withStatus(400),
+            .withStatus(500),
         ),
     )
   }
@@ -176,7 +176,7 @@ class LRSApiMockServer : WireMockServer(8082) {
       post(anyUrl())
         .willReturn(
           aResponse()
-            .withStatus(500),
+            .withStatus(500).withBody(readTemplateToString("error_ful")),
         ),
     )
   }

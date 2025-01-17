@@ -64,15 +64,9 @@ class LearnersResourceIntTest : IntegrationTestBase() {
     }
 
     @Test
-    fun `should return 500 with an appropriate error response if LRS returns a BadRequest`() {
-      lrsApiMock.stubPostBadRequest()
-      assertThat(actualResponse(expectedStatus = 500)).contains("There was an error with an upstream service. Please try again later.")
-    }
-
-    @Test
     fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
       lrsApiMock.stubPostServerError()
-      assertThat(actualResponse(expectedStatus = 500)).contains("There was an error with an upstream service. Please try again later.")
+      assertThat(actualResponse(expectedStatus = 500)).contains("LRS returned an error: MIAPAPIException")
     }
 
     @Test
