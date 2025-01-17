@@ -39,7 +39,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
 
     val actualResponse = webTestClient.post()
       .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
       .bodyValue(findLearnerByDemographicsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -74,7 +74,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
 
     val actualResponse = webTestClient.post()
       .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
       .bodyValue(findLearnerByDemographicsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -109,7 +109,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
 
     val actualResponse = webTestClient.post()
       .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
       .bodyValue(findLearnerByDemographicsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -144,7 +144,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
 
     val actualResponse = webTestClient.post()
       .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
       .bodyValue(findLearnerByDemographicsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -179,7 +179,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
 
     val actualResponse = webTestClient.post()
       .uri("/someotherEndpoint")
-      .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
       .bodyValue(findLearnerByDemographicsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -217,7 +217,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
 
     val actualResponse = webTestClient.post()
       .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
       .contentType(MediaType.APPLICATION_JSON)
       .bodyValue(requestJsonWithoutGivenName)
       .accept(MediaType.parseMediaType("application/json"))
