@@ -68,5 +68,5 @@ management:
         time-to-live: 2000ms
 
 lrs:
-  base-url: ${lrs.base-url}
-  pfx-path: ${lrs.pfx-path}
+  base-url: "https://cmp-ws.dev.lrs.education.gov.uk"
+  pfx-path: "WebServiceClientCert.pfx"
