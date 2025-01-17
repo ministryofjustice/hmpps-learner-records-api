@@ -50,25 +50,9 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         .expectStatus()
 
       return when (expectedStatus) {
-        200 ->
-          executedRequest
-            .isOk
-            .expectBody()
-            .returnResult()
-            .responseBody?.toString(Charsets.UTF_8)
-
-        500 ->
-          executedRequest
-            .is5xxServerError
-            .expectBody()
-            .returnResult()
-            .responseBody?.toString(Charsets.UTF_8)
-        400 ->
-          executedRequest
-            .isBadRequest
-            .expectBody()
-            .returnResult()
-            .responseBody?.toString(Charsets.UTF_8)
+        200 -> executedRequest.isOk.expectBody().returnResult().responseBody?.toString(Charsets.UTF_8)
+        500 -> executedRequest.is5xxServerError.expectBody().returnResult().responseBody?.toString(Charsets.UTF_8)
+        400 -> executedRequest.isBadRequest.expectBody().returnResult().responseBody?.toString(Charsets.UTF_8)
         else ->
           throw RuntimeException("Unimplemented Expected Status")
       }
