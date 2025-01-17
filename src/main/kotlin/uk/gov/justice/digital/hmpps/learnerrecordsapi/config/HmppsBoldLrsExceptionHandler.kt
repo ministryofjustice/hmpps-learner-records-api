@@ -3,11 +3,13 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 import org.apache.commons.lang3.StringUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
+import org.springframework.web.servlet.resource.NoResourceFoundException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 
 @RestControllerAdvice
@@ -43,19 +45,19 @@ class HmppsBoldLrsExceptionHandler {
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
-  @ExceptionHandler(IllegalStateException::class)
+  @ExceptionHandler(NoResourceFoundException::class)
   fun handleNoResourceFoundException(
-    ex: IllegalStateException,
+    ex: NoResourceFoundException,
     request: WebRequest,
   ): ResponseEntity<Any> {
     val errorResponse = ErrorResponse(
       status = HttpStatus.NOT_FOUND,
       errorCode = "No Resource Found",
       userMessage = "No resource found failure: ${ex.message}",
-      developerMessage = "Requested Resource Not found on the server",
-      moreInfo = "Requested Resource Not found on the server",
+      developerMessage = "Requested Resource not found on the server",
+      moreInfo = "Requested Resource not found on the server",
     )
-    log.error("Requested Resource was not Found {}", ex)
+    log.error("Requested Resource was not found {}", ex)
     return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
   }
 
@@ -73,6 +75,22 @@ class HmppsBoldLrsExceptionHandler {
     )
     log.error("Forbidden (403) returned: {}", ex)
     return ResponseEntity(errorResponse, HttpStatus.FORBIDDEN)
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException::class)
+  fun handleUnreadableHttpMessage(
+    ex: HttpMessageNotReadableException,
+    request: WebRequest,
+  ): ResponseEntity<Any> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.BAD_REQUEST,
+      errorCode = "Unreadable HTTP message",
+      userMessage = "Unreadable HTTP message",
+      developerMessage = "${ex.message}",
+      moreInfo = "Unreadable HTTP message",
+    )
+    log.error("Unexpected Error: {}", ex)
+    return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
   @ExceptionHandler(Exception::class)
