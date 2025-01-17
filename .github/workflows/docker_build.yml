@@ -91,7 +91,7 @@ jobs:
           push: ${{ inputs.push }}
           app_version: ${{ steps.app_version.outputs.version }}
           additional_docker_build_args: ${{ inputs.additional_docker_build_args }}
-          certificate: ${{ secrets.CERTIICATE }}
+          certificate: ${{ secrets.CERTIFICATE }}
       - uses: ./.github/actions/build_multiplatform_docker # WORKFLOW_VERSION
         if: ${{ ( inputs.docker_registry  == 'quay.io' ) && ( inputs.docker_multiplatform )}}
         with:
@@ -104,4 +104,4 @@ jobs:
           additional_docker_build_args: ${{ inputs.additional_docker_build_args }}
           HMPPS_QUAYIO_USER: ${{ secrets.HMPPS_QUAYIO_USER }}
           HMPPS_QUAYIO_TOKEN: ${{ secrets.HMPPS_QUAYIO_TOKEN}}
-          certificate: ${{ secrets.CERTIICATE }}
+          certificate: ${{ secrets.CERTIFICATE }}
