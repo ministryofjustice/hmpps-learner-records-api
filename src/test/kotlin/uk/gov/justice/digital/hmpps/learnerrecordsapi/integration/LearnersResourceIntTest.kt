@@ -35,11 +35,16 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         "CV49EE",
       )
 
-    private fun actualResponse(request: FindLearnerByDemographicsRequest = findLearnerByDemographicsRequest, expectedStatus: Int = 200): String? {
+    private fun actualResponse(
+      request: FindLearnerByDemographicsRequest = findLearnerByDemographicsRequest,
+      requestAsJson: String? = null,
+      expectedStatus: Int = 200,
+    ): String? {
       val executedRequest = webTestClient.post()
         .uri("/learners")
         .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(request)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(requestAsJson ?: request)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
@@ -58,6 +63,12 @@ class LearnersResourceIntTest : IntegrationTestBase() {
             .expectBody()
             .returnResult()
             .responseBody?.toString(Charsets.UTF_8)
+        400 ->
+          executedRequest
+            .isBadRequest
+            .expectBody()
+            .returnResult()
+            .responseBody?.toString(Charsets.UTF_8)
         else ->
           throw RuntimeException("Unimplemented Expected Status")
       }
@@ -67,6 +78,57 @@ class LearnersResourceIntTest : IntegrationTestBase() {
     fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
       lrsApiMock.stubPostServerError()
       assertThat(actualResponse(expectedStatus = 500)).contains("LRS returned an error: MIAPAPIException")
+    }
+
+    @Test
+    fun `should return 400 with an appropriate error response if any mandatory field is missing`() {
+      val request = """
+        {
+          "givenName": "Some",
+          "familyName": "Person",
+          "gender": 1,
+          "dateOfBirth": "1976-08-16",
+          "lastKnownPostCode": "CV49EE"
+        }
+      """
+
+      val scenarios = listOf(
+        "\"givenName\": \"Some\",",
+        "\"familyName\": \"Person\",",
+        "\"dateOfBirth\": \"1976-08-16\",",
+        "\"lastKnownPostCode\": \"CV49EE\"",
+      )
+
+      for (jsonToRemove in scenarios) {
+        assertThat(actualResponse(requestAsJson = request.replace(jsonToRemove, ""), expectedStatus = 400)).contains("JSON parse error")
+      }
+    }
+
+    @Test
+    fun `should return 400 with an appropriate error response if any field is invalid`() {
+      val validRequest = """
+        {
+          "givenName": "Some",
+          "familyName": "Person",
+          "gender": 1,
+          "dateOfBirth": "1976-08-16",
+          "lastKnownPostCode": "CV49EE"
+        }
+        """
+
+      val scenarios = listOf(
+        "InvalidNameInvalidNameInvalidNameInvalidNameInvalidName" to "Some",
+        "InvalidNameInvalidNameInvalidNameInvalidNameInvalidName" to "Person",
+        "-1" to "1",
+        "\"invalid-date\"" to "1976-08-16",
+        "\"INVALID\"" to "CV49EE",
+      )
+
+      for ((invalidValue, valueToReplace) in scenarios) {
+        val requestWithInvalidField = validRequest.replace(valueToReplace, invalidValue)
+        val response = actualResponse(requestAsJson = requestWithInvalidField, expectedStatus = 400).orEmpty()
+        assertThat(response.contains("JSON parse error"))
+      }
     }
 
     @Test

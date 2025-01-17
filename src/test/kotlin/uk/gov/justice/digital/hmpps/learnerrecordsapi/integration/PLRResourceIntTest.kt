@@ -21,29 +21,89 @@ class PLRResourceIntTest : IntegrationTestBase() {
   @DisplayName("POST /plr")
   inner class LearnersEndpoint {
 
-    val gson = GsonBuilder()
+    private val gson = GsonBuilder()
       .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
       .registerTypeAdapter(LRSResponseType::class.java, ResponseTypeAdapter().nullSafe())
       .create()
 
-    @Test
-    fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
-      lrsApiMock.stubPostServerError()
+    private val getLearningEventsRequest = GetPLRByULNRequest(
+      "Some Given Name",
+      "Some Family Name",
+      "1234567890",
+      null,
+      null,
+    )
 
-      val actualResponse = webTestClient.post()
+    private fun actualResponse(
+      request: GetPLRByULNRequest = getLearningEventsRequest,
+      requestAsJson: String? = null,
+      expectedStatus: Int = 200,
+    ): String? {
+      val executedRequest = webTestClient.post()
         .uri("/plr")
         .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(getLearningEventsRequest)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(requestAsJson ?: request)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
-        .is5xxServerError
-        .expectBody()
-        .returnResult()
-        .responseBody
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).contains("LRS returned an error: MIAPAPIException")
+      return when (expectedStatus) {
+        200 -> executedRequest.isOk.expectBody().returnResult().responseBody?.toString(Charsets.UTF_8)
+        500 -> executedRequest.is5xxServerError.expectBody().returnResult().responseBody?.toString(Charsets.UTF_8)
+        400 -> executedRequest.isBadRequest.expectBody().returnResult().responseBody?.toString(Charsets.UTF_8)
+        else -> throw RuntimeException("Unhandled status code")
+      }
+    }
+
+    @Test
+    fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
+      lrsApiMock.stubPostServerError()
+      assertThat(actualResponse(expectedStatus = 500)).contains("LRS returned an error: MIAPAPIException")
+    }
+
+    @Test
+    fun `should return 400 with an appropriate error response if any mandatory field is missing`() {
+      val request = """
+        {
+          "givenName": "Some Given Name",
+          "familyName": "Some Family Name",
+          "uln": "1234567890",
+        }
+      """
+
+      val scenarios = listOf(
+        "\"givenName\": \"Some Given Name\",",
+        "\"familyName\": \"Some Family Name\",",
+        "\"uln\": \"1234567890\",",
+      )
+
+      for (jsonToRemove in scenarios) {
+        assertThat(actualResponse(requestAsJson = request.replace(jsonToRemove, ""), expectedStatus = 400)).contains("JSON parse error")
+      }
+    }
+
+    @Test
+    fun `should return 400 with an appropriate error response if any field is invalid`() {
+      val validRequest = """
+        {
+          "givenName": "Some",
+          "familyName": "Person",
+          "uln": "1234567890",
+        }
+      """
+
+      val scenarios = listOf(
+        "InvalidNameInvalidNameInvalidNameInvalidNameInvalidName" to "Some",
+        "InvalidNameInvalidNameInvalidNameInvalidNameInvalidName" to "Person",
+        "1234" to "1234567890",
+      )
+
+      for ((invalidValue, valueToReplace) in scenarios) {
+        val requestWithInvalidField = validRequest.replace(valueToReplace, invalidValue)
+        val response = actualResponse(requestAsJson = requestWithInvalidField, expectedStatus = 400).orEmpty()
+        assertThat(response.contains("JSON parse error"))
+      }
     }
 
     @Test
@@ -77,20 +137,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
         ),
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/plr")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(getLearningEventsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
-
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+      assertThat(actualResponse()).isEqualTo(gson.toJson(expectedResponse))
     }
 
     @Test
@@ -128,20 +175,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
         ),
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/plr")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(getLearningEventsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
-
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+      assertThat(actualResponse()).isEqualTo(gson.toJson(expectedResponse))
     }
 
     @Test
@@ -156,20 +190,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
         emptyList(),
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/plr")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(getLearningEventsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
-
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+      assertThat(actualResponse()).isEqualTo(gson.toJson(expectedResponse))
     }
 
     @Test
@@ -184,28 +205,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
         emptyList(),
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/plr")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-        .bodyValue(getLearningEventsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
-
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+      assertThat(actualResponse()).isEqualTo(gson.toJson(expectedResponse))
     }
   }
-
-  val getLearningEventsRequest = GetPLRByULNRequest(
-    "Some Given Name",
-    "Some Family Name",
-    "1234567890",
-    null,
-    null,
-  )
 }
