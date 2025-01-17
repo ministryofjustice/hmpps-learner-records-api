@@ -14,7 +14,7 @@ generic-service:
     # TODO: This should be replaced by a call to a different service, or removed
     EXAMPLE_API_URL: "https://learner-records-api-dev.hmpps.service.justice.gov.uk"
     LRS_BASE_URL: "https://cmp-ws.dev.lrs.education.gov.uk"
-    PFX_FILE_PATH: "WebServiceClientCert.pfx"
+    LRS_PFX_PATH: "WebServiceClientCert.pfx"
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
