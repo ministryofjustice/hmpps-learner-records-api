@@ -14,9 +14,6 @@ inputs:
     required: true
     default: ""
 
-secrets:
-  certificate:
-    required: true
 runs:
   using: "composite"
   steps:
@@ -25,8 +22,6 @@ runs:
       run: |
         echo "Decoding the Certificate from inputs shared by inputs"
         echo "${{ inputs.certificate }}" | base64 --decode > WebServiceClientCert.pfx
-        echo "Decoding the Certificate from inputs shared by inputs"
-        echo "${{ secrets.certificate }}" | base64 --decode > WebServiceClientCert.pfx
     - name: run the script to do the thing
       shell: bash
       run:
