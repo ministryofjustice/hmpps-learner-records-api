@@ -20,9 +20,9 @@ runs:
       shell: bash
       run: |
         echo "Decoding the Certificate from inputs shared by inputs"
-        echo "${{ inputs.CERTIFICATE }}" | base64 --decode > WebServiceClientCert.pfx
+        echo "${{ inputs.certificate }}" | base64 --decode > WebServiceClientCert.pfx
         echo "Decoding the Certificate from Secret"
-        echo "${{ secrets.CERTIFICATE }}" | base64 --decode > WebServiceClientCert.pfx
+        echo "${{ secrets.certificate }}" | base64 --decode > WebServiceClientCert.pfx
     - name: run the script to do the thing
       shell: bash
       run:
