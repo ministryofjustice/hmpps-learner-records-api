@@ -1,4 +1,20 @@
 services:
+  hmpps-auth:
+    image: quay.io/hmpps/hmpps-auth:latest
+    profiles:
+      - local
+    networks:
+      - hmpps
+    container_name: hmpps-auth
+    ports:
+      - "8090:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/auth/health" ]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev
+      - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
+
   lrs-api:
     image: "wiremock/wiremock:latest"
     profiles:

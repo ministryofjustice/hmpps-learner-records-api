@@ -1,14 +1,15 @@
-# ms-bold-lrs-service
+# hmpps-learner-records-api
+The hmpps-learner-records-api retrieves Unique Learner Number (ULN) and Personal Learning Record (PLR) for matching
+individuals from the Learning Records Service (LRS) data held by the Education and Skills Funding Agency (EFSA) at Department
+for Education (DfE).
 
-Generated from https://github.com/ministryofjustice/hmpps-template-kotlin. Please see the readme of that for extra info.
-
-This is our experimental repo for our microservice, but it is quickly becoming an actual piece of work.
-
-Auth has been temporarily commented out.
+This repository has been generated from https://github.com/ministryofjustice/hmpps-template-kotlin.
 
 ## Endpoints
 
-This service runs on `http://localhost:8080` by default.
+This service runs on:
+* Local: `http://localhost:8080`
+* Dev: `https://learner-records-api-dev.hmpps.service.justice.gov.uk/`
 
 ### `POST:/learners`
 This endpoint is to search for learners by their demographic information.
@@ -148,17 +149,19 @@ docker-compose --profile=<local/development> --env-file .env.<dev/local> up --bu
 As mentioned before there are two profiles.
 
 `local` will run:
-1. HMPPS-Auth
+1. HMPPS-Auth - Use the guidance [here](https://github.com/moj-analytical-services/dmet-bold/wiki/RR-Pilot-%E2%80%90-LRS-API-%E2%80%90-HMPPS-Auth#make-oauth-request)
+to get the access_token from the local instance of `hmpps-auth`.
 2. Wiremock API
 3. This Service
 
-Or `development` will run
-1. HMPPS-Auth
-2. This Service
+Or `development` will run:
+1. This Service
 
-_Instead of the wiremock API, this profile will attempt connection to the LRS Dev environment._
+_Instead of the wiremock API, this profile will attempt connection to the LRS Dev environment. This profile will also
+require you to connect to the `hmpps-auth` Dev environment._
 
-
+Follow the guidance [here](https://github.com/moj-analytical-services/dmet-bold/wiki/RR-Pilot-%E2%80%90-LRS-API-%E2%80%90-HMPPS-Auth#client-credentials)
+to get the access_token from the `hmpps-auth` Dev environment.
 
 E.g.
 ```bash
@@ -179,7 +182,7 @@ Open a terminal either in IntelliJ or in a separate window, ensuring you are in 
 
 Either ensure that you have set the environment variables above or if you would prefer not to set them, you can prefix the command with the following: 
 ```bash
-ORG_PASSWORD={pass};PFX_FILE_PASSWORD={pass};SPRING_PROFILES_ACTIVE=local;UK_PRN={pass}
+ORG_PASSWORD={pass};PFX_FILE_PASSWORD={pass};SPRING_PROFILES_ACTIVE=local;UK_PRN={pass};VENDOR_ID={pass}
 ```
 
 Run the following command:

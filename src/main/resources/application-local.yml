@@ -1,5 +1,5 @@
 hmpps-auth:
-  url: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+  url: "http://localhost:8090/auth"
 
 lrs:
   base-url: "http://lrs-api:8080"
