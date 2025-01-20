@@ -1,5 +1,8 @@
 name: Security veracode pipeline scan
 on:
+  push:
+    branches:
+      - '**'
   workflow_dispatch:
   schedule:
     - cron: "*/30 * * * *" # Every weekday
