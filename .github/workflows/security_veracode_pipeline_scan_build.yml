@@ -78,7 +78,7 @@ jobs:
       with:
         docker_image_app_dir: ${{ inputs.docker_image_app_dir }}
         certificate: ${{ secrets.certificate }}
-      secrets: inherit
+        secrets: inherit
     - name: "Download/Extract pipeline scanner"
       shell: bash
       run: |
