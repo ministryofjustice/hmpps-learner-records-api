@@ -37,11 +37,6 @@ jobs:
           cache-dependency-path: |
             *.gradle*
             **/gradle-wrapper.properties
-      - name: Write Certificate file
-        shell: bash
-        run: |
-          echo "Decoding the Certificate"
-          echo "${{ secrets.CERTIFICATE }}" | base64 --decode > WebServiceClientCert.pfx
       - name: gradlew check
         env:
           cache-name: kotlin-cache

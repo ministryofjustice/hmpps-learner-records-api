@@ -138,6 +138,13 @@ Once downloaded, add the `WebServiceClientCert.pfx` to the root project director
 
 
 ### Starting the service
+
+Insert these two lines into the Dockerfile if running locally (as well as ensuring you have the SSL Certificate in the root directory):
+```
+COPY WebServiceClientCert.pfx /app/WebServiceClientCert.pfx
+RUN ls -la /app/WebServiceClientCert.pfx
+```
+
 Use the docker compose file to start the services - HMPPS-Auth, Wiremock for mocking LRS API Response and this microservice.
 
 Run:
