@@ -27,9 +27,7 @@ class LRSService(
 
   private val log: LoggerUtil = LoggerUtil(javaClass)
 
-  private fun lrsClient(): LRSApiServiceInterface {
-    return httpClientConfiguration.retrofit().create(LRSApiServiceInterface::class.java)
-  }
+  private fun lrsClient(): LRSApiServiceInterface = httpClientConfiguration.retrofit().create(LRSApiServiceInterface::class.java)
 
   private fun parseError(xmlString: String): MIAPAPIException? {
     val regex = Regex("<ns10:MIAPAPIException[\\s\\S]*?</ns10:MIAPAPIException>")
