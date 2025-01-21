@@ -21,13 +21,13 @@ import kotlin.reflect.full.declaredMemberProperties
 class LRSService(
   @Autowired
   private val httpClientConfiguration: HttpClientConfiguration,
-  private val lrsClient: LRSApiServiceInterface = httpClientConfiguration.retrofit()
-    .create(LRSApiServiceInterface::class.java),
   @Autowired
   private val appConfig: AppConfig,
 ) {
 
   private val log: LoggerUtil = LoggerUtil(javaClass)
+
+  private fun lrsClient(): LRSApiServiceInterface = httpClientConfiguration.retrofit().create(LRSApiServiceInterface::class.java)
 
   private fun parseError(xmlString: String): MIAPAPIException? {
     val regex = Regex("<ns10:MIAPAPIException[\\s\\S]*?</ns10:MIAPAPIException>")
@@ -45,7 +45,7 @@ class LRSService(
 
     log.debug("Calling LRS API")
 
-    val lrsResponse = lrsClient.findLearnerByDemographics(requestBody)
+    val lrsResponse = lrsClient().findLearnerByDemographics(requestBody)
     val lrsResponseBody = lrsResponse.body()?.body?.findLearnerResponse
 
     if (lrsResponse.isSuccessful && lrsResponseBody != null) {

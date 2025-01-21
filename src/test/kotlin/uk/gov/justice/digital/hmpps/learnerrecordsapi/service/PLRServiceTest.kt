@@ -14,8 +14,10 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import retrofit2.Response
+import retrofit2.Retrofit
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsEnvelope
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
@@ -30,7 +32,8 @@ import java.time.LocalDate
 class PLRServiceTest {
 
   private lateinit var httpClientConfigurationMock: HttpClientConfiguration
-  private lateinit var lrsApiServiceInterfaceMock: uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface
+  private lateinit var retrofitMock: Retrofit
+  private lateinit var lrsApiServiceInterfaceMock: LRSApiServiceInterface
   private lateinit var appConfigMock: AppConfig
 
   private lateinit var plrService: PLRService
@@ -38,10 +41,13 @@ class PLRServiceTest {
   @BeforeEach
   fun setup() {
     httpClientConfigurationMock = mock(HttpClientConfiguration::class.java)
+    retrofitMock = mock(Retrofit::class.java)
     lrsApiServiceInterfaceMock =
-      mock(uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface::class.java)
+      mock(LRSApiServiceInterface::class.java)
+    `when`(httpClientConfigurationMock.retrofit()).thenReturn(retrofitMock)
+    `when`(retrofitMock.create(LRSApiServiceInterface::class.java)).thenReturn(lrsApiServiceInterfaceMock)
     appConfigMock = mock(AppConfig::class.java)
-    plrService = PLRService(httpClientConfigurationMock, lrsApiServiceInterfaceMock, appConfigMock)
+    plrService = PLRService(httpClientConfigurationMock, appConfigMock)
     `when`(appConfigMock.ukprn()).thenReturn("test")
     `when`(appConfigMock.password()).thenReturn("pass")
     `when`(appConfigMock.vendorId()).thenReturn("01")
