@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
@@ -18,12 +19,12 @@ import javax.xml.bind.JAXBContext
 class PLRService(
   @Autowired
   private val httpClientConfiguration: HttpClientConfiguration,
-  private val lrsClient: uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface = httpClientConfiguration.retrofit()
-    .create(uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface::class.java),
   @Autowired
   private val appConfig: AppConfig,
 ) {
   private val log: LoggerUtil = LoggerUtil(javaClass)
+
+  private fun lrsClient(): LRSApiServiceInterface = httpClientConfiguration.retrofit().create(LRSApiServiceInterface::class.java)
 
   private fun parseError(xmlString: String): MIAPAPIException? {
     val regex = Regex("<ns10:MIAPAPIException[\\s\\S]*?</ns10:MIAPAPIException>")
@@ -40,7 +41,7 @@ class PLRService(
       .transformToLRSRequest(appConfig.ukprn(), appConfig.password(), appConfig.vendorId())
     log.debug("Calling LRS API")
 
-    val plrResponse = lrsClient.getLearnerLearningEvents(requestBody)
+    val plrResponse = lrsClient().getLearnerLearningEvents(requestBody)
     val learningEvents = plrResponse.body()?.body?.learningEventsResponse
 
     if (plrResponse.isSuccessful && learningEvents != null) {
