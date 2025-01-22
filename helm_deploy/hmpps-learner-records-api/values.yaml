@@ -30,7 +30,7 @@ generic-service:
         secretName: dfe-lrs-api-cert
         items:
           - key: WebServiceClientCert
-            path: /app/WebServiceClientCert
+            path: /app/WebServiceClientCert.pfx
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
   #   [name of kubernetes secret]:
