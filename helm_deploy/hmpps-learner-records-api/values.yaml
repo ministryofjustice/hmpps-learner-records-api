@@ -20,6 +20,17 @@ generic-service:
     SERVER_PORT: "8080"
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
 
+  volumeMounts:
+    - name: lrs-api-cert
+      mountPath: /app
+
+  volumes:
+    - name: lrs-api-cert
+      secret:
+        secretName: dfe-lrs-api-cert
+        items:
+          - key: WebServiceClientCert
+            path: /app/WebServiceClientCert
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
   #   [name of kubernetes secret]:
