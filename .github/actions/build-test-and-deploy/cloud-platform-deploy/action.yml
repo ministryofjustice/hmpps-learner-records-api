@@ -105,7 +105,6 @@ runs:
           echo "${{ inputs.helm_allowlist_groups }}" | base64 --decode > ./ip-allowlist-groups.yaml
           echo "ALLOWLIST_GROUPS=--values ./ip-allowlist-groups.yaml" >> $GITHUB_OUTPUT
         fi
-
     - name: Check for IP_ALLOWLIST_GROUPS_VERSION
       shell: bash
       id: check-ip-allowlists-version
@@ -113,14 +112,13 @@ runs:
         if [[ -n "${{ inputs.helm_allowlist_version }}" ]]; then
           echo "ALLOWLIST_VERSION=--set generic-service.allowlist_version=${{ inputs.helm_allowlist_version }}" >> $GITHUB_OUTPUT
         fi
-    - name: Write Certificate file
-      shell: bash
-      run: |
-        echo "Decoding the Certificate from inputs shared by inputs"
-        echo "${{ inputs.certificate }}" | base64 --decode > /app/WebServiceClientCert.pfx
     - name: Deploy
       shell: bash
       run: |
+        echo "Decoding the Certificate"
+        pwd
+        echo "${{ inputs.certificate }}" | base64 --decode > WebServiceClientCert.pfx
+        ls -la
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         brew install helm
         yq -i ".appVersion = \"${{ inputs.version }}\"" "${{ inputs.helm_dir }}/${{ github.event.repository.name }}/Chart.yaml"
