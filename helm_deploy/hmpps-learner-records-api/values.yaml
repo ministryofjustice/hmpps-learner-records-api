@@ -21,16 +21,14 @@ generic-service:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
 
   volumeMounts:
-    - name: lrs-api-cert
-      mountPath: /app
+    - mountPath: "/app"
+      name: dfe-lrs-api-cert
 
   volumes:
-    - name: lrs-api-cert
+    - name: dfe-lrs-api-cert
       secret:
         secretName: dfe-lrs-api-cert
-        items:
-          - key: WebServiceClientCert
-            path: /app/WebServiceClientCert.pfx
+
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
   #   [name of kubernetes secret]:
