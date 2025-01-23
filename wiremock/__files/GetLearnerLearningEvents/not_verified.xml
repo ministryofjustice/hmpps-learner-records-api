@@ -1,12 +1,11 @@
 <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
     <s:Body>
         <GetLearnerLearningEventsResponse xmlns="http://tempuri.org/">
-            <GetLearnerLearningEventsResult
-            >
-                <ResponseCode>WSEC0208</ResponseCode>
-                <FoundULN/>
-                <IncomingULN>{{soapXPath request.body '/GetLearnerLearningEvents/uln/text()'}}</IncomingULN>
-                <LearnerRecord/>
+            <GetLearnerLearningEventsResult xmlns:a="http://api.lrs.qcf.gov.uk/model" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                <a:ResponseCode>WSEC0208</a:ResponseCode>
+                <a:FoundULN/>
+                <a:IncomingULN>1174112637</a:IncomingULN>
+                <a:LearnerRecord/>
             </GetLearnerLearningEventsResult>
         </GetLearnerLearningEventsResponse>
     </s:Body>

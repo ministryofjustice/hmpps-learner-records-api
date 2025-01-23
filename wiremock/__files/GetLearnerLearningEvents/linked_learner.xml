@@ -1,0 +1,419 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body>
+        <GetLearnerLearningEventsResponse xmlns="http://tempuri.org/">
+            <GetLearnerLearningEventsResult xmlns:a="http://api.lrs.qcf.gov.uk/model" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                <a:ResponseCode>WSRC0022</a:ResponseCode>
+                <a:FoundULN>6936002314</a:FoundULN>
+                <a:IncomingULN>4444599390</a:IncomingULN>
+                <a:LearnerRecord>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-09-26</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>UNKNOWN</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>UNKNWN</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>W</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-31 16:47:04</a:DateLoaded>
+                        <a:Grade>9999999999</a:Grade>
+                        <a:ID>4284</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate>2010-09-26</a:ParticipationEndDate>
+                        <a:ParticipationStartDate>2010-09-01</a:ParticipationStartDate>
+                        <a:QualificationType>NVQ/GNVQ Key Skills Unit</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>02</a:ReturnNumber>
+                        <a:Source>ILR</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>Key Skills in Application of Number - level 1</a:Subject>
+                        <a:SubjectCode>1000323X</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2011-10-24</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>UNKNOWN</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>UNKNWN</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>W</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-31 16:47:04</a:DateLoaded>
+                        <a:Grade>9999999999</a:Grade>
+                        <a:ID>5320</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate>2011-10-24</a:ParticipationEndDate>
+                        <a:ParticipationStartDate>2011-10-01</a:ParticipationStartDate>
+                        <a:QualificationType>GCSE</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>02</a:ReturnNumber>
+                        <a:Source>ILR</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>GCSE Sociology</a:Subject>
+                        <a:SubjectCode>10009048</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-09-26</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>UNKNOWN</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>UNKNWN</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>W</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-31 16:47:04</a:DateLoaded>
+                        <a:Grade>9999999999</a:Grade>
+                        <a:ID>4286</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate>2010-09-26</a:ParticipationEndDate>
+                        <a:ParticipationStartDate>2010-09-01</a:ParticipationStartDate>
+                        <a:QualificationType>NVQ</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>02</a:ReturnNumber>
+                        <a:Source>ILR</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>NVQ in Occupational Health and Safety</a:Subject>
+                        <a:SubjectCode>10036015</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-09-26</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>UNKNOWN</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>UNKNWN</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>W</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-31 16:47:04</a:DateLoaded>
+                        <a:Grade>9999999999</a:Grade>
+                        <a:ID>5322</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate>2010-09-26</a:ParticipationEndDate>
+                        <a:ParticipationStartDate>2010-09-01</a:ParticipationStartDate>
+                        <a:QualificationType>NVQ</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>02</a:ReturnNumber>
+                        <a:Source>ILR</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>NVQ in Performing Manufacturing Operations</a:Subject>
+                        <a:SubjectCode>10039508</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-09-26</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>UNKNOWN</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>UNKNWN</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>W</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-31 16:47:04</a:DateLoaded>
+                        <a:Grade>9999999999</a:Grade>
+                        <a:ID>4288</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate>2010-09-26</a:ParticipationEndDate>
+                        <a:ParticipationStartDate>2010-09-01</a:ParticipationStartDate>
+                        <a:QualificationType>NVQ/GNVQ Key Skills Unit</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>02</a:ReturnNumber>
+                        <a:Source>ILR</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>Key Skills in Improving Own Learning and Performance</a:Subject>
+                        <a:SubjectCode>1004033X</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-09-26</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>UNKNOWN</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>UNKNWN</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>W</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-31 16:47:04</a:DateLoaded>
+                        <a:Grade>9999999999</a:Grade>
+                        <a:ID>5324</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate>2010-09-26</a:ParticipationEndDate>
+                        <a:ParticipationStartDate>2010-09-01</a:ParticipationStartDate>
+                        <a:QualificationType>Certificate</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>02</a:ReturnNumber>
+                        <a:Source>ILR</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>BTEC Certificate in Life Coaching Skills and Practice</a:Subject>
+                        <a:SubjectCode>10059027</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>Welsh Joint Education Committee</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100040</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>2</a:Grade>
+                        <a:ID>1236</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>ELQ Band D</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>WJEC Entry Level Certificate in Science (Double Award)</a:Subject>
+                        <a:SubjectCode>10010452</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>Welsh Joint Education Committee</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100040</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>1</a:Grade>
+                        <a:ID>1932</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>ELQ Band D</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>WJEC Entry Level Certificate in Science (Double Award)</a:Subject>
+                        <a:SubjectCode>10010452</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>Assessment and Qualifications Alliance</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100062</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>AB</a:Grade>
+                        <a:ID>1933</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>Applied GCE Double Award</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>AQA Level 3 Advanced GCE in Applied Information and Communication Technology (Double Award)</a:Subject>
+                        <a:SubjectCode>10045636</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>Assessment and Qualifications Alliance</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100062</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>AB</a:Grade>
+                        <a:ID>1237</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>Applied GCE Double Award</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>AQA Level 3 Advanced GCE in Applied Information and Communication Technology (Double Award)</a:Subject>
+                        <a:SubjectCode>10045636</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>EDEXCEL Foundation</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100060</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>DM</a:Grade>
+                        <a:ID>1238</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>BTEC National Certificate</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>Edexcel Level 3 BTEC National Certificate in Music Technology</a:Subject>
+                        <a:SubjectCode>50013634</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>EDEXCEL Foundation</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100060</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>DM</a:Grade>
+                        <a:ID>1934</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>BTEC National Certificate</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>Edexcel Level 3 BTEC National Certificate in Music Technology</a:Subject>
+                        <a:SubjectCode>50013634</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2011-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>EDEXCEL Foundation</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100060</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>B</a:Grade>
+                        <a:ID>1935</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>GCE AS level</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>EDEXCEL Level 3 Advanced Subsidiary GCE in Art and Design</a:Subject>
+                        <a:SubjectCode>50026410</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2011-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>EDEXCEL Foundation</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100060</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>B</a:Grade>
+                        <a:ID>1239</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>GCE AS level</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>EDEXCEL Level 3 Advanced Subsidiary GCE in Art and Design</a:Subject>
+                        <a:SubjectCode>50026410</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2011-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>Oxford,Cambridge and RSA Examinations</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100061</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>M</a:Grade>
+                        <a:ID>1240</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>OCR National Diploma at Level 3</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>OCR Level 3 National Diploma in ICT</a:Subject>
+                        <a:SubjectCode>50033529</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2011-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10032743</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>Oxford,Cambridge and RSA Examinations</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100061</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>M</a:Grade>
+                        <a:ID>1936</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>OCR National Diploma at Level 3</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>OCR Level 3 National Diploma in ICT</a:Subject>
+                        <a:SubjectCode>50033529</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2014-10-27</a:AchievementAwardDate>
+                        <a:AchievementProviderName/>
+                        <a:AchievementProviderUkprn/>
+                        <a:AwardingOrganisationName>Cambridge International Examinations</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>TEST0045</a:AwardingOrganisationUkprn>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2014-11-26 10:08:15</a:DateLoaded>
+                        <a:Grade>Pass</a:Grade>
+                        <a:ID>38075057</a:ID>
+                        <a:LanguageForAssessment>English</a:LanguageForAssessment>
+                        <a:Level>Level 1/2</a:Level>
+                        <a:QualificationType>GCSE (A* to G)</a:QualificationType>
+                        <a:Source>AO</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>AQA Level 1/Level 2 GCSE in Humanities</a:Subject>
+                        <a:SubjectCode>500/4606/8</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2014-10-27</a:AchievementAwardDate>
+                        <a:AchievementProviderName/>
+                        <a:AchievementProviderUkprn/>
+                        <a:AwardingOrganisationName>Cambridge International Examinations</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>TEST0045</a:AwardingOrganisationUkprn>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2014-11-26 09:26:45</a:DateLoaded>
+                        <a:Grade>Pass</a:Grade>
+                        <a:ID>38070859</a:ID>
+                        <a:LanguageForAssessment>English</a:LanguageForAssessment>
+                        <a:Level>Level 3</a:Level>
+                        <a:QualificationType>GCE A Level</a:QualificationType>
+                        <a:Source>AO</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>Pearson Edexcel Level 3 Advanced GCE in General Studies</a:Subject>
+                        <a:SubjectCode>500/2652/5</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                </a:LearnerRecord>
+            </GetLearnerLearningEventsResult>
+        </GetLearnerLearningEventsResponse>
+    </s:Body>
+</s:Envelope>
