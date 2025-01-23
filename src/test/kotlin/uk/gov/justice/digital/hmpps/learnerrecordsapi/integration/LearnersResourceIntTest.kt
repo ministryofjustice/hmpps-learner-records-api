@@ -38,7 +38,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
     private fun actualResponse(request: FindLearnerByDemographicsRequest = findLearnerByDemographicsRequest, expectedStatus: Int = 200): String? {
       val executedRequest = webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__R")))
         .bodyValue(request)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()

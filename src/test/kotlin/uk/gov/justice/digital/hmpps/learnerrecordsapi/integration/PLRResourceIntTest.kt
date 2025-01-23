@@ -32,7 +32,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
       val actualResponse = webTestClient.post()
         .uri("/plr")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__R")))
         .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
@@ -79,7 +79,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
       val actualResponse = webTestClient.post()
         .uri("/plr")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__R")))
         .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
@@ -130,7 +130,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
       val actualResponse = webTestClient.post()
         .uri("/plr")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__R")))
         .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
@@ -158,7 +158,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
       val actualResponse = webTestClient.post()
         .uri("/plr")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__R")))
         .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
@@ -186,7 +186,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
 
       val actualResponse = webTestClient.post()
         .uri("/plr")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__R")))
         .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
