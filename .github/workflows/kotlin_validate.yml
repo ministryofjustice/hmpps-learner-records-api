@@ -24,6 +24,8 @@ jobs:
       - name: refresh cache
         id: initial-cache
         uses: actions/cache@v4
+        env:
+          cache-name: kotlin-cache
         with:
           path: |
             - gradle-{{ checksum "build.gradle.kts" }}
@@ -52,7 +54,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: upload kotlin validation results
+          name: upload kotlin valdation results
           path: |
             build/test-results
             build/reports/tests
