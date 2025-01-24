@@ -17,6 +17,7 @@ class PLRResource(
 ) : BaseResource() {
 
   @PostMapping
+  @Tag(name = "PLR")
   @FindByULNApi
   suspend fun findByUln(
     @RequestBody @Valid getPLRByULNRequest: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest,
