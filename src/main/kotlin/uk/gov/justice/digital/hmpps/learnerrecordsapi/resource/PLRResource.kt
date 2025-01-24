@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.resource
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,6 +18,7 @@ class PLRResource(
 ) : BaseResource() {
 
   @PostMapping
+  @Tag(name = "PLR")
   @FindByULNApi
   suspend fun findByUln(
     @RequestBody @Valid getPLRByULNRequest: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest,
