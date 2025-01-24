@@ -2,8 +2,8 @@
     <soapenv:Body>
         <ns2:FindLearnerResponse xmlns:ns2="http://api.lrs.miap.gov.uk/findmsg">
             <ResponseCode>WSRC0002</ResponseCode>
-            <FamilyName>Test</FamilyName>
-            <GivenName>Test</GivenName>
+            <FamilyName>Everybody</FamilyName>
+            <GivenName>Everybody</GivenName>
             <DateOfBirth>2000-01-01</DateOfBirth>
             <Gender>2</Gender>
             <LastKnownPostCode>CV49EE</LastKnownPostCode>
