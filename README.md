@@ -12,6 +12,7 @@ This repository has been generated from https://github.com/ministryofjustice/hmp
 This service is available at:
 * Local: `http://localhost:8080/`
 * Dev: `https://learner-records-api-dev.hmpps.service.justice.gov.uk/`
+* UAT - `https://learner-records-api-uat.hmpps.service.justice.gov.uk/`
 * Preprod: tbc
 * Prod: tbc
 
@@ -25,7 +26,14 @@ The service provides 2 endpoints to consumers.
 
 ### `POST:/learners`
 This endpoint is to search for learners by their demographic information.
-The search may yield varied results, such as an exact match or possible matches.
+The search may yield varied results depending on the accuracy of the demographic information and the DfE data available:
+
+* No match
+* Too many matches
+* Possible matches 
+* Exact match
+* Linked Learner Found
+
 Assuming a successful search, the response should contain a ULN for each learner found. This ULN may be used on the`/plr` endpoint to retrieve their respective PLRs.
 
 Example request body:
