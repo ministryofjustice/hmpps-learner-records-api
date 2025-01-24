@@ -35,4 +35,10 @@ tasks {
   withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     compilerOptions.jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
   }
+  test {
+    environment("PFX_FILE_PASSWORD", "TEST")
+    environment("UK_PRN", "TEST")
+    environment("ORG_PASSWORD", "TEST")
+    environment("VENDOR_ID", "TEST")
+  }
 }
