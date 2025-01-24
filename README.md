@@ -86,6 +86,8 @@ Example response body:
 Response codes:
 * 200 - Success
 * 400 - Bad Request, malformed inputs
+* 401 - Unauthorised
+* 403 - Forbidden
 
 ### `POST:/plr`
 This endpoint is used to request a learner's learning events (or Personal Learning Record [PLR]) by their Unique Learner Number (ULN).
@@ -146,6 +148,12 @@ Example response body:
   ]
 }
 ```
+
+Response codes:
+* 200 - Success
+* 400 - Bad Request, malformed inputs
+* 401 - Unauthorised
+* 403 - Forbidden
 ---
 ## API Documentation
 
