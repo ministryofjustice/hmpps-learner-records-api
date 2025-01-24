@@ -17,7 +17,7 @@ dependencies {
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
   implementation("javax.xml.bind:jaxb-api:2.3.1")
   implementation("org.glassfish.jaxb:jaxb-runtime:2.3.5")
-  implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+  implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
   testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:1.1.0")
   testImplementation("org.wiremock:wiremock-standalone:3.9.2")
