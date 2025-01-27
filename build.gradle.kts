@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "6.1.0"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "6.1.2"
   kotlin("plugin.spring") version "2.0.21"
 }
 
@@ -17,7 +17,7 @@ dependencies {
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
   implementation("javax.xml.bind:jaxb-api:2.3.1")
   implementation("org.glassfish.jaxb:jaxb-runtime:2.3.5")
-  implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+  implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
   testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:1.1.0")
   testImplementation("org.wiremock:wiremock-standalone:3.9.2")
@@ -34,5 +34,11 @@ kotlin {
 tasks {
   withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     compilerOptions.jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
+  }
+  test {
+    environment("PFX_FILE_PASSWORD", "TEST")
+    environment("UK_PRN", "TEST")
+    environment("ORG_PASSWORD", "TEST")
+    environment("VENDOR_ID", "TEST")
   }
 }

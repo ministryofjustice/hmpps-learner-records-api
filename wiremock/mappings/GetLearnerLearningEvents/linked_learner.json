@@ -13,7 +13,7 @@
       {
         "matchesXPath": {
           "expression": "//Envelope/Body/GetLearnerLearningEvents/GivenName",
-          "equalToXml": "<GivenName>Sean</GivenName>"
+          "equalToXml": "<GivenName>Connor</GivenName>"
         }
       }
     ],
@@ -21,7 +21,7 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "GetLearnerLearningEvents/exact_match_full.xml",
+    "bodyFileName": "GetLearnerLearningEvents/linked_learner.xml",
     "headers": {
       "Content-Type": "text/xml"
     }

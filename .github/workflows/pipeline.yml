@@ -31,7 +31,7 @@ jobs:
   helm_lint:
     strategy:
       matrix:
-        environments: [ 'dev', 'preprod', 'prod' ]
+        environments: [ 'dev', 'uat', 'preprod', 'prod' ]
     name: helm lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v2 # WORKFLOW VERSION
     secrets: inherit
@@ -39,12 +39,12 @@ jobs:
       environment: ${{ matrix.environments }}
   kotlin_validate:
     name: Validate the kotlin
-    uses: ./.github/workflows/kotlin_validate.yml # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/kotlin_validate.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
   build:
     name: Build docker image from hmpps-github-actions
     if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/docker_build.yml # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
     needs:
       - kotlin_validate
     with:
@@ -59,10 +59,21 @@ jobs:
     needs:
       - build
       - helm_lint
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
     secrets: inherit
     with:
       environment: 'dev'
+      app_version: '${{ needs.build.outputs.app_version }}'
+  deploy_uat:
+    name: Deploy to the uat environment
+    needs:
+      - build
+      - helm_lint
+      - deploy_dev
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
+    secrets: inherit
+    with:
+      environment: 'uat'
       app_version: '${{ needs.build.outputs.app_version }}'
   # deploy_preprod:
   #   name: Deploy to pre-production environment

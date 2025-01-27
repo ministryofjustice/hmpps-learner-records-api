@@ -1,38 +1,42 @@
-# ms-bold-lrs-service
+# hmpps-learner-records-api
+The hmpps-learner-records-api retrieves Unique Learner Number (ULN) and Personal Learning Record (PLR) for matching
+individuals from the Learning Records Service (LRS) data held by the Education and Skills Funding Agency (EFSA) at Department
+for Education (DfE).
 
-Generated from https://github.com/ministryofjustice/hmpps-template-kotlin. Please see the readme of that for extra info.
+This repository has been generated from https://github.com/ministryofjustice/hmpps-template-kotlin.
 
-This is our experimental repo for our microservice, but it is quickly becoming an actual piece of work.
+---
 
-Auth has been temporarily commented out.
+## Hosting 
+
+This service is available at:
+* Local: `http://localhost:8080/`
+* Dev: `https://learner-records-api-dev.hmpps.service.justice.gov.uk/`
+* UAT - `https://learner-records-api-uat.hmpps.service.justice.gov.uk/`
+* Preprod: tbc
+* Prod: tbc
+
+---
 
 ## Endpoints
 
-This service runs on `http://localhost:8080` by default.
+The service provides 2 endpoints to consumers.
+* `/learners` - Search for a learner's ULN via their demographic data
+* `/plr` - Request a learner's learning record via their ULN
 
 ### `POST:/learners`
 This endpoint is to search for learners by their demographic information.
-The search may yield varied results, such as an exact match or possible matches.
-The response contains a ULN for each learner found, which may be used on another endpoint to retrieve their respective PLNs.
+The search may yield varied results depending on the accuracy of the demographic information and the DfE data available:
 
-#### How it works:
+* No match
+* Too many matches
+* Possible matches 
+* Exact match
+* Linked Learner Found
 
-The controller `LearnersResource` accepts a request with a `json` body taking the form of our model `FindLearnerByDemographicRequest`.
+Assuming a successful search, the response should contain a ULN for each learner found. This ULN may be used on the`/plr` endpoint to retrieve their respective PLRs.
 
-Example `json` for use with wiremock (local)
-
-```json
-{
-  "givenName": "Test_Possible_Match_Two_Learners",
-  "familyName": "some_name",
-  "dateOfBirth": "2022-02-02",
-  "gender": "1",
-  "lastKnownPostCode": "1234"
-}
-```
-
-Example `json` for use with Dev API
-
+Example request body:
 ```json
 {
   "givenName": "Darcie",
@@ -43,23 +47,58 @@ Example `json` for use with Dev API
 }
 ```
 
-The model asserts correct inputs for the request body using validation annotations and correct datatypes. In the event that inputs are malformed, error handlers will catch this and return a `400 Bad Request`.
+Example response body:
+```json
+{
+    "searchParameters": {
+        "givenName": "Darcie",
+        "familyName": "Tucker",
+        "dateOfBirth": "1976-08-16",
+        "gender": 2,
+        "lastKnownPostcode": "CV49EE"
+    },
+    "responseType": "Exact Match",
+    "matchedLearners": [
+        {
+            "createdDate": "2012-05-25",
+            "lastUpdatedDate": "2012-05-25",
+            "uln": "1026893096",
+            "versionNumber": "1",
+            "title": "Mrs",
+            "givenName": "Darcie",
+            "middleOtherName": "Isla",
+            "familyName": "Tucker",
+            "preferredGivenName": "Darcie",
+            "previousFamilyName": "CAMPBELL",
+            "familyNameAtAge16": "TUCKER",
+            "schoolAtAge16": "Mill Hill School Foundation ",
+            "lastKnownAddressLine1": "1 JOBS LANE",
+            "lastKnownAddressTown": "COVENTRY",
+            "lastKnownAddressCountyOrCity": "WEST MIDLANDS",
+            "lastKnownPostCode": "CV4 9EE",
+            "dateOfAddressCapture": "2009-04-25",
+            "dateOfBirth": "1976-08-16",
+            "placeOfBirth": "Blean ",
+            "gender": "2",
+            "emailAddress": "darcie.tucker@aol.compatibilitytest.com",
+            "scottishCandidateNumber": "845759406",
+            "abilityToShare": "1",
+            "learnerStatus": "1",
+            "verificationType": "1",
+            "tierLevel": "0"
+        }
+    ]
+}
+```
 
-In the case that the request is accepted, the controller will then call a service object `LRSService` to handle interfacing the LRS API.
-
-The service `LRSService` has a method called `findLearner` which accepts a single argument of type `FindLearnerByDemographicsRequest`.
-
-The service has an instance of `retrofit` which provides a way to interface with the LRS API.
-
-`retrofit` along with `JAXBConverter`, the models under the `models.lrsapi` package, and the interface `LRSApiServiceInterface` handles all the heavy lifting when it comes to parsing `XML` responses from the LRS API.
-
-When `findLearner` is called, retrofit is used to make a call to the LRS API. The service returns the response as a model `FindLearnerResponse`.
-
-The controller parses this into `json` and responds with that to the user.
+Response codes:
+* 200 - Success
+* 400 - Bad Request, malformed inputs
+* 401 - Unauthorised
+* 403 - Forbidden
 
 ### `POST:/plr`
-
-The `/plr` endpoint is used to request a Learner's learning events by their Unique Learner Number (ULN).
+This endpoint is used to request a learner's learning events (or Personal Learning Record [PLR]) by their Unique Learner Number (ULN).
 
 Generally when using a valid ULN there should be no issues with this request, but there are a few possible responses.
 * Exact Match
@@ -67,53 +106,108 @@ Generally when using a valid ULN there should be no issues with this request, bu
 * Learner opted to not share data
 * Learner could not be verified
 
-Example JSON Body
+Example request body:
 ```json
 {
-  "givenName": "Connor",
-  "familyName": "Carroll",
-  "uln": "4444599390"
+  "givenName": "Sean",
+  "familyName": "Findlay",
+  "uln": "1174112637",
+  "dateOfBirth": "1980-11-01",
+  "gender": 1
 }
 ```
 
-Example JSON Response
+Example response body:
 ```json
 {
-  "responseCode": "WSRC0004",
-  "foundUln": "6936002314",
-  "incomingUln": "4444599390",
+  "searchParameters": {
+    "givenName": "Sean",
+    "familyName": "Findlay",
+    "uln": "1174112637",
+    "dateOfBirth": "1980-11-01",
+    "gender": 1
+  },
+  "responseType": "Exact Match",
+  "foundUln": "1174112637",
+  "incomingUln": "1174112637",
   "learnerRecord": [
     {
-      "id": "1234",
-      "achievementProviderUkprn": "11111112",
-      "achievementProviderName": "PRIMARY SCHOOL",
+      "id": "2931",
+      "achievementProviderUkprn": "10030488",
+      "achievementProviderName": "LUTON PENTECOSTAL CHURCH",
       "awardingOrganisationName": "UNKNOWN",
-      "qualificationType": "NVQ/GNVQ Key Skills Unit",
-      "subjectCode": "1000123A",
-      "achievementAwardDate": "2010-01-01",
+      "qualificationType": "GCSE",
+      "subjectCode": "50079116",
+      "achievementAwardDate": "2011-10-24",
       "credits": "0",
       "source": "ILR",
       "dateLoaded": "2012-05-31 16:47:04",
       "underDataChallenge": "N",
       "level": "",
       "status": "F",
-      "subject": "Key Skills",
+      "subject": "GCSE in English Literature",
       "grade": "9999999999",
       "awardingOrganisationUkprn": "UNKNWN",
       "collectionType": "W",
       "returnNumber": "02",
-      "participationStartDate": "2010-09-01",
-      "participationEndDate": "2010-09-26"
+      "participationStartDate": "2011-10-02",
+      "participationEndDate": "2011-10-24"
     }
   ]
 }
 ```
 
+Response codes:
+* 200 - Success
+* 400 - Bad Request, malformed inputs
+* 401 - Unauthorised
+* 403 - Forbidden
+---
 ## API Documentation
 
-API documentation is available here - http://localhost:8080/swagger-ui/index.html
+OpenAPI documentation is available here - http://localhost:8080/swagger-ui/index.html
 
-## Running the application while developing
+---
+
+## Authentication
+
+The hmpps-learner-records-api requires bearer authorization.
+
+The tokens for authenticating with this service need to be requested from hmpps-auth via a `basic` authentication, citing your service's client id and client secret.
+
+You should ensure your service has the appropriate roles present to access this service.
+
+Example header
+```
+"Authorization": "bearer <token>"
+```
+
+---
+
+## Running the application
+
+The hmpps-learner-records-api is generally run via docker so ensure you have docker or docker desktop installed and running.
+
+### Profiles
+
+When run on local developer machines there are two profiles available to run with that include varying levels of supporting services.
+
+#### `local`
+
+This will set up all services required to access the API as local instances and will ensure connections between those within the docker container.
+There should be no external connections made.
+
+Services run:
+1. HMPPS-Auth (for authentication)
+2. Wiremock API (for LRS)
+3. hmpps-learner-records-api (this service)
+
+#### `development`
+
+Running in the development profile will only spin up the hmpps-learner-records-api and make connections to the dev environment hosted versions of hmpps-auth and the DfE LRS environment.
+
+Services run:
+1. hmpps-learner-records-api (this service)
 
 ### Environment Variables
 
@@ -131,13 +225,17 @@ SPRING_PROFILES_ACTIVE=
 
 In order to make a connection to the LRS Development environment (achieved when using the `development` profile) you will require the relevant certificate.
 
-Details for acquiring this certificate can be found [here](https://github.com/moj-analytical-services/dmet-bold/wiki/RR-Pilot-%E2%80%90-LRS-Microservice).
+Reach out to the development team if you don't have this. Once downloaded, add the `WebServiceClientCert.pfx` to the project root directory.
 
-Once downloaded, add the `WebServiceClientCert.pfx` to the root project directory.
-
+Uncomment these two lines in the Dockerfile when running locally:
+```
+COPY WebServiceClientCert.pfx /app/WebServiceClientCert.pfx
+RUN ls -la /app/WebServiceClientCert.pfx
+```
 
 ### Starting the service
-Use the docker compose file to start the services - HMPPS-Auth, Wiremock for mocking LRS API Response and this microservice.
+
+Use the docker compose file to start the services including your chosen profile.
 
 Run:
 ```bash
@@ -145,41 +243,28 @@ docker-compose down
 docker-compose --profile=<local/development> --env-file .env.<dev/local> up --build
 ```
 
-As mentioned before there are two profiles.
-
-`local` will run:
-1. HMPPS-Auth
-2. Wiremock API
-3. This Service
-
-Or `development` will run
-1. HMPPS-Auth
-2. This Service
-
-_Instead of the wiremock API, this profile will attempt connection to the LRS Dev environment._
-
-
-
-E.g.
+Local:
 ```bash
 docker-compose --profile=local --env-file .env.local up --build
 ```
-or
+Development:
 ```bash
 docker-compose --profile=development --env-file .env.development up --build
 ```
+
+---
 
 ## Running tests:
 
 Ensure no docker services are running as there may be port collisions.
 
-## Testing in a terminal:
+### Testing in a terminal:
 
 Open a terminal either in IntelliJ or in a separate window, ensuring you are in the repo directory.
 
 Either ensure that you have set the environment variables above or if you would prefer not to set them, you can prefix the command with the following: 
 ```bash
-ORG_PASSWORD={pass};PFX_FILE_PASSWORD={pass};SPRING_PROFILES_ACTIVE=local;UK_PRN={pass}
+ORG_PASSWORD={pass};PFX_FILE_PASSWORD={pass};SPRING_PROFILES_ACTIVE=local;UK_PRN={pass};VENDOR_ID={pass}
 ```
 
 Run the following command:
@@ -188,7 +273,7 @@ Run the following command:
 ./gradlew test
 ```
 
-## Testing using IntelliJ:
+### Testing using IntelliJ:
 
 If you encounter issues, make sure gradle is set up properly in IntelliJ for this project.
 

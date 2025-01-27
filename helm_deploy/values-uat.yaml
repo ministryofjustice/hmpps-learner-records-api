@@ -5,11 +5,13 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    host: learner-records-api-preprod.hmpps.service.justice.gov.uk
+    host: learner-records-api-uat.hmpps.service.justice.gov.uk
 
   env:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: "applicationinsights.dev.json"
-    HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
+    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    LRS_BASE_URL: "https://cmp-ws.dev.lrs.education.gov.uk"
+    LRS_PFX_PATH: "/certs/WebServiceClientCert.pfx"
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts

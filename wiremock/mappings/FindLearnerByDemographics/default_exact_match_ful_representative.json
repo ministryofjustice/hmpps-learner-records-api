@@ -19,7 +19,25 @@
       {
         "matchesXPath": {
           "expression": "//Envelope/Body/FindLearnerByDemographics/GivenName",
-          "equalToXml": "<GivenName>Test_Exact_Match</GivenName>"
+          "equalToXml": "<GivenName>Darcie</GivenName>"
+        }
+      },
+      {
+        "matchesXPath": {
+          "expression": "//Envelope/Body/FindLearnerByDemographics/FamilyName",
+          "equalToXml": "<FamilyName>Darcie</FamilyName>"
+        }
+      },
+      {
+        "matchesXPath": {
+          "expression": "//Envelope/Body/FindLearnerByDemographics/DateOfBirth",
+          "equalToXml": "<DateOfBirth>1976-08-16</DateOfBirth>"
+        }
+      },
+      {
+        "matchesXPath": {
+          "expression": "//Envelope/Body/FindLearnerByDemographics/LastKnownPostCode",
+          "equalToXml": "<LastKnownPostCode>CV49EE</LastKnownPostCode>"
         }
       }
     ],

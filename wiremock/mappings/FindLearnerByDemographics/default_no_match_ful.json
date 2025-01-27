@@ -19,7 +19,7 @@
       {
         "matchesXPath": {
           "expression": "//Envelope/Body/FindLearnerByDemographics/GivenName",
-          "equalToXml": "<GivenName>Test_No_Match</GivenName>"
+          "equalToXml": "<GivenName>Nobody</GivenName>"
         }
       }
     ],

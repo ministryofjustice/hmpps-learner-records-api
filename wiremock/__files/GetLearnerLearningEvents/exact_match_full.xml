@@ -1,31 +1,170 @@
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-    <soapenv:Body>
-        <GetLearnerLearningEventsResponse>
-            <GetLearnerLearningEventsResult>
-                <FoundULN>{{soapXPath request.body '/GetLearnerLearningEvents/uln/text()'}}</FoundULN>
-                <IncomingULN>{{soapXPath request.body '/GetLearnerLearningEvents/uln/text()'}}</IncomingULN>
-                <ResponseCode>WSRC0004</ResponseCode>
-                <LearnerRecord>
-                    <LearningEvent>
-                        <ID>28538264</ID>
-                        <AchievementProviderUkprn>90000051</AchievementProviderUkprn>
-                        <AchievementProviderName>TEST90000051</AchievementProviderName>
-                        <AwardingOrganisationName>Pearson Education Ltd</AwardingOrganisationName>
-                        <QualificationType></QualificationType>
-                        <SubjectCode>K/501/5773</SubjectCode>
-                        <AchievementAwardDate>2010-01-01</AchievementAwardDate>
-                        <Credits>2</Credits>
-                        <Source>QCFU</Source>
-                        <DateLoaded>2014-05-21 14:49:01</DateLoaded>
-                        <UnderDataChallenge>N</UnderDataChallenge>
-                        <Level>Entry Level</Level>
-                        <Status>F</Status>
-                        <Subject>Introduction to Construction Work: Entry 3</Subject>
-                        <Grade>Pass</Grade>
-                        <AwardingOrganisationUkprn>90000051</AwardingOrganisationUkprn>
-                    </LearningEvent>
-                </LearnerRecord>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body>
+        <GetLearnerLearningEventsResponse xmlns="http://tempuri.org/">
+            <GetLearnerLearningEventsResult xmlns:a="http://api.lrs.qcf.gov.uk/model" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                <a:ResponseCode>WSRC0004</a:ResponseCode>
+                <a:FoundULN>1174112637</a:FoundULN>
+                <a:IncomingULN>1174112637</a:IncomingULN>
+                <a:LearnerRecord>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2011-10-24</a:AchievementAwardDate>
+                        <a:AchievementProviderName>LUTON PENTECOSTAL CHURCH</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10030488</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>UNKNOWN</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>UNKNWN</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>W</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-31 16:47:04</a:DateLoaded>
+                        <a:Grade>9999999999</a:Grade>
+                        <a:ID>2931</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate>2011-10-24</a:ParticipationEndDate>
+                        <a:ParticipationStartDate>2011-10-02</a:ParticipationStartDate>
+                        <a:QualificationType>GCSE</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>02</a:ReturnNumber>
+                        <a:Source>ILR</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>GCSE in English Literature</a:Subject>
+                        <a:SubjectCode>50079116</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2011-10-24</a:AchievementAwardDate>
+                        <a:AchievementProviderName>VALLEY PARK SCHOOL</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10033421</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>UNKNOWN</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>UNKNWN</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>W</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-31 16:47:04</a:DateLoaded>
+                        <a:Grade>9999999999</a:Grade>
+                        <a:ID>2932</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate>2011-10-24</a:ParticipationEndDate>
+                        <a:ParticipationStartDate>2011-10-02</a:ParticipationStartDate>
+                        <a:QualificationType>Certificate</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>02</a:ReturnNumber>
+                        <a:Source>ILR</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>Certificate in Business Language Competence</a:Subject>
+                        <a:SubjectCode>10016454</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>LUTON PENTECOSTAL CHURCH</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10030488</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>EDEXCEL Foundation</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100060</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>E</a:Grade>
+                        <a:ID>252</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>GCE AS level</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>EDEXCEL Level 3 Advanced Subsidiary GCE in Government and Politics</a:Subject>
+                        <a:SubjectCode>50026173</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2058-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>THE CORSHAM SCHOOL</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10033325</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>Assessment and Qualifications Alliance</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100062</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>A*</a:Grade>
+                        <a:ID>253</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>GCE A level</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>AQA Level 3 Advanced GCE in English Literature A</a:Subject>
+                        <a:SubjectCode>50025685</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2010-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>VALLEY PARK SCHOOL</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10033421</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>Welsh Joint Education Committee</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100040</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>D</a:Grade>
+                        <a:ID>254</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>GCE A level</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>WJEC Level 3 Advanced GCE in Business Studies</a:Subject>
+                        <a:SubjectCode>50024760</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2011-07-01</a:AchievementAwardDate>
+                        <a:AchievementProviderName>VALLEY PARK SCHOOL</a:AchievementProviderName>
+                        <a:AchievementProviderUkprn>10033421</a:AchievementProviderUkprn>
+                        <a:AwardingOrganisationName>Oxford,Cambridge and RSA Examinations</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>100061</a:AwardingOrganisationUkprn>
+                        <a:CollectionType>A</a:CollectionType>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2012-05-30 17:28:02</a:DateLoaded>
+                        <a:Grade>U</a:Grade>
+                        <a:ID>255</a:ID>
+                        <a:Level i:nil="true"/>
+                        <a:ParticipationEndDate/>
+                        <a:ParticipationStartDate/>
+                        <a:QualificationType>GCE A level</a:QualificationType>
+                        <a:Restriction>0</a:Restriction>
+                        <a:ReturnNumber>01</a:ReturnNumber>
+                        <a:Source>NPD</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>OCR Level 3 Advanced GCE in English Literature</a:Subject>
+                        <a:SubjectCode>50024899</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                    <a:LearningEvent>
+                        <a:AchievementAwardDate>2014-10-27</a:AchievementAwardDate>
+                        <a:AchievementProviderName/>
+                        <a:AchievementProviderUkprn/>
+                        <a:AwardingOrganisationName>Cambridge International Examinations</a:AwardingOrganisationName>
+                        <a:AwardingOrganisationUkprn>TEST0045</a:AwardingOrganisationUkprn>
+                        <a:Credits>0</a:Credits>
+                        <a:DateLoaded>2014-11-26 10:10:07</a:DateLoaded>
+                        <a:Grade>Pass</a:Grade>
+                        <a:ID>38075232</a:ID>
+                        <a:LanguageForAssessment>English</a:LanguageForAssessment>
+                        <a:Level>Level 1/2</a:Level>
+                        <a:QualificationType>GCSE (A* to G)</a:QualificationType>
+                        <a:Source>AO</a:Source>
+                        <a:Status>F</a:Status>
+                        <a:Subject>OCR Level 1/Level 2 GCSE in Additional Science B</a:Subject>
+                        <a:SubjectCode>600/1166/X</a:SubjectCode>
+                        <a:UnderDataChallenge>N</a:UnderDataChallenge>
+                    </a:LearningEvent>
+                </a:LearnerRecord>
             </GetLearnerLearningEventsResult>
         </GetLearnerLearningEventsResponse>
-    </soapenv:Body>
-</soapenv:Envelope>
+    </s:Body>
+</s:Envelope>

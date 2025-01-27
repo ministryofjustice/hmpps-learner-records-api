@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.resource
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PostMapping
@@ -10,13 +11,14 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.FindByULNApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.PLRService
 
 @RestController
-@PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__RW')")
+@PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__RO')")
 @RequestMapping(value = ["/plr"], produces = ["application/json"])
 class PLRResource(
   private val plrService: PLRService,
 ) : BaseResource() {
 
   @PostMapping
+  @Tag(name = "PLR")
   @FindByULNApi
   suspend fun findByUln(
     @RequestBody @Valid getPLRByULNRequest: uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest,

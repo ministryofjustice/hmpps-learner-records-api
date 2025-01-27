@@ -41,7 +41,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
     ): String? {
       val executedRequest = webTestClient.post()
         .uri("/plr")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RW")))
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(requestAsJson ?: request)
         .accept(MediaType.parseMediaType("application/json"))

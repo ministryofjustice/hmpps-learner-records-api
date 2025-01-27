@@ -14,21 +14,29 @@ class HttpClientConfiguration(
   @Value("\${lrs.pfx-path}") val pfxFilePath: String,
   @Value("\${lrs.base-url}") val baseUrl: String,
 ) {
-  fun sslHttpClient(): OkHttpClient {
-    log.info("Building HTTP Client With SSL")
-    val sslContextConfiguration = SSLContextConfiguration(pfxFilePath)
-    val sslContext = sslContextConfiguration.createSSLContext()
-
-    val trustManager = sslContextConfiguration.getTrustManager()
-
+  fun buildSSLHttpClient(): OkHttpClient {
+    log.info("Building HTTP client with SSL")
     val loggingInterceptor = HttpLoggingInterceptor()
     loggingInterceptor.level = Level.BODY
 
-    val httpClientBuilder = OkHttpClient.Builder()
-      .sslSocketFactory(sslContext.socketFactory, trustManager)
-      .addInterceptor(loggingInterceptor)
+    try {
+      val sslContextConfiguration = SSLContextConfiguration(pfxFilePath)
+      val sslContext = sslContextConfiguration.createSSLContext()
+      val trustManager = sslContextConfiguration.getTrustManager()
 
-    return httpClientBuilder.build()
+      val httpClientBuilder = OkHttpClient.Builder()
+        .sslSocketFactory(sslContext.socketFactory, trustManager)
+        .addInterceptor(loggingInterceptor)
+
+      log.info("HTTP client with SSL built successfully!")
+      return httpClientBuilder.build()
+    } catch (e: Exception) {
+      log.info(e.message + " Falling back to HTTP client without SSL")
+      val httpClientBuilder = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+
+      return httpClientBuilder.build()
+    }
   }
 
   fun retrofit(): Retrofit {
@@ -36,7 +44,7 @@ class HttpClientConfiguration(
 
     return Retrofit.Builder()
       .baseUrl(baseUrl)
-      .client(sslHttpClient())
+      .client(buildSSLHttpClient())
       .addConverterFactory(JaxbConverterFactory.create())
       .build()
   }

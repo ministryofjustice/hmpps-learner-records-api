@@ -13,7 +13,7 @@
       {
         "matchesXPath": {
           "expression": "//Envelope/Body/GetLearnerLearningEvents/GivenName",
-          "equalToXml": "<GivenName>Not_Shared</GivenName>"
+          "equalToXml": "<GivenName>Rebecca</GivenName>"
         }
       }
     ],
