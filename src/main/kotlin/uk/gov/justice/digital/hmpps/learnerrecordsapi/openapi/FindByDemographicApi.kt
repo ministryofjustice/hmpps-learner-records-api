@@ -48,7 +48,7 @@ fun readResourceFile(fileName: String): String {
       ),
     ],
   ),
-  security = [SecurityRequirement(name = "template-kotlin-ui-role")],
+  security = [SecurityRequirement(name = "learner-records-search-read-only-role")],
   responses = [
     ApiResponse(
       responseCode = "200",

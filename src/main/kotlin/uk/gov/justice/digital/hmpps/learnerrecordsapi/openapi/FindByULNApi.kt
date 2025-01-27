@@ -39,7 +39,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
       ),
     ],
   ),
-  security = [SecurityRequirement(name = "template-kotlin-ui-role")],
+  security = [SecurityRequirement(name = "learner-records-search-read-only-role")],
   responses = [
     ApiResponse(
       responseCode = "200",
