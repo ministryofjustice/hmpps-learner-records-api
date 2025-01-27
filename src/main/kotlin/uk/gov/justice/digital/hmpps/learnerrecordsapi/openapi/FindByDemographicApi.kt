@@ -30,10 +30,22 @@ fun readResourceFile(fileName: String): String {
     content = [
       Content(
         mediaType = "application/json",
-        schema = Schema(implementation = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest::class),
+        schema = Schema(implementation = FindLearnerByDemographicsRequest::class),
         examples = [
           ExampleObject(
-            name = "Example Request",
+            name = "Exact Match Example",
+            value = """
+              {
+                "givenName": "Darcie",
+                "familyName": "Tucker",
+                "dateOfBirth": "1976-08-16",
+                "gender": "2",
+                "lastKnownPostCode": "CV49EE"
+              }
+            """,
+          ),
+          ExampleObject(
+            name = "Possible Match Example",
             value = """
               {
                 "givenName": "Anna",
@@ -41,6 +53,30 @@ fun readResourceFile(fileName: String): String {
                 "dateOfBirth": "1995-06-28",
                 "gender": "2",
                 "lastKnownPostCode": "ZZ12ZZ"
+              }
+            """,
+          ),
+          ExampleObject(
+            name = "Linked Learner Example",
+            value = """
+              {
+                "givenName": "Connor",
+                "familyName": "Carroll",
+                "dateOfBirth": "1985-03-27",
+                "gender": "1",
+                "lastKnownPostCode": "AB125EQ"
+              }
+            """,
+          ),
+          ExampleObject(
+            name = "No Match Example",
+            value = """
+              {
+                "givenName": "Random",
+                "familyName": "Name",
+                "dateOfBirth": "2000-01-01",
+                "gender": "2",
+                "lastKnownPostCode": "CV49EE"
               }
             """,
           ),

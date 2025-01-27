@@ -24,13 +24,49 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
         schema = Schema(implementation = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest::class),
         examples = [
           ExampleObject(
-            name = "Example Request",
+            name = "Exact Match",
             value = """
               {
                 "givenName": "Sean",
                 "familyName": "Findlay",
                 "uln": "1174112637",
                 "dateOfBirth": "1980-11-01",
+                "gender": 1
+              }
+            """,
+          ),
+          ExampleObject(
+            name = "Learner Not Verified",
+            value = """
+              {
+                "givenName": "Test",
+                "familyName": "Test",
+                "uln": "1174112637",
+                "dateOfBirth": "1995-05-12",
+                "gender": 2
+              }
+            """,
+          ),
+          ExampleObject(
+            name = "Learner Not Sharing Data",
+            value = """
+              {
+                "givenName": "Rebecca",
+                "familyName": "Brennan-Ace",
+                "uln": "1026922983",
+                "dateOfBirth": "1992-03-27",
+                "gender": 3
+              }
+            """,
+          ),
+          ExampleObject(
+            name = "Linked Learner",
+            value = """
+              {
+                "givenName": "Connor",
+                "familyName": "Carrol",
+                "uln": "4444599390",
+                "dateOfBirth": "2000-07-19",
                 "gender": 1
               }
             """,
@@ -124,7 +160,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                         "returnNumber": "02",
                         "participationStartDate": "2010-09-01",
                         "participationEndDate": "2010-09-26"
-                    },
+                    }
                 ]
             }
             """,
