@@ -47,7 +47,7 @@ generic-service:
 
   allowlist:
     groups:
-      - internal
+      - moj_cloud_platform
 
 generic-prometheus-alerts:
   targetApplication: hmpps-learner-records-api
