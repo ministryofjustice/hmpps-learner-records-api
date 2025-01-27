@@ -200,7 +200,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       "Unreadable HTTP message",
       "Unreadable HTTP message",
       "JSON parse error: Instantiation of " +
-        "[simple type, class uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest] " +
+        "[simple type, class uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest] " +
         "value failed for JSON property givenName due to missing (therefore NULL) value " +
         "for creator parameter givenName which is a non-nullable type",
       "Unreadable HTTP message",
