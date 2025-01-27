@@ -64,17 +64,17 @@ jobs:
     with:
       environment: 'dev'
       app_version: '${{ needs.build.outputs.app_version }}'
-  deploy_uat:
-    name: Deploy to the uat environment
-    needs:
-      - build
-      - helm_lint
-      - deploy_dev
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
-    secrets: inherit
-    with:
-      environment: 'uat'
-      app_version: '${{ needs.build.outputs.app_version }}'
+#  deploy_uat:
+#    name: Deploy to the uat environment
+#    needs:
+#      - build
+#      - helm_lint
+#      - deploy_dev
+#    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
+#    secrets: inherit
+#    with:
+#      environment: 'uat'
+#      app_version: '${{ needs.build.outputs.app_version }}'
   # deploy_preprod:
   #   name: Deploy to pre-production environment
   #   needs:
