@@ -28,11 +28,11 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
     // service authorisation requirements
     .components(
       Components().addSecuritySchemes(
-        "template-kotlin-ui-role",
+        "learner-records-search-read-only-role",
         SecurityScheme().addBearerJwtRequirement("ROLE_LEARNER_RECORDS_SEARCH__RO"),
       ),
     )
-    .addSecurityItem(SecurityRequirement().addList("template-kotlin-ui-role", listOf("read")))
+    .addSecurityItem(SecurityRequirement().addList("learner-records-search-read-only-role", listOf("read")))
 }
 
 private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme = type(SecurityScheme.Type.HTTP)
