@@ -18,6 +18,7 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
     .servers(
       listOf(
         Server().url("https://hmpps-learner-records-api-dev.hmpps.service.justice.gov.uk").description("Development"),
+        Server().url("https://hmpps-learner-records-api-uat.hmpps.service.justice.gov.uk").description("User Acceptance Testing"),
         Server().url("https://hmpps-learner-records-api-preprod.hmpps.service.justice.gov.uk")
           .description("Pre-Production"),
         Server().url("https://hmpps-learner-records-api.hmpps.service.justice.gov.uk").description("Production"),
