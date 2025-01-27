@@ -47,10 +47,8 @@ generic-service:
 
   allowlist:
     groups:
-      - digital_staff_and_mojo
+      - global_protect
       - moj_cloud_platform
-      - prisons
-      - prisons-education
 
 generic-prometheus-alerts:
   targetApplication: hmpps-learner-records-api
