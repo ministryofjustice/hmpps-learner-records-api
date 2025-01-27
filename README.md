@@ -22,7 +22,7 @@ This service is available at:
 
 The service provides 2 endpoints to consumers.
 * `/learners` - Search for a learner's ULN via their demographic data
-* `/plr` - Request a learner's learning record via their ULN
+* `/learner-events` - Request a learner's learning record via their ULN
 
 ### `POST:/learners`
 This endpoint is to search for learners by their demographic information.
@@ -34,7 +34,7 @@ The search may yield varied results depending on the accuracy of the demographic
 * Exact match
 * Linked Learner Found
 
-Assuming a successful search, the response should contain a ULN for each learner found. This ULN may be used on the`/plr` endpoint to retrieve their respective PLRs.
+Assuming a successful search, the response should contain a ULN for each learner found. This ULN may be used on the`/learner-events` endpoint to retrieve their respective PLRs.
 
 Example request body:
 ```json
@@ -97,7 +97,7 @@ Response codes:
 * 401 - Unauthorised
 * 403 - Forbidden
 
-### `POST:/plr`
+### `POST:/learner-events`
 This endpoint is used to request a learner's learning events (or Personal Learning Record [PLR]) by their Unique Learner Number (ULN).
 
 Generally when using a valid ULN there should be no issues with this request, but there are a few possible responses.

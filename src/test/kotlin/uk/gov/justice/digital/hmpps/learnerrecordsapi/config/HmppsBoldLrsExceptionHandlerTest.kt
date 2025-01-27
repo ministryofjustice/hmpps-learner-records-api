@@ -29,7 +29,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     )
 
     val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest(
+      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
         "Darcie",
         "Tucker",
         LocalDate.parse("2024-01-01"),
@@ -64,7 +64,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     )
 
     val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest(
+      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
         "DarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcie",
         "Tucker",
         LocalDate.parse("2024-01-01"),
@@ -99,7 +99,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     )
 
     val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest(
+      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
         "Darcie",
         "TuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTucker",
         LocalDate.parse("2024-01-01"),
@@ -133,8 +133,8 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       "Validation(s) failed for [gender] with reason(s): [must be less than or equal to 2]",
     )
 
-    val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest(
+    val learnersRequest =
+      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
         "Darcie",
         "Tucker",
         LocalDate.parse("2024-01-01"),
@@ -145,7 +145,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learners")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(findLearnerByDemographicsRequest)
+      .bodyValue(learnersRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
       .expectStatus()
@@ -168,8 +168,8 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       moreInfo = "Requested Resource not found on the server",
     )
 
-    val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest(
+    val learnersRequest =
+      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
         "Darcie",
         "Tucker",
         LocalDate.parse("2024-01-01"),
@@ -180,7 +180,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/someotherEndpoint")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(findLearnerByDemographicsRequest)
+      .bodyValue(learnersRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
       .expectStatus()

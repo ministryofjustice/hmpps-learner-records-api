@@ -15,43 +15,42 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.create
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerBody
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerEnvelope
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
-class LRSServiceTest {
+class LearnersServiceTest {
 
   private lateinit var httpClientConfigurationMock: HttpClientConfiguration
   private lateinit var retrofitMock: Retrofit
-  private lateinit var lrsApiServiceInterfaceMock: uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface
+  private lateinit var lrsApiInterfaceMock: uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
   private lateinit var appConfigMock: AppConfig
 
-  private lateinit var lrsService: LRSService
+  private lateinit var learnersService: LearnersService
 
   @BeforeEach
   fun setup() {
     httpClientConfigurationMock = mock(HttpClientConfiguration::class.java)
     retrofitMock = mock(Retrofit::class.java)
-    lrsApiServiceInterfaceMock =
-      mock(LRSApiServiceInterface::class.java)
+    lrsApiInterfaceMock =
+      mock(LRSApiInterface::class.java)
     `when`(httpClientConfigurationMock.retrofit()).thenReturn(retrofitMock)
-    `when`(retrofitMock.create(LRSApiServiceInterface::class.java)).thenReturn(lrsApiServiceInterfaceMock)
+    `when`(retrofitMock.create(LRSApiInterface::class.java)).thenReturn(lrsApiInterfaceMock)
     appConfigMock = mock(AppConfig::class.java)
-    lrsService = LRSService(httpClientConfigurationMock, appConfigMock)
+    learnersService = LearnersService(httpClientConfigurationMock, appConfigMock)
     `when`(appConfigMock.ukprn()).thenReturn("test")
     `when`(appConfigMock.password()).thenReturn("pass")
   }
@@ -60,7 +59,7 @@ class LRSServiceTest {
   fun `should return an LRS request object`(): Unit = runTest {
     val xmlEnv = FindLearnerEnvelope()
 
-    val requestBody = FindLearnerByDemographicsRequest(
+    val requestBody = LearnersRequest(
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
@@ -68,23 +67,23 @@ class LRSServiceTest {
       lastKnownPostCode = "ABCDEF",
     )
 
-    val expectedResult = FindLearnerByDemographicsResponse(
+    val expectedResult = LearnersResponse(
       searchParameters = requestBody,
       responseType = LRSResponseType.UNKNOWN_RESPONSE_TYPE,
       mismatchedFields = null,
       matchedLearners = null,
     )
 
-    `when`(lrsApiServiceInterfaceMock.findLearnerByDemographics(any())).thenReturn(
+    `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(
       Response.success(
         xmlEnv,
       ),
     )
 
-    val result = lrsService.findLearner(requestBody)
+    val result = learnersService.getLearners(requestBody)
 
     assertEquals(expectedResult, result)
-    verify(lrsApiServiceInterfaceMock).findLearnerByDemographics(any())
+    verify(lrsApiInterfaceMock).findLearnerByDemographics(any())
   }
 
   @Test
@@ -103,7 +102,7 @@ class LRSServiceTest {
 
     val xmlEnv = FindLearnerEnvelope(xmlBody)
 
-    val requestBody = FindLearnerByDemographicsRequest(
+    val requestBody = LearnersRequest(
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
@@ -111,23 +110,23 @@ class LRSServiceTest {
       lastKnownPostCode = "ABCDEF",
     )
 
-    val expectedResult = FindLearnerByDemographicsResponse(
+    val expectedResult = LearnersResponse(
       searchParameters = requestBody,
       responseType = LRSResponseType.EXACT_MATCH,
       mismatchedFields = null,
       matchedLearners = listOf(Learner(givenName = "Some")),
     )
 
-    `when`(lrsApiServiceInterfaceMock.findLearnerByDemographics(any())).thenReturn(
+    `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(
       Response.success(
         xmlEnv,
       ),
     )
 
-    val result = lrsService.findLearner(requestBody)
+    val result = learnersService.getLearners(requestBody)
 
     assertEquals(expectedResult, result)
-    verify(lrsApiServiceInterfaceMock).findLearnerByDemographics(any())
+    verify(lrsApiInterfaceMock).findLearnerByDemographics(any())
   }
 
   @Test
@@ -146,7 +145,7 @@ class LRSServiceTest {
 
     val xmlEnv = FindLearnerEnvelope(xmlBody)
 
-    val requestBody = FindLearnerByDemographicsRequest(
+    val requestBody = LearnersRequest(
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
@@ -154,7 +153,7 @@ class LRSServiceTest {
       lastKnownPostCode = "ABCDEF",
     )
 
-    val expectedResult = FindLearnerByDemographicsResponse(
+    val expectedResult = LearnersResponse(
       searchParameters = requestBody,
       responseType = LRSResponseType.POSSIBLE_MATCH,
       mismatchedFields = mutableMapOf(
@@ -163,21 +162,21 @@ class LRSServiceTest {
       matchedLearners = listOf(Learner(givenName = "Some"), Learner(givenName = "Mismatch")),
     )
 
-    `when`(lrsApiServiceInterfaceMock.findLearnerByDemographics(any())).thenReturn(
+    `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(
       Response.success(
         xmlEnv,
       ),
     )
 
-    val result = lrsService.findLearner(requestBody)
+    val result = learnersService.getLearners(requestBody)
 
     assertEquals(expectedResult, result)
-    verify(lrsApiServiceInterfaceMock).findLearnerByDemographics(any())
+    verify(lrsApiInterfaceMock).findLearnerByDemographics(any())
   }
 
   @Test
   fun `should throw an LRSException when the API returns an error`(): Unit = runTest {
-    val requestBody = FindLearnerByDemographicsRequest(
+    val requestBody = LearnersRequest(
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
@@ -197,7 +196,7 @@ class LRSServiceTest {
 
     val inputStream = javaClass.classLoader.getResourceAsStream("error_ful.xml") ?: throw IllegalArgumentException("File not found in resources: error_ful.xml")
 
-    `when`(lrsApiServiceInterfaceMock.findLearnerByDemographics(any())).thenReturn(
+    `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(
       Response.error(
         500,
         ResponseBody.create("text/xml".toMediaTypeOrNull(), InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()),
@@ -205,10 +204,10 @@ class LRSServiceTest {
     )
 
     val actualException = assertThrows<LRSException> {
-      lrsService.findLearner(requestBody)
+      learnersService.getLearners(requestBody)
     }
 
-    verify(lrsApiServiceInterfaceMock).findLearnerByDemographics(any())
+    verify(lrsApiInterfaceMock).findLearnerByDemographics(any())
     assertEquals(expectedException.toString(), actualException.toString())
   }
 }

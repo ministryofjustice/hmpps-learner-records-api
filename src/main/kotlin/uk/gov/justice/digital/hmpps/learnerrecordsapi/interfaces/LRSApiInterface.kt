@@ -8,7 +8,7 @@ import retrofit2.http.POST
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerEnvelope
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsEnvelope
 
-interface LRSApiServiceInterface {
+interface LRSApiInterface {
   @Headers("Accept: application/xml", "Content-Type: text/xml")
 // This is the endpoint we want to call on the base url of the api
 // Want to figure out how to use the config for this instead of hardcoding

@@ -4,19 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiServiceInterface
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.GetPLRByULNResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 import java.io.StringReader
 import javax.xml.bind.JAXBContext
 
 @Service
-class PLRService(
+class LearnerEventsService(
   @Autowired
   private val httpClientConfiguration: HttpClientConfiguration,
   @Autowired
@@ -24,7 +24,7 @@ class PLRService(
 ) {
   private val log: LoggerUtil = LoggerUtil(javaClass)
 
-  private fun lrsClient(): LRSApiServiceInterface = httpClientConfiguration.retrofit().create(LRSApiServiceInterface::class.java)
+  private fun lrsClient(): LRSApiInterface = httpClientConfiguration.retrofit().create(LRSApiInterface::class.java)
 
   private fun parseError(xmlString: String): MIAPAPIException? {
     val regex = Regex("<ns10:MIAPAPIException[\\s\\S]*?</ns10:MIAPAPIException>")
@@ -35,29 +35,29 @@ class PLRService(
     return unmarshaller.unmarshal(StringReader(relevantXml)) as MIAPAPIException
   }
 
-  suspend fun getPLR(getPLRByULNRequest: GetPLRByULNRequest): GetPLRByULNResponse {
+  suspend fun getLearningEvents(learnerEventsRequest: LearnerEventsRequest): LearnerEventsResponse {
     log.debug("Transforming inbound request object to LRS request object")
-    val requestBody = getPLRByULNRequest.extractFromRequest()
+    val requestBody = learnerEventsRequest.extractFromRequest()
       .transformToLRSRequest(appConfig.ukprn(), appConfig.password(), appConfig.vendorId())
     log.debug("Calling LRS API")
 
-    val plrResponse = lrsClient().getLearnerLearningEvents(requestBody)
-    val learningEvents = plrResponse.body()?.body?.learningEventsResponse
+    val learningEventsResponse = lrsClient().getLearnerLearningEvents(requestBody)
+    val learningEventsObject = learningEventsResponse.body()?.body?.learningEventsResponse
 
-    if (plrResponse.isSuccessful && learningEvents != null) {
-      return formatLRSResponse(getPLRByULNRequest, learningEvents)
+    if (learningEventsResponse.isSuccessful && learningEventsObject != null) {
+      return formatLRSResponse(learnerEventsRequest, learningEventsObject)
     } else {
-      throw LRSException(parseError(plrResponse.errorBody()?.string().toString()))
+      throw LRSException(parseError(learningEventsResponse.errorBody()?.string().toString()))
     }
   }
 
   private fun formatLRSResponse(
-    request: GetPLRByULNRequest,
+    request: LearnerEventsRequest,
     response: LearningEventsResponse,
-  ): GetPLRByULNResponse {
+  ): LearnerEventsResponse {
     val learningEventsResult = response.learningEventsResult
     val responseType = LRSResponseType.fromLrsResponseCode(learningEventsResult.responseCode)
-    return GetPLRByULNResponse(
+    return LearnerEventsResponse(
       searchParameters = request,
       responseType = responseType,
       incomingUln = learningEventsResult.incomingUln,

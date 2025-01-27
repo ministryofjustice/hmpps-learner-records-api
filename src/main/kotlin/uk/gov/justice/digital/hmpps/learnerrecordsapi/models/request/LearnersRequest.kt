@@ -4,14 +4,14 @@ import com.google.gson.annotations.SerializedName
 import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Pattern
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.FindLearnerByDemographicsLRSRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.LearnersLRSRequest
 import java.time.LocalDate
 
 // Example model for the request
 // Checking number of characters
 // Error handling for bad requests need to be added - add specific message and giving a 400 instead of a 500
 // annotations support message = ''
-data class FindLearnerByDemographicsRequest(
+data class LearnersRequest(
   // Mandatory
   @field:Pattern(regexp = "^[A-Za-z]{3,35}\$")
   @SerializedName("givenName")
@@ -34,7 +34,7 @@ data class FindLearnerByDemographicsRequest(
   @SerializedName("lastKnownPostcode")
   val lastKnownPostCode: String,
 ) {
-  fun extractFromRequest(): FindLearnerByDemographicsLRSRequest = FindLearnerByDemographicsLRSRequest(
+  fun extractFromRequest(): LearnersLRSRequest = LearnersLRSRequest(
     givenName = givenName,
     familyName = familyName,
     dateOfBirth = dateOfBirth,
