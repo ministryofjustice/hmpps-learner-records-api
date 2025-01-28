@@ -47,6 +47,7 @@ generic-service:
 
   allowlist:
     groups:
+      - global_protect
       - moj_cloud_platform
 
 generic-prometheus-alerts:
