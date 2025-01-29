@@ -24,8 +24,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Fin
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
 import java.io.InputStreamReader
@@ -195,12 +195,16 @@ class LearnersServiceTest {
       ),
     )
 
-    val inputStream = javaClass.classLoader.getResourceAsStream("error_ful.xml") ?: throw IllegalArgumentException("File not found in resources: error_ful.xml")
+    val inputStream = javaClass.classLoader.getResourceAsStream("error_ful.xml")
+      ?: throw IllegalArgumentException("File not found in resources: error_ful.xml")
 
     `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(
       Response.error(
         500,
-        ResponseBody.create("text/xml".toMediaTypeOrNull(), InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()),
+        ResponseBody.create(
+          "text/xml".toMediaTypeOrNull(),
+          InputStreamReader(inputStream, StandardCharsets.UTF_8).readText(),
+        ),
       ),
     )
 

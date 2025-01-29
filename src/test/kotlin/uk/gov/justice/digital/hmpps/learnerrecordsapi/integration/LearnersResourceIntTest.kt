@@ -10,11 +10,10 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSAp
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
-
 import java.time.LocalDate
 
 class LearnersResourceIntTest : IntegrationTestBase() {
@@ -37,7 +36,10 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         "CV49EE",
       )
 
-    private fun actualResponse(request: LearnersRequest = findLearnerByDemographicsRequest, expectedStatus: Int = 200): String? {
+    private fun actualResponse(
+      request: LearnersRequest = findLearnerByDemographicsRequest,
+      expectedStatus: Int = 200,
+    ): String? {
       val executedRequest = webTestClient.post()
         .uri("/learners")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))

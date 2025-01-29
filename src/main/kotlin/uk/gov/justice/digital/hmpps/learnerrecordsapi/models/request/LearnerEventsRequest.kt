@@ -3,7 +3,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 import com.google.gson.annotations.SerializedName
 import jakarta.validation.constraints.Past
 import jakarta.validation.constraints.Pattern
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.GetLearnerLearningEventsLRSRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.LearnerEventsLRSRequest
 import java.time.LocalDate
 
 class LearnerEventsRequest(
