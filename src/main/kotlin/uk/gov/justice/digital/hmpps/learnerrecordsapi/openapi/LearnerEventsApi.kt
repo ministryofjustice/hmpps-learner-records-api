@@ -7,13 +7,13 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.GetPLRByULNResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 @Operation(
-  summary = "Get PLR by ULN",
+  summary = "Get learning events by learner ULN",
   description = "Get personal learning records and events by a ULN",
   requestBody = RequestBody(
     description = "ULN and demographic details of the learner",
@@ -21,7 +21,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
     content = [
       Content(
         mediaType = "application/json",
-        schema = Schema(implementation = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest::class),
+        schema = Schema(implementation = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest::class),
         examples = [
           ExampleObject(
             name = "Exact Match",
@@ -83,7 +83,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
       content = [
         Content(
           mediaType = "application/json",
-          schema = Schema(implementation = GetPLRByULNResponse::class),
+          schema = Schema(implementation = LearnerEventsResponse::class),
           examples = [
             ExampleObject(
               name = "Exact Match Response",
@@ -213,4 +213,4 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
     ),
   ],
 )
-annotation class FindByULNApi
+annotation class LearnerEventsApi

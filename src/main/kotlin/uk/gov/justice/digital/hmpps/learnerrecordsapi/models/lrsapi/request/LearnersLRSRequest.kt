@@ -9,7 +9,7 @@ import java.time.LocalDate
 // We supply the ukprn and orgPassword - need to store this somewhere safe and call it
 // When user first uses microservice the username will be in the header of the request, we need to store this value and then input this value in the request to the LRS API
 // Need to investigate logs - everytime a request is made we want to store some logging information (i.e. username, request made). Need to speak to hmpps devs to understand what is the norm.
-data class FindLearnerByDemographicsLRSRequest(
+data class LearnersLRSRequest(
   @field:Size(max = 35)
   val userName: String = "TEST",
 

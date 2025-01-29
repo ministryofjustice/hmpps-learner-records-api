@@ -10,9 +10,9 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSAp
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
 import java.time.LocalDate
 
 class LearnersResourceIntTest : IntegrationTestBase() {
@@ -27,7 +27,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       .create()
 
     private val findLearnerByDemographicsRequest =
-      FindLearnerByDemographicsRequest(
+      LearnersRequest(
         "Some",
         "Person",
         LocalDate.parse("2024-01-01"),
@@ -35,7 +35,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         "CV49EE",
       )
 
-    private fun actualResponse(request: FindLearnerByDemographicsRequest = findLearnerByDemographicsRequest, expectedStatus: Int = 200): String? {
+    private fun actualResponse(request: LearnersRequest = findLearnerByDemographicsRequest, expectedStatus: Int = 200): String? {
       val executedRequest = webTestClient.post()
         .uri("/learners")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
@@ -103,7 +103,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       )
 
       val expectedResponse = gson.toJson(
-        FindLearnerByDemographicsResponse(
+        LearnersResponse(
           searchParameters = findLearnerByDemographicsRequest,
           responseType = LRSResponseType.EXACT_MATCH,
           matchedLearners = listOf(expectedExactMatchLearner),
@@ -184,7 +184,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       )
 
       val expectedResponse = gson.toJson(
-        FindLearnerByDemographicsResponse(
+        LearnersResponse(
           searchParameters = requestWithTwoMismatches,
           responseType = LRSResponseType.POSSIBLE_MATCH,
           mismatchedFields = mutableMapOf(
@@ -203,7 +203,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       lrsApiMock.stubLearnerByDemographicsNoMatch()
 
       val expectedResponse = gson.toJson(
-        FindLearnerByDemographicsResponse(
+        LearnersResponse(
           searchParameters = findLearnerByDemographicsRequest,
           responseType = LRSResponseType.NO_MATCH,
         ),
@@ -246,7 +246,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       )
 
       val expectedResponse = gson.toJson(
-        FindLearnerByDemographicsResponse(
+        LearnersResponse(
           searchParameters = findLearnerByDemographicsRequest,
           responseType = LRSResponseType.LINKED_LEARNER,
           matchedLearners = mutableListOf(expectedLinkedLearner),
@@ -261,7 +261,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       lrsApiMock.stubLearnerByDemographicsTooManyMatches()
 
       val expectedResponse = gson.toJson(
-        FindLearnerByDemographicsResponse(
+        LearnersResponse(
           searchParameters = findLearnerByDemographicsRequest,
           responseType = LRSResponseType.TOO_MANY_MATCHES,
         ),

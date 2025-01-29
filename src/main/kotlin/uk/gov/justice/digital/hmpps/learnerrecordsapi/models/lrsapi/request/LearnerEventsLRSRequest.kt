@@ -6,7 +6,7 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.time.LocalDate
 
-data class GetLearnerLearningEventsLRSRequest(
+data class LearnerEventsLRSRequest(
   @field:Size(max = 35)
   val userName: String = "TEST",
 

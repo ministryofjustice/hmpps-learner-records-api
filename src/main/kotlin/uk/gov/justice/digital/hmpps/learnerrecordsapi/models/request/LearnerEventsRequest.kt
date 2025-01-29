@@ -3,10 +3,10 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 import com.google.gson.annotations.SerializedName
 import jakarta.validation.constraints.Past
 import jakarta.validation.constraints.Size
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.GetLearnerLearningEventsLRSRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.LearnerEventsLRSRequest
 import java.time.LocalDate
 
-class GetPLRByULNRequest(
+class LearnerEventsRequest(
   @field:Size(max = 35)
   @SerializedName("givenName")
   val givenName: String,
@@ -26,7 +26,7 @@ class GetPLRByULNRequest(
   @SerializedName("gender")
   val gender: Int?,
 ) {
-  fun extractFromRequest(): GetLearnerLearningEventsLRSRequest = GetLearnerLearningEventsLRSRequest(
+  fun extractFromRequest(): LearnerEventsLRSRequest = LearnerEventsLRSRequest(
     givenName = givenName,
     familyName = familyName,
     uln = uln,

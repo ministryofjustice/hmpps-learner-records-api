@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.FindLearnerByDemographicsRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.FindLearnerByDemographicsResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
 import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -30,7 +30,7 @@ fun readResourceFile(fileName: String): String {
     content = [
       Content(
         mediaType = "application/json",
-        schema = Schema(implementation = FindLearnerByDemographicsRequest::class),
+        schema = Schema(implementation = LearnersRequest::class),
         examples = [
           ExampleObject(
             name = "Exact Match Example",
@@ -92,7 +92,7 @@ fun readResourceFile(fileName: String): String {
       content = [
         Content(
           mediaType = "application/json",
-          schema = Schema(implementation = FindLearnerByDemographicsResponse::class),
+          schema = Schema(implementation = LearnersResponse::class),
           examples = [
             ExampleObject(
               name = "Exact Match Response",

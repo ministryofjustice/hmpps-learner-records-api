@@ -10,15 +10,15 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSAp
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.GetPLRByULNRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.GetPLRByULNResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 import java.time.LocalDate
 
-class PLRResourceIntTest : IntegrationTestBase() {
+class LearnerEventsResourceIntTest : IntegrationTestBase() {
 
   @Nested
-  @DisplayName("POST /plr")
+  @DisplayName("POST /learner-events")
   inner class LearnersEndpoint {
 
     val gson = GsonBuilder()
@@ -31,7 +31,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
       lrsApiMock.stubPostServerError()
 
       val actualResponse = webTestClient.post()
-        .uri("/plr")
+        .uri("/learner-events")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -50,7 +50,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
     fun `should return OK and the correct response when LRS returns an exact match for FULL type`() {
       lrsApiMock.stubLearningEventsExactMatchFull()
 
-      val expectedResponse = GetPLRByULNResponse(
+      val expectedResponse = LearnerEventsResponse(
         getLearningEventsRequest,
         LRSResponseType.EXACT_MATCH,
         "1234567890",
@@ -78,7 +78,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
       )
 
       val actualResponse = webTestClient.post()
-        .uri("/plr")
+        .uri("/learner-events")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -97,7 +97,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
     fun `should return OK and the correct response when LRS returns a linked learner response`() {
       lrsApiMock.stubLearningEventsLinkedMatchFull()
 
-      val expectedResponse = GetPLRByULNResponse(
+      val expectedResponse = LearnerEventsResponse(
         getLearningEventsRequest,
         LRSResponseType.LINKED_LEARNER,
         "6666666666",
@@ -129,7 +129,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
       )
 
       val actualResponse = webTestClient.post()
-        .uri("/plr")
+        .uri("/learner-events")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -148,7 +148,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
     fun `should return OK and the correct response when LRS returns a not shared response`() {
       lrsApiMock.stubLearningEventsNotShared()
 
-      val expectedResponse = GetPLRByULNResponse(
+      val expectedResponse = LearnerEventsResponse(
         getLearningEventsRequest,
         LRSResponseType.NOT_SHARED,
         "",
@@ -157,7 +157,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
       )
 
       val actualResponse = webTestClient.post()
-        .uri("/plr")
+        .uri("/learner-events")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -176,7 +176,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
     fun `should return OK and the correct response when LRS returns a not verified response`() {
       lrsApiMock.stubLearningEventsNotVerified()
 
-      val expectedResponse = GetPLRByULNResponse(
+      val expectedResponse = LearnerEventsResponse(
         getLearningEventsRequest,
         LRSResponseType.NOT_VERIFIED,
         "",
@@ -185,7 +185,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
       )
 
       val actualResponse = webTestClient.post()
-        .uri("/plr")
+        .uri("/learner-events")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .bodyValue(getLearningEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -201,7 +201,7 @@ class PLRResourceIntTest : IntegrationTestBase() {
     }
   }
 
-  val getLearningEventsRequest = GetPLRByULNRequest(
+  val getLearningEventsRequest = LearnerEventsRequest(
     "Some Given Name",
     "Some Family Name",
     "1234567890",
