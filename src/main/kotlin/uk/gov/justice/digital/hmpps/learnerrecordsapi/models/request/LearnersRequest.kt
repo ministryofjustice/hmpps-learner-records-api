@@ -1,8 +1,6 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 
 import com.google.gson.annotations.SerializedName
-import jakarta.validation.constraints.Max
-import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Pattern
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.LearnersLRSRequest
 import java.time.LocalDate
@@ -13,22 +11,18 @@ import java.time.LocalDate
 // annotations support message = ''
 data class LearnersRequest(
   // Mandatory
-  @field:Pattern(regexp = "^[A-Za-z]{3,35}\$")
+  @field:Pattern(regexp = "^[A-Za-z' ,.-]{3,35}$")
   @SerializedName("givenName")
   val givenName: String,
 
-  @field:Pattern(regexp = "^[A-Za-z]{3,35}\$")
+  @field:Pattern(regexp = "^[A-Za-z' ,.-]{3,35}$")
   @SerializedName("familyName")
   val familyName: String,
 
   @SerializedName("dateOfBirth")
   val dateOfBirth: LocalDate,
 
-  // TODO: Validate gender
-  @SerializedName("gender")
-  @field:Min(0)
-  @field:Max(2)
-  val gender: Int,
+  val gender: Gender,
 
   @field:Pattern(regexp = "^[A-Z]{1,2}[0-9R][0-9A-Z]? ?[0-9][ABDEFGHJLNPQRSTUWXYZ]{2}|BFPO ?[0-9]{1,4}|([AC-FHKNPRTV-Y]\\d{2}|D6W)? ?[0-9AC-FHKNPRTV-Y]{4}\$")
   @SerializedName("lastKnownPostcode")
@@ -38,7 +32,14 @@ data class LearnersRequest(
     givenName = givenName,
     familyName = familyName,
     dateOfBirth = dateOfBirth,
-    gender = gender,
+    gender = gender.value,
     lastKnownPostCode = lastKnownPostCode,
   )
+}
+
+enum class Gender(val value: Int) {
+  MALE(1),
+  FEMALE(2),
+  NOT_KNOWN(0),
+  NOT_SPECIFIED(9),
 }

@@ -10,6 +10,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSAp
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
@@ -206,6 +207,6 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     "Some Family Name",
     "1234567890",
     null,
-    null,
+    Gender.MALE,
   )
 }

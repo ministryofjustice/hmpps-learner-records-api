@@ -25,6 +25,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Lea
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
 import java.io.InputStreamReader
@@ -63,7 +64,7 @@ class LearnersServiceTest {
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
-      gender = 1,
+      gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
     )
 
@@ -93,7 +94,7 @@ class LearnersServiceTest {
       familyName = "Person",
       givenName = "Some",
       dateOfBirth = LocalDate.of(1980, 1, 1).toString(),
-      gender = 1,
+      Gender.MALE,
       lastKnownPostCode = "ABCDEF",
       learners = listOf(Learner(givenName = "Some")),
     )
@@ -106,7 +107,7 @@ class LearnersServiceTest {
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
-      gender = 1,
+      gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
     )
 
@@ -136,7 +137,7 @@ class LearnersServiceTest {
       familyName = "Person",
       givenName = "Some",
       dateOfBirth = LocalDate.of(1980, 1, 1).toString(),
-      gender = 1,
+      Gender.MALE,
       lastKnownPostCode = "ABCDEF",
       learners = listOf(Learner(givenName = "Some"), Learner(givenName = "Mismatch")),
     )
@@ -149,7 +150,7 @@ class LearnersServiceTest {
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
-      gender = 1,
+      gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
     )
 
@@ -180,7 +181,7 @@ class LearnersServiceTest {
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
-      gender = 1,
+      gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
     )
 

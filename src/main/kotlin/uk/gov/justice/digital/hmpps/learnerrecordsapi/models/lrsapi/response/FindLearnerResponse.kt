@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response
 
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 
@@ -18,7 +19,7 @@ data class FindLearnerResponse(
   var dateOfBirth: String = "",
 
   @get:XmlElement(name = "Gender")
-  var gender: Int = 1,
+  var gender: Gender = Gender.NOT_SPECIFIED,
 
   @get:XmlElement(name = "LastKnownPostCode")
   var lastKnownPostCode: String = "",

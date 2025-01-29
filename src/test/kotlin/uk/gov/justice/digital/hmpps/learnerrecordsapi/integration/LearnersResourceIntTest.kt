@@ -13,6 +13,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Lea
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
+
 import java.time.LocalDate
 
 class LearnersResourceIntTest : IntegrationTestBase() {
@@ -31,7 +33,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         "Some",
         "Person",
         LocalDate.parse("2024-01-01"),
-        1,
+        Gender.MALE,
         "CV49EE",
       )
 
@@ -58,6 +60,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
             .expectBody()
             .returnResult()
             .responseBody?.toString(Charsets.UTF_8)
+
         else ->
           throw RuntimeException("Unimplemented Expected Status")
       }
@@ -122,7 +125,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         familyName = "Cheng",
         lastKnownPostCode = "NE26 3ND",
         dateOfBirth = LocalDate.parse("1995-06-27"),
-        gender = 2,
+        gender = Gender.FEMALE,
       )
 
       val expectedPossibleMatchLearners = mutableListOf(
@@ -189,6 +192,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
           responseType = LRSResponseType.POSSIBLE_MATCH,
           mismatchedFields = mutableMapOf(
             ("dateOfBirth" to mutableListOf("1995-06-28", "1995-06-28")),
+            ("gender" to mutableListOf("2", "2")),
             ("lastKnownPostCode" to mutableListOf("SO40 4JX")),
           ),
           matchedLearners = expectedPossibleMatchLearners,
