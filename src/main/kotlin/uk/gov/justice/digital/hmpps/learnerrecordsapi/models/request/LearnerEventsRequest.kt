@@ -24,13 +24,13 @@ class LearnerEventsRequest(
   val dateOfBirth: LocalDate?,
 
   @SerializedName("gender")
-  val gender: Gender,
+  val gender: Gender?,
 ) {
   fun extractFromRequest(): LearnerEventsLRSRequest = LearnerEventsLRSRequest(
     givenName = givenName,
     familyName = familyName,
     uln = uln,
     dateOfBirth = dateOfBirth,
-    gender = gender.value,
+    gender = gender?.value,
   )
 }
