@@ -2,20 +2,20 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 
 import com.google.gson.annotations.SerializedName
 import jakarta.validation.constraints.Past
-import jakarta.validation.constraints.Size
+import jakarta.validation.constraints.Pattern
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.LearnerEventsLRSRequest
 import java.time.LocalDate
 
 class LearnerEventsRequest(
-  @field:Size(max = 35)
+  @field:Pattern(regexp = "^[A-Za-z' ,.-]{3,35}$")
   @SerializedName("givenName")
   val givenName: String,
 
-  @field:Size(max = 35)
+  @field:Pattern(regexp = "^[A-Za-z' ,.-]{3,35}$")
   @SerializedName("familyName")
   val familyName: String,
 
-  @field:Size(max = 10)
+  @field:Pattern(regexp = "^[0-9]{1,10}\$")
   @SerializedName("uln")
   val uln: String,
 
@@ -24,13 +24,13 @@ class LearnerEventsRequest(
   val dateOfBirth: LocalDate?,
 
   @SerializedName("gender")
-  val gender: Int?,
+  val gender: Gender?,
 ) {
   fun extractFromRequest(): LearnerEventsLRSRequest = LearnerEventsLRSRequest(
     givenName = givenName,
     familyName = familyName,
     uln = uln,
     dateOfBirth = dateOfBirth,
-    gender = gender,
+    gender = gender?.value,
   )
 }

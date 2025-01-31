@@ -24,6 +24,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Fin
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
@@ -63,7 +64,7 @@ class LearnersServiceTest {
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
-      gender = 1,
+      gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
     )
 
@@ -93,9 +94,9 @@ class LearnersServiceTest {
       familyName = "Person",
       givenName = "Some",
       dateOfBirth = LocalDate.of(1980, 1, 1).toString(),
-      gender = 1,
+      "1",
       lastKnownPostCode = "ABCDEF",
-      learners = listOf(Learner(givenName = "Some")),
+      learners = listOf(Learner(givenName = "Some", gender = "1")),
     )
 
     val xmlBody = FindLearnerBody(xmlFindLearnerResponse)
@@ -106,7 +107,7 @@ class LearnersServiceTest {
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
-      gender = 1,
+      gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
     )
 
@@ -114,7 +115,7 @@ class LearnersServiceTest {
       searchParameters = requestBody,
       responseType = LRSResponseType.EXACT_MATCH,
       mismatchedFields = null,
-      matchedLearners = listOf(Learner(givenName = "Some")),
+      matchedLearners = listOf(Learner(givenName = "Some", gender = "MALE")),
     )
 
     `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(
@@ -136,9 +137,9 @@ class LearnersServiceTest {
       familyName = "Person",
       givenName = "Some",
       dateOfBirth = LocalDate.of(1980, 1, 1).toString(),
-      gender = 1,
+      "1",
       lastKnownPostCode = "ABCDEF",
-      learners = listOf(Learner(givenName = "Some"), Learner(givenName = "Mismatch")),
+      learners = listOf(Learner(givenName = "Some", gender = "1"), Learner(givenName = "Mismatch", gender = "1")),
     )
 
     val xmlBody = FindLearnerBody(xmlFindLearnerResponse)
@@ -149,7 +150,7 @@ class LearnersServiceTest {
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
-      gender = 1,
+      gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
     )
 
@@ -159,7 +160,7 @@ class LearnersServiceTest {
       mismatchedFields = mutableMapOf(
         "givenName" to mutableListOf("Mismatch"),
       ),
-      matchedLearners = listOf(Learner(givenName = "Some"), Learner(givenName = "Mismatch")),
+      matchedLearners = listOf(Learner(givenName = "Some", gender = "MALE"), Learner(givenName = "Mismatch", gender = "MALE")),
     )
 
     `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(
@@ -180,7 +181,7 @@ class LearnersServiceTest {
       givenName = "Some",
       familyName = "Person",
       dateOfBirth = LocalDate.of(1980, 1, 1),
-      gender = 1,
+      gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
     )
 
@@ -194,12 +195,16 @@ class LearnersServiceTest {
       ),
     )
 
-    val inputStream = javaClass.classLoader.getResourceAsStream("error_ful.xml") ?: throw IllegalArgumentException("File not found in resources: error_ful.xml")
+    val inputStream = javaClass.classLoader.getResourceAsStream("error_ful.xml")
+      ?: throw IllegalArgumentException("File not found in resources: error_ful.xml")
 
     `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(
       Response.error(
         500,
-        ResponseBody.create("text/xml".toMediaTypeOrNull(), InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()),
+        ResponseBody.create(
+          "text/xml".toMediaTypeOrNull(),
+          InputStreamReader(inputStream, StandardCharsets.UTF_8).readText(),
+        ),
       ),
     )
 

@@ -21,7 +21,6 @@ data class LearnersLRSRequest(
 
   val dateOfBirth: LocalDate? = null,
 
-  // TODO: Validate gender
   val gender: Int? = null,
 
   @field:Size(max = 9)

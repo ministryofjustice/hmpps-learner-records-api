@@ -18,7 +18,7 @@ data class FindLearnerResponse(
   var dateOfBirth: String = "",
 
   @get:XmlElement(name = "Gender")
-  var gender: Int = 1,
+  var gender: String = "",
 
   @get:XmlElement(name = "LastKnownPostCode")
   var lastKnownPostCode: String = "",

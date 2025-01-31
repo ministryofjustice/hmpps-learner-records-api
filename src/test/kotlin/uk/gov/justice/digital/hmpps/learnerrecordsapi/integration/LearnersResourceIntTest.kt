@@ -10,6 +10,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSAp
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
@@ -31,11 +32,14 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         "Some",
         "Person",
         LocalDate.parse("2024-01-01"),
-        1,
+        Gender.MALE,
         "CV49EE",
       )
 
-    private fun actualResponse(request: LearnersRequest = findLearnerByDemographicsRequest, expectedStatus: Int = 200): String? {
+    private fun actualResponse(
+      request: LearnersRequest = findLearnerByDemographicsRequest,
+      expectedStatus: Int = 200,
+    ): String? {
       val executedRequest = webTestClient.post()
         .uri("/learners")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
@@ -58,6 +62,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
             .expectBody()
             .returnResult()
             .responseBody?.toString(Charsets.UTF_8)
+
         else ->
           throw RuntimeException("Unimplemented Expected Status")
       }
@@ -93,7 +98,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         dateOfAddressCapture = "2009-04-25",
         dateOfBirth = "1976-08-16",
         placeOfBirth = "Blean ",
-        gender = "2",
+        gender = "FEMALE",
         emailAddress = "darcie.tucker@aol.compatibilitytest.com",
         scottishCandidateNumber = "845759406",
         abilityToShare = "1",
@@ -122,7 +127,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         familyName = "Cheng",
         lastKnownPostCode = "NE26 3ND",
         dateOfBirth = LocalDate.parse("1995-06-27"),
-        gender = 2,
+        gender = Gender.FEMALE,
       )
 
       val expectedPossibleMatchLearners = mutableListOf(
@@ -144,7 +149,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
           dateOfAddressCapture = "2010-09-07",
           dateOfBirth = "1995-06-28",
           placeOfBirth = "Chard ",
-          gender = "2",
+          gender = "FEMALE",
           emailAddress = "anna.cheng@yahoo.compatibilitytest.co.uk",
           scottishCandidateNumber = "820208781",
           verificationType = "5",
@@ -172,7 +177,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
           dateOfAddressCapture = "2010-09-07",
           dateOfBirth = "1995-06-28",
           placeOfBirth = "Chard ",
-          gender = "2",
+          gender = "FEMALE",
           emailAddress = "anna.cheng@yahoo.compatibilitytest.co.uk",
           scottishCandidateNumber = "820208781",
           verificationType = "5",
@@ -189,6 +194,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
           responseType = LRSResponseType.POSSIBLE_MATCH,
           mismatchedFields = mutableMapOf(
             ("dateOfBirth" to mutableListOf("1995-06-28", "1995-06-28")),
+//            ("gender" to mutableListOf("2", "2")),
             ("lastKnownPostCode" to mutableListOf("SO40 4JX")),
           ),
           matchedLearners = expectedPossibleMatchLearners,
@@ -236,7 +242,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         dateOfAddressCapture = "2008-07-13",
         dateOfBirth = "1985-03-27",
         placeOfBirth = "Whittlesey ",
-        gender = "1",
+        gender = "MALE",
         emailAddress = "william-connor.carroll@inbox.compatibilitytest.com",
         scottishCandidateNumber = "145589606",
         abilityToShare = "1",

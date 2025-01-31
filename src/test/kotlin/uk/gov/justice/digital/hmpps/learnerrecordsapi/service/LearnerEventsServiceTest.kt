@@ -21,6 +21,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsEnvelope
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
@@ -61,7 +62,7 @@ class LearnerEventsServiceTest {
       familyName = "test",
       uln = "test",
       dateOfBirth = LocalDate.of(1980, 1, 1),
-      gender = 1,
+      gender = Gender.MALE,
     )
     val expectedResult = LearnerEventsResponse(
       searchParameters = body,
@@ -90,7 +91,7 @@ class LearnerEventsServiceTest {
       familyName = "test",
       uln = "test",
       dateOfBirth = LocalDate.of(1980, 1, 1),
-      gender = 1,
+      gender = Gender.MALE,
     )
 
     val expectedException = LRSException(
