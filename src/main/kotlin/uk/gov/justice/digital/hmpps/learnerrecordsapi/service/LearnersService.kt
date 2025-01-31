@@ -87,6 +87,16 @@ class LearnersService(
   ): LearnersResponse {
     val responseType = LRSResponseType.fromLrsResponseCode(response.responseCode)
     val isPossibleMatch = responseType == LRSResponseType.POSSIBLE_MATCH
+    response.learners?.forEach { learner: Learner ->
+      val correctGender = when (learner.gender) {
+        "1" -> "MALE"
+        "2" -> "FEMALE"
+        "0" -> "NOT_KNOWN"
+        "9" -> "NOT_SPECIFIED"
+        else -> "Unknown"
+      }
+      learner.gender = correctGender
+    }
     return LearnersResponse(
       searchParameters = request,
       responseType = responseType,

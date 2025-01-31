@@ -94,7 +94,7 @@ class LearnersServiceTest {
       familyName = "Person",
       givenName = "Some",
       dateOfBirth = LocalDate.of(1980, 1, 1).toString(),
-      Gender.MALE,
+      "1",
       lastKnownPostCode = "ABCDEF",
       learners = listOf(Learner(givenName = "Some")),
     )
@@ -137,7 +137,7 @@ class LearnersServiceTest {
       familyName = "Person",
       givenName = "Some",
       dateOfBirth = LocalDate.of(1980, 1, 1).toString(),
-      Gender.MALE,
+      "1",
       lastKnownPostCode = "ABCDEF",
       learners = listOf(Learner(givenName = "Some"), Learner(givenName = "Mismatch")),
     )
