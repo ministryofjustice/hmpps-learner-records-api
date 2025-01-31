@@ -96,7 +96,7 @@ class LearnersServiceTest {
       dateOfBirth = LocalDate.of(1980, 1, 1).toString(),
       "1",
       lastKnownPostCode = "ABCDEF",
-      learners = listOf(Learner(givenName = "Some")),
+      learners = listOf(Learner(givenName = "Some", gender = "1")),
     )
 
     val xmlBody = FindLearnerBody(xmlFindLearnerResponse)
@@ -115,7 +115,7 @@ class LearnersServiceTest {
       searchParameters = requestBody,
       responseType = LRSResponseType.EXACT_MATCH,
       mismatchedFields = null,
-      matchedLearners = listOf(Learner(givenName = "Some")),
+      matchedLearners = listOf(Learner(givenName = "Some", gender = "MALE")),
     )
 
     `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(
@@ -139,7 +139,7 @@ class LearnersServiceTest {
       dateOfBirth = LocalDate.of(1980, 1, 1).toString(),
       "1",
       lastKnownPostCode = "ABCDEF",
-      learners = listOf(Learner(givenName = "Some"), Learner(givenName = "Mismatch")),
+      learners = listOf(Learner(givenName = "Some", gender = "1"), Learner(givenName = "Mismatch", gender = "1")),
     )
 
     val xmlBody = FindLearnerBody(xmlFindLearnerResponse)
@@ -160,7 +160,7 @@ class LearnersServiceTest {
       mismatchedFields = mutableMapOf(
         "givenName" to mutableListOf("Mismatch"),
       ),
-      matchedLearners = listOf(Learner(givenName = "Some"), Learner(givenName = "Mismatch")),
+      matchedLearners = listOf(Learner(givenName = "Some", gender = "MALE"), Learner(givenName = "Mismatch", gender = "MALE")),
     )
 
     `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(

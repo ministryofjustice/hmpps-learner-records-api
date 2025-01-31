@@ -95,8 +95,11 @@ class LearnersService(
         "9" -> "NOT_SPECIFIED"
         else -> "Unknown"
       }
+      println("GENDER --------- " + learner.gender)
       learner.gender = correctGender
+      println("GENDER --------- " + learner.gender)
     }
+
     return LearnersResponse(
       searchParameters = request,
       responseType = responseType,
