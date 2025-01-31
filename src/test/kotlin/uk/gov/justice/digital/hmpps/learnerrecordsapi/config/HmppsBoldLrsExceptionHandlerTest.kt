@@ -4,231 +4,116 @@ import com.google.gson.GsonBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import java.time.LocalDate
+
+// Tests that when exceptions are thrown, the exception handler will pick them up and behave correctly.
+// Test endpoints that throw exceptions are found in TestExceptionResource in this same package.
 
 class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
 
   val gson = GsonBuilder()
     .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
     .registerTypeAdapter(LRSResponseType::class.java, ResponseTypeAdapter().nullSafe())
-    .disableHtmlEscaping()
     .create()
 
+  private fun testExceptionHandling(
+    uri: String,
+    expectedResponse: HmppsBoldLrsExceptionHandler.ErrorResponse,
+    expectedStatus: HttpStatus,
+  ) {
+    val actualResponse = webTestClient.post()
+      .uri(uri)
+      .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+      .exchange()
+      .expectStatus()
+      .isEqualTo(expectedStatus)
+      .expectBody()
+      .returnResult()
+      .responseBody
+
+    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
+    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+  }
+
   @Test
-  fun `should return validation errors when user postcode is invalid`() {
+  fun `should catch validation exceptions (MethodArgumentNotValidException) and return BadRequest`() {
     val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
       HttpStatus.BAD_REQUEST,
       "Validation Failed",
       "Please correct the error and retry",
-      "Validation(s) failed for [lastKnownPostCode]",
-      "Validation(s) failed for [lastKnownPostCode] with reason(s): [must match \"^[A-Z]{1,2}[0-9R][0-9A-Z]? ?[0-9][ABDEFGHJLNPQRSTUWXYZ]{2}|BFPO ?[0-9]{1,4}|([AC-FHKNPRTV-Y]\\d{2}|D6W)? ?[0-9AC-FHKNPRTV-Y]{4}\$\"]",
+      "Validation(s) failed for [testField]",
+      "Validation(s) failed for [testField] with reason(s): [Validation failed]",
     )
 
-    val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
-        "Darcie",
-        "Tucker",
-        LocalDate.parse("2024-01-01"),
-        Gender.MALE,
-        "ABC123",
-      )
-
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(findLearnerByDemographicsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
-
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    testExceptionHandling("/test/validation", expectedResponse, expectedStatus = HttpStatus.BAD_REQUEST)
   }
 
   @Test
-  fun `should return validation errors when user givenName is invalid`() {
-    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
-      HttpStatus.BAD_REQUEST,
-      "Validation Failed",
-      "Please correct the error and retry",
-      "Validation(s) failed for [givenName]",
-      "Validation(s) failed for [givenName] with reason(s): [must match \"^[A-Za-z' ,.-]{3,35}$\"]",
-    )
-
-    val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
-        "DarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcie",
-        "Tucker",
-        LocalDate.parse("2024-01-01"),
-        Gender.MALE,
-        "CV49EE",
-      )
-
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(findLearnerByDemographicsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
-
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
-  }
-
-  @Test
-  fun `should return validation errors when user familyName is invalid`() {
-    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
-      HttpStatus.BAD_REQUEST,
-      "Validation Failed",
-      "Please correct the error and retry",
-      "Validation(s) failed for [familyName]",
-      "Validation(s) failed for [familyName] with reason(s): [must match \"^[A-Za-z' ,.-]{3,35}\$\"]",
-    )
-    val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
-        "Darcie",
-        "TuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTucker",
-        LocalDate.parse("2024-01-01"),
-        Gender.MALE,
-        "CV49EE",
-      )
-
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(findLearnerByDemographicsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
-
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
-  }
-
-  @Test
-  fun `should return validation errors when user gender is invalid`() {
-    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
-      HttpStatus.BAD_REQUEST,
-      "Unreadable HTTP message",
-      "Unreadable HTTP message",
-      "JSON parse error: Cannot deserialize value of type `uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender` from String \"TESTINGENUM\": not one of the values accepted for Enum class: [NOT_SPECIFIED, MALE, NOT_KNOWN, FEMALE]",
-      "Unreadable HTTP message",
-    )
-
-    val findLearnerByDemographicsRequest =
-      """{
-        "givenName":"Darcie", 
-        "familyName": "Tucker",
-        "dateOfBirth": "2024-01-01",
-        "gender": "TESTINGENUM",
-        "postcode": "CV49EE"
-        }"""
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .contentType(MediaType.APPLICATION_JSON)
-      .bodyValue(findLearnerByDemographicsRequest)
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
-
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
-  }
-
-  @Test
-  fun `should return No Resource errors when an unknown resource is called`() {
+  fun `should catch No Resource exceptions (NoResourceFoundException) and return Not Found`() {
     val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
       HttpStatus.NOT_FOUND,
       "No Resource Found",
-      "No resource found failure: No static resource someotherEndpoint.",
+      "No resource found failure: No static resource someUnknownEndpoint.",
       "Requested Resource not found on the server",
       moreInfo = "Requested Resource not found on the server",
     )
 
-    val learnersRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
-        "Darcie",
-        "Tucker",
-        LocalDate.parse("2024-01-01"),
-        Gender.FEMALE,
-        "CV49EE",
-      )
-
-    val actualResponse = webTestClient.post()
-      .uri("/someotherEndpoint")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(learnersRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isNotFound
-      .expectBody()
-      .returnResult()
-      .responseBody
-
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    testExceptionHandling("/someUnknownEndpoint", expectedResponse, expectedStatus = HttpStatus.NOT_FOUND)
   }
 
   @Test
-  fun `should return bad request when a mandatory input is not provided`() {
+  fun `should catch missing mandatory field exceptions (HttpMessageNotReadableException) and return BadRequest`() {
     val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
       HttpStatus.BAD_REQUEST,
       "Unreadable HTTP message",
       "Unreadable HTTP message",
-      "JSON parse error: Instantiation of " +
-        "[simple type, class uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest] " +
-        "value failed for JSON property givenName due to missing (therefore NULL) value " +
-        "for creator parameter givenName which is a non-nullable type",
+      "JSON parse error: Missing Field",
       "Unreadable HTTP message",
     )
 
-    val requestJsonWithoutGivenName = """
-      {
-        "lastName": "Tucker",
-        "dateOfBirth": "2024-01-01",
-        "gender": 1,
-        "postcode": "CV49EE"
-      }
-    """
+    testExceptionHandling("/test/missing-mandatory-field", expectedResponse, expectedStatus = HttpStatus.BAD_REQUEST)
+  }
 
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .contentType(MediaType.APPLICATION_JSON)
-      .bodyValue(requestJsonWithoutGivenName)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+  @Test
+  fun `should catch exceptions thrown when communicating with LRS (LRSException) and return Internal Server Error`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      "LRS Error",
+      "LRS returned an error without detail",
+      "LRS returned an error without detail",
+      "LRS Error",
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    testExceptionHandling("/test/lrs-error", expectedResponse, expectedStatus = HttpStatus.INTERNAL_SERVER_ERROR)
+  }
+
+  @Test
+  fun `should catch forbidden exceptions (AccessDeniedException) and return FORBIDDEN`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.FORBIDDEN,
+      "Forbidden - Access Denied",
+      "Forbidden: ",
+      "Forbidden - Access Denied",
+      "Forbidden - Access Denied",
+    )
+
+    testExceptionHandling("/test/forbidden", expectedResponse, expectedStatus = HttpStatus.FORBIDDEN)
+  }
+
+  @Test
+  fun `should catch generic exceptions and return Internal Server Error`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      "Unexpected error",
+      "Unexpected error: null",
+      "Unexpected error: null",
+      "Unexpected error",
+    )
+
+    testExceptionHandling("/test/generic-exception", expectedResponse, expectedStatus = HttpStatus.INTERNAL_SERVER_ERROR)
   }
 }

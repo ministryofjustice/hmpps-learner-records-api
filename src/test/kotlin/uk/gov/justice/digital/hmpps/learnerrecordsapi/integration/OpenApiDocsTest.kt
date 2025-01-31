@@ -69,7 +69,10 @@ class OpenApiDocsTest : IntegrationTestBase() {
     // We therefore need to grab all the valid security requirements and check that each path only contains those items
     val securityRequirements = result.openAPI.security.flatMap { it.keys }
     result.openAPI.paths.forEach { pathItem ->
-      assertThat(pathItem.value.post.security.flatMap { it.keys }).isSubsetOf(securityRequirements)
+      // Excludes test resource
+      if (pathItem.value.post.tags.get(0) != "test-exception-resource") {
+        assertThat(pathItem.value.post.security.flatMap { it.keys }).isSubsetOf(securityRequirements)
+      }
     }
   }
 
@@ -99,6 +102,10 @@ class OpenApiDocsTest : IntegrationTestBase() {
       .exchange()
       .expectStatus().isOk
       .expectBody()
-      .jsonPath("$.paths[*][*][?(!@.security)]").doesNotExist()
+      .jsonPath("$.paths[*][*][?(!@.security)]")
+      .value<List<Any>> { list ->
+        // Assert that the list has only 5 items since there are 5 test endpoints
+        assertThat(list).hasSize(5)
+      }
   }
 }

@@ -39,10 +39,13 @@ class ResourceSecurityTest : IntegrationTestBase() {
         val classAnnotation = method.beanType.getAnnotation(PreAuthorize::class.java)
         val annotation = method.getMethodAnnotation(PreAuthorize::class.java)
         if (classAnnotation == null && annotation == null) {
-          mappingInfo.getMappings().forEach {
-            assertThat(exclusions.contains(it)).withFailMessage {
-              "Found $mappingInfo of type $method with no PreAuthorize annotation"
-            }.isTrue()
+          // Excludes test resource
+          if (!mappingInfo.toString().contains("/test")) {
+            mappingInfo.getMappings().forEach {
+              assertThat(exclusions.contains(it)).withFailMessage {
+                "Found $mappingInfo of type $method with no PreAuthorize annotation"
+              }.isTrue()
+            }
           }
         }
       }
