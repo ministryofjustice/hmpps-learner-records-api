@@ -8,11 +8,15 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import retrofit2.Retrofit
 import retrofit2.converter.jaxb.JaxbConverterFactory
+import java.util.concurrent.TimeUnit
 
 @Configuration
 class HttpClientConfiguration(
   @Value("\${lrs.pfx-path}") val pfxFilePath: String,
   @Value("\${lrs.base-url}") val baseUrl: String,
+  @Value("\${lrs.connectTimeoutSeconds}") val connectTimeoutSeconds: Int,
+  @Value("\${lrs.writeTimeoutSeconds}") val writeTimeoutSeconds: Int,
+  @Value("\${lrs.readTimeoutSeconds}") val readTimeoutSeconds: Int,
 ) {
   fun buildSSLHttpClient(): OkHttpClient {
     log.info("Building HTTP client with SSL")
@@ -25,6 +29,9 @@ class HttpClientConfiguration(
       val trustManager = sslContextConfiguration.getTrustManager()
 
       val httpClientBuilder = OkHttpClient.Builder()
+        .connectTimeout(connectTimeoutSeconds.toLong(), TimeUnit.SECONDS)
+        .writeTimeout(writeTimeoutSeconds.toLong(), TimeUnit.SECONDS)
+        .readTimeout(readTimeoutSeconds.toLong(), TimeUnit.SECONDS)
         .sslSocketFactory(sslContext.socketFactory, trustManager)
         .addInterceptor(loggingInterceptor)
 

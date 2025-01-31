@@ -54,3 +54,6 @@ management:
 lrs:
   base-url: ${lrs.base-url}
   pfx-path: ${lrs.pfx-path}
+  connectTimeoutSeconds: 20
+  writeTimeoutSeconds: 20
+  readTimeoutSeconds: 20

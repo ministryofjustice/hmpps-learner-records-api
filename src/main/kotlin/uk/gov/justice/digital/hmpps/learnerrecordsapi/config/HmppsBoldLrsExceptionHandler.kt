@@ -12,6 +12,7 @@ import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.resource.NoResourceFoundException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
+import java.net.SocketTimeoutException
 
 @RestControllerAdvice
 class HmppsBoldLrsExceptionHandler {
@@ -124,5 +125,21 @@ class HmppsBoldLrsExceptionHandler {
     )
     log.error(ex.message.orEmpty())
     return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
+  }
+
+  @ExceptionHandler(SocketTimeoutException::class)
+  fun handleSocketTimeoutException(
+    ex: SocketTimeoutException,
+    request: WebRequest,
+  ): ResponseEntity<Any> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.REQUEST_TIMEOUT,
+      errorCode = "Request Timeout",
+      userMessage = "A request to an upstream service timed out.",
+      developerMessage = "${ex.message}",
+      moreInfo = "A request timed out while waiting for a response from an upstream service.",
+    )
+    log.error("Socket Timeout Error: {}", ex)
+    return ResponseEntity(errorResponse, HttpStatus.REQUEST_TIMEOUT)
   }
 }

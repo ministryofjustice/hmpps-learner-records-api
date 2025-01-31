@@ -2,18 +2,27 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 
 import com.google.gson.GsonBuilder
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
+import java.time.Duration
 import java.time.LocalDate
 
 // Tests that when exceptions are thrown, the exception handler will pick them up and behave correctly.
 // Test endpoints that throw exceptions are found in TestExceptionResource in this same package.
 
 class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
+
+  @BeforeEach
+  fun setUp() {
+    webTestClient = webTestClient.mutate()
+      .responseTimeout(Duration.ofMillis(180000))
+      .build()
+  }
 
   val gson = GsonBuilder()
     .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
@@ -102,6 +111,30 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     )
 
     testExceptionHandling("/test/forbidden", expectedResponse, expectedStatus = HttpStatus.FORBIDDEN)
+  }
+
+  @Test
+  fun `should catch timeout exceptions (SocketTimeoutException) and return Gateway Timeout`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      status = HttpStatus.REQUEST_TIMEOUT,
+      errorCode = "Request Timeout",
+      userMessage = "A request to an upstream service timed out.",
+      developerMessage = "Read timed out",
+      moreInfo = "A request timed out while waiting for a response from an upstream service.",
+    )
+
+    val actualResponse = webTestClient.post()
+      .uri("/test/okhttp-timeout")
+      .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+      .exchange()
+      .expectStatus()
+      .isEqualTo(HttpStatus.REQUEST_TIMEOUT)
+      .expectBody()
+      .returnResult()
+      .responseBody
+
+    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
+    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
   }
 
   @Test

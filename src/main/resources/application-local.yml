@@ -4,3 +4,6 @@ hmpps-auth:
 lrs:
   base-url: "http://lrs-api:8080"
   pfx-path: "WebServiceClientCert.pfx"
+  connectTimeoutSeconds: 20
+  writeTimeoutSeconds: 20
+  readTimeoutSeconds: 20

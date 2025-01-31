@@ -4,3 +4,6 @@ hmpps-auth:
 lrs:
   base-url: "https://cmp-ws.dev.lrs.education.gov.uk"
   pfx-path: "WebServiceClientCert.pfx"
+  connectTimeoutSeconds: 20
+  writeTimeoutSeconds: 20
+  readTimeoutSeconds: 20
