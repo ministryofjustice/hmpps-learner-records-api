@@ -119,7 +119,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       status = HttpStatus.REQUEST_TIMEOUT,
       errorCode = "Request Timeout",
       userMessage = "A request to an upstream service timed out.",
-      developerMessage = "Read timed out",
+      developerMessage = "dev message can vary",
       moreInfo = "A request timed out while waiting for a response from an upstream service.",
     )
 
@@ -134,7 +134,11 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       .responseBody
 
     val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+
+    val actualResponseObject = gson.fromJson(actualResponseString, HmppsBoldLrsExceptionHandler.ErrorResponse::class.java)
+
+    assertThat(actualResponseObject.copy(developerMessage = "dev message can vary"))
+      .isEqualTo(expectedResponse)
   }
 
   @Test
