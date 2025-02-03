@@ -12,6 +12,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
 import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
+import java.nio.file.Files
+import java.nio.file.Paths
+import kotlin.text.Charsets.UTF_8
+
+fun readResourceFile(fileName: String): String {
+  val resourcePath = Paths.get("src/test/resources", fileName)
+  return Files.readString(resourcePath, UTF_8)
+}
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
