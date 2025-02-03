@@ -11,6 +11,3 @@ hmpps-auth:
 lrs:
   base-url: "http://localhost:8082"
   pfx-path: "WebServiceClientCert.pfx"
-  connectTimeoutSeconds: 3
-  writeTimeoutSeconds: 3
-  readTimeoutSeconds: 3

@@ -114,7 +114,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
   }
 
   @Test
-  fun `should catch timeout exceptions (SocketTimeoutException) and return Gateway Timeout`() {
+  fun `should catch timeout exceptions (SocketTimeoutException) and return Request Timeout`() {
     val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
       status = HttpStatus.REQUEST_TIMEOUT,
       errorCode = "Request Timeout",
