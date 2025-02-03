@@ -104,8 +104,8 @@ class OpenApiDocsTest : IntegrationTestBase() {
       .expectBody()
       .jsonPath("$.paths[*][*][?(!@.security)]")
       .value<List<Any>> { list ->
-        // Assert that the list has only 5 items since there are 5 test endpoints
-        assertThat(list).hasSize(5)
+        // Assert that the list has only 6 items since there are 6 test endpoints
+        assertThat(list).hasSize(6)
       }
   }
 }
