@@ -5,6 +5,7 @@ import jakarta.validation.Valid
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
@@ -23,6 +24,7 @@ class LearnersResource(
   @FindByDemographicApi
   suspend fun findByDemographic(
     @RequestBody @Valid findLearnerByDemographicsRequest: LearnersRequest,
+    @RequestHeader("X-Username", required = true) username: String,
   ): String {
     log.inboundRequest(requestModelObject = findLearnerByDemographicsRequest)
     return gson.toJson(learnersService.getLearners(findLearnerByDemographicsRequest))

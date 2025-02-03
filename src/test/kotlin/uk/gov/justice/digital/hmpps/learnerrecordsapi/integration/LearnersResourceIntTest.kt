@@ -43,6 +43,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       val executedRequest = webTestClient.post()
         .uri("/learners")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .header("X-Username", "TestUser")
         .bodyValue(request)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
