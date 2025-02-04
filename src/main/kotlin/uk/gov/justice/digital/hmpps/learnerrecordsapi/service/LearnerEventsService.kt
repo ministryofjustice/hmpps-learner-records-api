@@ -35,10 +35,10 @@ class LearnerEventsService(
     return unmarshaller.unmarshal(StringReader(relevantXml)) as MIAPAPIException
   }
 
-  suspend fun getLearningEvents(learnerEventsRequest: LearnerEventsRequest): LearnerEventsResponse {
+  suspend fun getLearningEvents(learnerEventsRequest: LearnerEventsRequest, userName: String): LearnerEventsResponse {
     log.debug("Transforming inbound request object to LRS request object")
     val requestBody = learnerEventsRequest.extractFromRequest()
-      .transformToLRSRequest(appConfig.ukprn(), appConfig.password(), appConfig.vendorId())
+      .transformToLRSRequest(appConfig.ukprn(), appConfig.password(), appConfig.vendorId(), userName)
     log.debug("Calling LRS API")
 
     val learningEventsResponse = lrsClient().getLearnerLearningEvents(requestBody)

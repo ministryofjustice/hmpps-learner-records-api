@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.MissingRequestHeaderException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
@@ -90,6 +91,25 @@ class HmppsBoldLrsExceptionHandler {
       userMessage = "Unreadable HTTP message",
       developerMessage = "${ex.message}",
       moreInfo = "Unreadable HTTP message",
+    )
+    log.error("Unexpected Error: {}", ex)
+    return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+  }
+
+  @ExceptionHandler(MissingRequestHeaderException::class)
+  fun handleMissingRequestHeaderException(
+    ex: Exception,
+    request: WebRequest,
+  ): ResponseEntity<Any> {
+    val errorMessage =
+      if (request.getHeader("X-Username") == null) "Missing X-Username Header" else "Missing Request Header"
+
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.BAD_REQUEST,
+      errorCode = errorMessage,
+      userMessage = "$errorMessage: ${ex.message}",
+      developerMessage = "$errorMessage: ${ex.message}",
+      moreInfo = errorMessage,
     )
     log.error("Unexpected Error: {}", ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)

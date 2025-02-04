@@ -169,7 +169,22 @@ OpenAPI documentation is available here - http://localhost:8080/swagger-ui/index
 
 ---
 
-## Authentication
+## Headers
+
+### Username
+
+The hmpps-learner-records-api requires consumer services to identify their users when connecting to our service.
+
+Where possible when making a request you should identify the user (not the service) in the custom header `X-Username`.
+
+The value should be a unique identifier for the user, either a name or an email address.
+
+Example header
+```
+"X-Username": "john.doe@justice.gov.uk"
+```
+
+### Authentication
 
 The hmpps-learner-records-api requires bearer authorization.
 

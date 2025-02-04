@@ -37,7 +37,7 @@ class LearnersServiceTest {
 
   private lateinit var httpClientConfigurationMock: HttpClientConfiguration
   private lateinit var retrofitMock: Retrofit
-  private lateinit var lrsApiInterfaceMock: uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
+  private lateinit var lrsApiInterfaceMock: LRSApiInterface
   private lateinit var appConfigMock: AppConfig
 
   private lateinit var learnersService: LearnersService
@@ -85,7 +85,7 @@ class LearnersServiceTest {
       ),
     )
 
-    val result = learnersService.getLearners(requestBody)
+    val result = learnersService.getLearners(requestBody, "SomePerson")
 
     assertEquals(expectedResult, result)
     verify(lrsApiInterfaceMock).findLearnerByDemographics(any())
@@ -132,7 +132,7 @@ class LearnersServiceTest {
       ),
     )
 
-    val result = learnersService.getLearners(requestBody)
+    val result = learnersService.getLearners(requestBody, "SomePerson")
 
     assertEquals(expectedResult, result)
     verify(lrsApiInterfaceMock).findLearnerByDemographics(any())
@@ -181,7 +181,7 @@ class LearnersServiceTest {
       ),
     )
 
-    val result = learnersService.getLearners(requestBody)
+    val result = learnersService.getLearners(requestBody, "SomePerson")
 
     assertEquals(expectedResult, result)
     verify(lrsApiInterfaceMock).findLearnerByDemographics(any())
@@ -225,7 +225,7 @@ class LearnersServiceTest {
     )
 
     val actualException = assertThrows<LRSException> {
-      learnersService.getLearners(requestBody)
+      learnersService.getLearners(requestBody, "SomePerson")
     }
 
     verify(lrsApiInterfaceMock).findLearnerByDemographics(any())

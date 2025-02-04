@@ -8,9 +8,6 @@ import java.time.LocalDate
 
 data class LearnersLRSRequest(
   @field:Size(max = 35)
-  val userName: String = "TEST",
-
-  @field:Size(max = 35)
   val givenName: String,
 
   @field:Size(max = 35)
@@ -38,7 +35,7 @@ data class LearnersLRSRequest(
   @field:Size(max = 254)
   val emailAddress: String? = null,
 ) {
-  fun transformToLRSRequest(ukprn: String, password: String): RequestBody = """
+  fun transformToLRSRequest(ukprn: String, password: String, userName: String): RequestBody = """
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:fin="http://api.lrs.miap.gov.uk/findmsg">
         <soapenv:Header/>
         <soapenv:Body>

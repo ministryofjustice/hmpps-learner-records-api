@@ -1,6 +1,8 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
@@ -24,6 +26,7 @@ fun readResourceFile(fileName: String): String {
 @Operation(
   summary = "Find learners by demographic information",
   description = "Find possible or exact matches for learners by demographic information",
+  parameters = [Parameter(name = "X-Username", `in` = ParameterIn.HEADER, required = true)],
   requestBody = RequestBody(
     description = "Demographic details of the learner",
     required = true,
