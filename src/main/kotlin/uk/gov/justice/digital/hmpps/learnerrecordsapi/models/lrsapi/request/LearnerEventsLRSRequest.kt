@@ -19,9 +19,9 @@ data class LearnerEventsLRSRequest(
   @field:Size(min = 4, max = 5)
   val getType: String = "FULL",
 
-  val dateOfBirth: LocalDate? = null,
+  val dateOfBirth: LocalDate?,
 
-  val gender: Int? = null,
+  val gender: Int?,
 ) {
   fun transformToLRSRequest(ukprn: String, password: String, vendorId: String, userName: String): RequestBody = """
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns="http://schemas.datacontract.org/2004/07/Amor.Qcf.Service.Interface">

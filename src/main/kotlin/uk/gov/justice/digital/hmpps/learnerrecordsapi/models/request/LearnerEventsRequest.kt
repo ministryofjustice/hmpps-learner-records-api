@@ -21,10 +21,10 @@ class LearnerEventsRequest(
 
   @field:Past
   @SerializedName("dateOfBirth")
-  val dateOfBirth: LocalDate?,
+  val dateOfBirth: LocalDate? = null,
 
   @SerializedName("gender")
-  val gender: Gender?,
+  val gender: Gender? = null,
 ) {
   fun extractFromRequest(): LearnerEventsLRSRequest = LearnerEventsLRSRequest(
     givenName = givenName,
