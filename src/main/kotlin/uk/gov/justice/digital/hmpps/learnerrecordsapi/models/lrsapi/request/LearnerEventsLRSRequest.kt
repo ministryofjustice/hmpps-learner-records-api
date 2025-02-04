@@ -26,7 +26,7 @@ data class LearnerEventsLRSRequest(
 
   val gender: Int? = null,
 ) {
-  fun transformToLRSRequest(ukprn: String, password: String, vendorId: String): RequestBody = """
+  fun transformToLRSRequest(ukprn: String, password: String, vendorId: String, userName: String): RequestBody = """
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns="http://schemas.datacontract.org/2004/07/Amor.Qcf.Service.Interface">
          <soapenv:Header />
          <soapenv:Body>
@@ -34,7 +34,7 @@ data class LearnerEventsLRSRequest(
                <tem:invokingOrganisation>
                   <Password>$password</Password>
                   <Ukprn>$ukprn</Ukprn>
-                  <Username>$userName</Username>
+                  <Username>${this.userName}</Username>
                </tem:invokingOrganisation>
                <tem:userType>ORG</tem:userType>
                <tem:vendorID>$vendorId</tem:vendorID>
