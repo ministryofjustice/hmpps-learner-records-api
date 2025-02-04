@@ -27,6 +27,6 @@ class LearnerEventsResource(
     @RequestHeader("X-Username", required = true) username: String,
   ): String {
     log.inboundRequest(requestModelObject = learnerEventsRequest)
-    return gson.toJson(learnerEventsService.getLearningEvents(learnerEventsRequest))
+    return gson.toJson(learnerEventsService.getLearningEvents(learnerEventsRequest, username))
   }
 }

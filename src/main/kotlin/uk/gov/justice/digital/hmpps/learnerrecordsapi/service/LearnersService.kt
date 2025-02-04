@@ -38,10 +38,10 @@ class LearnersService(
     return unmarshaller.unmarshal(StringReader(relevantXml)) as MIAPAPIException
   }
 
-  suspend fun getLearners(findLearnerByDemographicsRequest: LearnersRequest): LearnersResponse {
+  suspend fun getLearners(findLearnerByDemographicsRequest: LearnersRequest, username: String): LearnersResponse {
     log.debug("Transforming inbound request object to LRS request object")
     val requestBody = findLearnerByDemographicsRequest.extractFromRequest()
-      .transformToLRSRequest(appConfig.ukprn(), appConfig.password())
+      .transformToLRSRequest(appConfig.ukprn(), appConfig.password(), username)
 
     log.debug("Calling LRS API")
 

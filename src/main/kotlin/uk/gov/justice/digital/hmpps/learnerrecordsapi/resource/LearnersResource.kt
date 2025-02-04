@@ -27,6 +27,6 @@ class LearnersResource(
     @RequestHeader("X-Username", required = true) username: String,
   ): String {
     log.inboundRequest(requestModelObject = findLearnerByDemographicsRequest)
-    return gson.toJson(learnersService.getLearners(findLearnerByDemographicsRequest))
+    return gson.toJson(learnersService.getLearners(findLearnerByDemographicsRequest, username))
   }
 }
