@@ -21,6 +21,9 @@ generic-service:
     JAVA_OPTS: "-Xmx512m"
     SERVER_PORT: "8080"
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
+    LRS_CONNECT_TIMEOUT: "20"
+    LRS_WRITE_TIMEOUT: "20"
+    LRS_READ_TIMEOUT: "20"
 
   volumeMounts:
     - mountPath: "/certs"
@@ -44,9 +47,6 @@ generic-service:
       PFX_FILE_PASSWORD: "PFX_FILE_PASSWORD"
       UK_PRN: "UK_PRN"
       VENDOR_ID: "VENDOR_ID"
-      LRS_CONNECT_TIMEOUT: "LRS_CONNECT_TIMEOUT"
-      LRS_WRITE_TIMEOUT: "LRS_WRITE_TIMEOUT"
-      LRS_READ_TIMEOUT: "LRS_READ_TIMEOUT"
 
   allowlist:
     groups:
