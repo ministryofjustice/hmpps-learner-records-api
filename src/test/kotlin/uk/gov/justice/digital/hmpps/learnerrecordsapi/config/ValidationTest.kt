@@ -39,6 +39,10 @@ class ValidationTest : IntegrationTestBase() {
         LocalDate.parse("2024-01-01"),
         Gender.MALE,
         "ABC123",
+        "Test",
+        "Test High School",
+        "Some place",
+        "test_email@test.com",
       )
 
     val actualResponse = webTestClient.post()
@@ -74,6 +78,10 @@ class ValidationTest : IntegrationTestBase() {
         LocalDate.parse("2024-01-01"),
         Gender.MALE,
         "CV49EE",
+        "Test",
+        "Test High School",
+        "Some place",
+        "test_email@test.com",
       )
 
     val actualResponse = webTestClient.post()
@@ -143,6 +151,86 @@ class ValidationTest : IntegrationTestBase() {
         LocalDate.parse("2024-01-01"),
         Gender.MALE,
         "CV49EE",
+        "Test",
+        "Test High School",
+        "Some place",
+        "test_email@test.com",
+      )
+
+    val actualResponse = webTestClient.post()
+      .uri("/learners")
+      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .bodyValue(findLearnerByDemographicsRequest)
+      .accept(MediaType.parseMediaType("application/json"))
+      .exchange()
+      .expectStatus()
+      .isBadRequest
+      .expectBody()
+      .returnResult()
+      .responseBody
+
+    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
+    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+  }
+
+  @Test
+  fun `learner endpoint should return validation errors when user previousFamilyName is invalid`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.BAD_REQUEST,
+      "Validation Failed",
+      "Please correct the error and retry",
+      "Validation(s) failed for [previousFamilyName]",
+      "Validation(s) failed for [previousFamilyName] with reason(s): [must match \"^[A-Za-z' ,.-]{3,35}\$\"]",
+    )
+    val findLearnerByDemographicsRequest =
+      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
+        "Darcie",
+        "Tucker",
+        LocalDate.parse("2024-01-01"),
+        Gender.MALE,
+        "CV49EE",
+        "TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+        "Test High School",
+        "Some place",
+        "test_email@test.com",
+      )
+
+    val actualResponse = webTestClient.post()
+      .uri("/learners")
+      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .bodyValue(findLearnerByDemographicsRequest)
+      .accept(MediaType.parseMediaType("application/json"))
+      .exchange()
+      .expectStatus()
+      .isBadRequest
+      .expectBody()
+      .returnResult()
+      .responseBody
+
+    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
+    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+  }
+
+  @Test
+  fun `learner endpoint should return validation errors when user emailAddress is invalid`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.BAD_REQUEST,
+      "Validation Failed",
+      "Please correct the error and retry",
+      "Validation(s) failed for [emailAddress]",
+      "Validation(s) failed for [emailAddress] with reason(s): [must match \"^[A-Za-z0-9._'%+-]{1,64}@(?:(?=[A-Za-z0-9-]{1,63}\\.)[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\.){1,8}[A-Za-z]{2,63}\$\"]",
+    )
+    val findLearnerByDemographicsRequest =
+      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
+        "Darcie",
+        "Tucker",
+        LocalDate.parse("2024-01-01"),
+        Gender.MALE,
+        "CV49EE",
+        "Test",
+        "Test High School",
+        "Some place",
+        "test_email@@test.com",
       )
 
     val actualResponse = webTestClient.post()

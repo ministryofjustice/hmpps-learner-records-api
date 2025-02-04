@@ -8,7 +8,7 @@ import java.time.LocalDate
 
 data class LearnerEventsLRSRequest(
   @field:Size(max = 10)
-  val uln: String = "TEST",
+  val uln: String,
 
   @field:Size(max = 35)
   val givenName: String,
@@ -19,14 +19,11 @@ data class LearnerEventsLRSRequest(
   @field:Size(min = 4, max = 5)
   val getType: String = "FULL",
 
-  val dateOfBirth: LocalDate? = null,
+  val dateOfBirth: LocalDate?,
 
-  // TODO: Validate gender
-  val gender: Int? = null,
+  val gender: Int?,
 ) {
-  fun transformToLRSRequest(ukprn: String, password: String, vendorId: String, userName: String): RequestBody {
-// is it best/common practice to move the xml into another file and pull it in? investigate existing kotlin repos
-    return """
+  fun transformToLRSRequest(ukprn: String, password: String, vendorId: String, userName: String): RequestBody = """
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns="http://schemas.datacontract.org/2004/07/Amor.Qcf.Service.Interface">
          <soapenv:Header />
          <soapenv:Body>
@@ -49,5 +46,4 @@ data class LearnerEventsLRSRequest(
          </soapenv:Body>
       </soapenv:Envelope>
       """.toRequestBody("text/xml".toMediaTypeOrNull())
-  }
 }
