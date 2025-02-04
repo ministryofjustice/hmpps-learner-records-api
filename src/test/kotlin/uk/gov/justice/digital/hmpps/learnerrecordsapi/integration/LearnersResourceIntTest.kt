@@ -34,6 +34,10 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         LocalDate.parse("2024-01-01"),
         Gender.MALE,
         "CV49EE",
+        "Test",
+        "Test High School",
+        "Some place",
+        "test_email@test.com",
       )
 
     private fun actualResponse(
@@ -128,6 +132,9 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         lastKnownPostCode = "NE26 3ND",
         dateOfBirth = LocalDate.parse("1995-06-27"),
         gender = Gender.FEMALE,
+        schoolAtAge16 = "Ellern Mede School ",
+        placeOfBirth = "Chard ",
+        emailAddress = "anna.cheng@yahoo.compatibilitytest.co.uk",
       )
 
       val expectedPossibleMatchLearners = mutableListOf(

@@ -66,6 +66,10 @@ class LearnersServiceTest {
       dateOfBirth = LocalDate.of(1980, 1, 1),
       gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
+      previousFamilyName = "Test",
+      schoolAtAge16 = "Test High School",
+      placeOfBirth = "Some place",
+      emailAddress = "test_email@test.com",
     )
 
     val expectedResult = LearnersResponse(
@@ -109,6 +113,10 @@ class LearnersServiceTest {
       dateOfBirth = LocalDate.of(1980, 1, 1),
       gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
+      previousFamilyName = "Test",
+      schoolAtAge16 = "Test High School",
+      placeOfBirth = "Some place",
+      emailAddress = "test_email@test.com",
     )
 
     val expectedResult = LearnersResponse(
@@ -152,6 +160,10 @@ class LearnersServiceTest {
       dateOfBirth = LocalDate.of(1980, 1, 1),
       gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
+      previousFamilyName = "Test",
+      schoolAtAge16 = "Test High School",
+      placeOfBirth = "Some place",
+      emailAddress = "test_email@test.com",
     )
 
     val expectedResult = LearnersResponse(
@@ -183,6 +195,10 @@ class LearnersServiceTest {
       dateOfBirth = LocalDate.of(1980, 1, 1),
       gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
+      previousFamilyName = "Test",
+      schoolAtAge16 = "Test High School",
+      placeOfBirth = "Some place",
+      emailAddress = "test_email@test.com",
     )
 
     val expectedException = LRSException(

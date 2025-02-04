@@ -61,7 +61,8 @@ class LearnersService(
   ): MutableMap<String, MutableList<String>> {
     val requestFieldNames =
       LearnersRequest::class.declaredMemberProperties.associateBy { it.name }
-    val learnerFieldNames = Learner::class.declaredMemberProperties.associateBy { it.name }
+    val learnerFieldNames =
+      Learner::class.declaredMemberProperties.associateBy { it.name }
     val sharedFieldNames = requestFieldNames.keys.intersect(learnerFieldNames.keys)
 
     val mismatchedFields = mutableMapOf<String, MutableList<String>>()
@@ -71,7 +72,7 @@ class LearnersService(
         val requestValue = requestFieldNames[fieldName]?.call(request)?.toString()
         val learnerValue = learnerFieldNames[fieldName]?.call(learner)?.toString()
 
-        if (requestValue != learnerValue && learnerValue != null) {
+        if (requestValue != learnerValue && learnerValue != null && requestValue != null) {
           mismatchedFields.computeIfAbsent(fieldName) { mutableListOf() }
             .add(learnerValue)
         }
