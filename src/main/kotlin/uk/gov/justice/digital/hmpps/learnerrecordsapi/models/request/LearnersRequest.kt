@@ -26,19 +26,19 @@ data class LearnersRequest(
 
   @field:Pattern(regexp = "^[A-Za-z' ,.-]{3,35}$")
   @SerializedName("previousFamilyName")
-  val previousFamilyName: String?,
+  val previousFamilyName: String? = null,
 
   @field:Size(max = 254)
   @SerializedName("schoolAtAge16")
-  val schoolAtAge16: String?,
+  val schoolAtAge16: String? = null,
 
   @field:Size(max = 35)
   @SerializedName("placeOfBirth")
-  val placeOfBirth: String?,
+  val placeOfBirth: String? = null,
 
   @field:Pattern(regexp = "^[A-Za-z0-9._'%+-]{1,64}@(?:(?=[A-Za-z0-9-]{1,63}\\.)[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\.){1,8}[A-Za-z]{2,63}\$")
   @SerializedName("emailAddress")
-  val emailAddress: String?,
+  val emailAddress: String? = null,
 ) {
   fun extractFromRequest(): LearnersLRSRequest = LearnersLRSRequest(
     givenName = givenName,
