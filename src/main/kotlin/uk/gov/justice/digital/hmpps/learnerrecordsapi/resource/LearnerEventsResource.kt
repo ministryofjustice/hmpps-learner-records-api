@@ -5,6 +5,7 @@ import jakarta.validation.Valid
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
@@ -23,8 +24,9 @@ class LearnerEventsResource(
   @LearnerEventsApi
   suspend fun findByUln(
     @RequestBody @Valid learnerEventsRequest: LearnerEventsRequest,
+    @RequestHeader("X-Username", required = true) userName: String,
   ): String {
     log.inboundRequest(requestModelObject = learnerEventsRequest)
-    return gson.toJson(learnerEventsService.getLearningEvents(learnerEventsRequest))
+    return gson.toJson(learnerEventsService.getLearningEvents(learnerEventsRequest, userName))
   }
 }

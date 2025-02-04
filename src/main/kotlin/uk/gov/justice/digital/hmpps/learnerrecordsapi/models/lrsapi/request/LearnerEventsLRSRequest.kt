@@ -7,9 +7,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.time.LocalDate
 
 data class LearnerEventsLRSRequest(
-  @field:Size(max = 35)
-  val userName: String = "TEST",
-
   @field:Size(max = 10)
   val uln: String = "TEST",
 
@@ -27,7 +24,7 @@ data class LearnerEventsLRSRequest(
   // TODO: Validate gender
   val gender: Int? = null,
 ) {
-  fun transformToLRSRequest(ukprn: String, password: String, vendorId: String): RequestBody {
+  fun transformToLRSRequest(ukprn: String, password: String, vendorId: String, userName: String): RequestBody {
 // is it best/common practice to move the xml into another file and pull it in? investigate existing kotlin repos
     return """
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns="http://schemas.datacontract.org/2004/07/Amor.Qcf.Service.Interface">
