@@ -101,23 +101,15 @@ class HmppsBoldLrsExceptionHandler {
     ex: Exception,
     request: WebRequest,
   ): ResponseEntity<Any> {
-    if (request.getHeader("X-Username") == null) {
-      val errorResponse = ErrorResponse(
-        status = HttpStatus.BAD_REQUEST,
-        errorCode = "Missing Request Header",
-        userMessage = "Missing X-Username Header",
-        developerMessage = "Missing Request Header: ${ex.message}",
-        moreInfo = "Missing Request Header",
-      )
-      log.error("Unexpected Error: {}", ex)
-      return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
-    }
+    val errorMessage =
+      if (request.getHeader("X-Username") == null) "Missing X-Username Header" else "Missing Request Header"
+
     val errorResponse = ErrorResponse(
       status = HttpStatus.BAD_REQUEST,
-      errorCode = "Missing Request Header",
-      userMessage = "Missing Request Header: ${ex.message}",
-      developerMessage = "Missing Request Header: ${ex.message}",
-      moreInfo = "Missing Request Header",
+      errorCode = errorMessage,
+      userMessage = "$errorMessage: ${ex.message}",
+      developerMessage = "$errorMessage: ${ex.message}",
+      moreInfo = errorMessage,
     )
     log.error("Unexpected Error: {}", ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
