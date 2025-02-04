@@ -78,7 +78,7 @@ class LearnerEventsServiceTest {
       ),
     )
 
-    val result = learnerEventsService.getLearningEvents(body, "One")
+    val result = learnerEventsService.getLearningEvents(body, "TestTest")
 
     assertEquals(expectedResult, result)
     verify(lrsApiInterfaceMock).getLearnerLearningEvents(any())
@@ -114,7 +114,7 @@ class LearnerEventsServiceTest {
     )
 
     val actualException = assertThrows<LRSException> {
-      learnerEventsService.getLearningEvents(body, "one")
+      learnerEventsService.getLearningEvents(body, "TestTest")
     }
 
     verify(lrsApiInterfaceMock).getLearnerLearningEvents(any())
