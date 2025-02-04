@@ -24,9 +24,9 @@ class LearnersResource(
   @FindByDemographicApi
   suspend fun findByDemographic(
     @RequestBody @Valid findLearnerByDemographicsRequest: LearnersRequest,
-    @RequestHeader("X-Username", required = true) username: String,
+    @RequestHeader("X-Username", required = true) userName: String,
   ): String {
     log.inboundRequest(requestModelObject = findLearnerByDemographicsRequest)
-    return gson.toJson(learnersService.getLearners(findLearnerByDemographicsRequest, username))
+    return gson.toJson(learnersService.getLearners(findLearnerByDemographicsRequest, userName))
   }
 }

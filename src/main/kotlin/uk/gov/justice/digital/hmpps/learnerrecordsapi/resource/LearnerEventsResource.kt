@@ -24,9 +24,9 @@ class LearnerEventsResource(
   @LearnerEventsApi
   suspend fun findByUln(
     @RequestBody @Valid learnerEventsRequest: LearnerEventsRequest,
-    @RequestHeader("X-Username", required = true) username: String,
+    @RequestHeader("X-Username", required = true) userName: String,
   ): String {
     log.inboundRequest(requestModelObject = learnerEventsRequest)
-    return gson.toJson(learnerEventsService.getLearningEvents(learnerEventsRequest, username))
+    return gson.toJson(learnerEventsService.getLearningEvents(learnerEventsRequest, userName))
   }
 }
