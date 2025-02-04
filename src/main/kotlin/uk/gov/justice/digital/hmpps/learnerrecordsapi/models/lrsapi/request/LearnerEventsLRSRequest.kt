@@ -34,7 +34,7 @@ data class LearnerEventsLRSRequest(
                <tem:invokingOrganisation>
                   <Password>$password</Password>
                   <Ukprn>$ukprn</Ukprn>
-                  <Username>${this.userName}</Username>
+                  <Username>$userName</Username>
                </tem:invokingOrganisation>
                <tem:userType>ORG</tem:userType>
                <tem:vendorID>$vendorId</tem:vendorID>
