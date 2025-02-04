@@ -205,6 +205,26 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
       assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
     }
+
+    @Test
+    fun `should return 400 with an appropriate error response if X-Username header is missing`() {
+      lrsApiMock.stubLearningEventsExactMatchFull()
+
+      val actualResponse = webTestClient.post()
+        .uri("/learner-events")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .bodyValue(getLearningEventsRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .is4xxClientError
+        .expectBody()
+        .returnResult()
+        .responseBody
+
+      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
+      assertThat(actualResponseString).contains("Missing X-Username Header")
+    }
   }
 
   val getLearningEventsRequest = LearnerEventsRequest(
