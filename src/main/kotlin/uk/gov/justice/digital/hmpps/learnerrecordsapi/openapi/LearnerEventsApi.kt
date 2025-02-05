@@ -34,7 +34,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                 "familyName": "Findlay",
                 "uln": "1174112637",
                 "dateOfBirth": "1980-11-01",
-                "gender": 1
+                "gender": "MALE"
               }
             """,
           ),
@@ -46,7 +46,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                 "familyName": "Test",
                 "uln": "1174112637",
                 "dateOfBirth": "1995-05-12",
-                "gender": 2
+                "gender": "FEMALE"
               }
             """,
           ),
@@ -58,7 +58,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                 "familyName": "Brennan-Ace",
                 "uln": "1026922983",
                 "dateOfBirth": "1992-03-27",
-                "gender": 3
+                "gender": "FEMALE"
               }
             """,
           ),
@@ -70,7 +70,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                 "familyName": "Carrol",
                 "uln": "4444599390",
                 "dateOfBirth": "2000-07-19",
-                "gender": 1
+                "gender": "MALE"
               }
             """,
           ),
@@ -97,7 +97,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                       "familyName": "Findlay",
                       "uln": "1174112637",
                       "dateOfBirth": "1980-11-01",
-                      "gender": 1
+                      "gender": "MALE"
                   },
                   "responseType": "Exact Match",
                   "foundUln": "1174112637",
