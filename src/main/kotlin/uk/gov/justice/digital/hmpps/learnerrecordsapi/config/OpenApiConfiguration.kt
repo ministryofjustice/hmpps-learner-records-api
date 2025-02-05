@@ -25,8 +25,6 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
         Server().url("http://localhost:8080").description("Local"),
       ),
     )
-    // TODO: Remove the default security schema and start adding your own schemas and roles to describe your
-    // service authorisation requirements
     .components(
       Components().addSecuritySchemes(
         "learner-records-search-read-only-role",

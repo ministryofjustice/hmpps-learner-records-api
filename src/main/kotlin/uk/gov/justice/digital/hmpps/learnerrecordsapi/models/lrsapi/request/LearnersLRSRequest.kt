@@ -24,16 +24,16 @@ data class LearnersLRSRequest(
   val findType: String = "FUL",
 
   @field:Size(max = 35)
-  val previousFamilyName: String? = null,
+  val previousFamilyName: String?,
 
   @field:Size(max = 254)
-  val schoolAtAge16: String? = null,
+  val schoolAtAge16: String?,
 
   @field:Size(max = 35)
-  val placeOfBirth: String? = null,
+  val placeOfBirth: String?,
 
   @field:Size(max = 254)
-  val emailAddress: String? = null,
+  val emailAddress: String?,
 ) {
   fun transformToLRSRequest(ukprn: String, password: String, userName: String): RequestBody = """
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:fin="http://api.lrs.miap.gov.uk/findmsg">
