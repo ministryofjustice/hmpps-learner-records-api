@@ -12,7 +12,7 @@ This repository has been generated from https://github.com/ministryofjustice/hmp
 This service is available at:
 * Local: `http://localhost:8080/`
 * Dev: `https://learner-records-api-dev.hmpps.service.justice.gov.uk/`
-* UAT - `https://learner-records-api-uat.hmpps.service.justice.gov.uk/`
+* UAT: `https://learner-records-api-uat.hmpps.service.justice.gov.uk/`
 * Preprod: tbc
 * Prod: tbc
 
@@ -42,8 +42,13 @@ Example request body:
   "givenName": "Darcie",
   "familyName": "Tucker",
   "dateOfBirth": "1976-08-16",
-  "gender": "2",
-  "lastKnownPostCode": "CV49EE"
+  "gender": "FEMALE",
+  "lastKnownPostCode": "CV49EE", 
+  // below are optional fields
+  "previousFamilyName": "CAMPBELL",
+  "schoolAtAge16": "Mill Hill School Foundation ",
+  "placeOfBirth": "Blean",
+  "emailAddress": "darcie.tucker@aol.compatibilitytest.com"
 }
 ```
 
@@ -54,7 +59,7 @@ Example response body:
         "givenName": "Darcie",
         "familyName": "Tucker",
         "dateOfBirth": "1976-08-16",
-        "gender": 2,
+        "gender": "FEMALE",
         "lastKnownPostcode": "CV49EE"
     },
     "responseType": "Exact Match",
@@ -112,8 +117,9 @@ Example request body:
   "givenName": "Sean",
   "familyName": "Findlay",
   "uln": "1174112637",
+  // below are optional fields
   "dateOfBirth": "1980-11-01",
-  "gender": 1
+  "gender": "MALE"
 }
 ```
 
@@ -125,7 +131,7 @@ Example response body:
     "familyName": "Findlay",
     "uln": "1174112637",
     "dateOfBirth": "1980-11-01",
-    "gender": 1
+    "gender": "MALE"
   },
   "responseType": "Exact Match",
   "foundUln": "1174112637",
