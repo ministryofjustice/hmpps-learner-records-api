@@ -202,7 +202,6 @@ class LearnersResourceIntTest : IntegrationTestBase() {
           responseType = LRSResponseType.POSSIBLE_MATCH,
           mismatchedFields = mutableMapOf(
             ("dateOfBirth" to mutableListOf("1995-06-28", "1995-06-28")),
-//            ("gender" to mutableListOf("2", "2")),
             ("lastKnownPostCode" to mutableListOf("SO40 4JX")),
           ),
           matchedLearners = expectedPossibleMatchLearners,
