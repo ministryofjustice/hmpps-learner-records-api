@@ -42,7 +42,7 @@ fun readResourceFile(fileName: String): String {
                 "givenName": "Darcie",
                 "familyName": "Tucker",
                 "dateOfBirth": "1976-08-16",
-                "gender": "2",
+                "gender": "FEMALE",
                 "lastKnownPostCode": "CV49EE"
               }
             """,
@@ -54,7 +54,7 @@ fun readResourceFile(fileName: String): String {
                 "givenName": "Anna",
                 "familyName": "Cheng",
                 "dateOfBirth": "1995-06-28",
-                "gender": "2",
+                "gender": "FEMALE",
                 "lastKnownPostCode": "ZZ12ZZ"
               }
             """,
@@ -66,7 +66,7 @@ fun readResourceFile(fileName: String): String {
                 "givenName": "Connor",
                 "familyName": "Carroll",
                 "dateOfBirth": "1985-03-27",
-                "gender": "1",
+                "gender": "MALE",
                 "lastKnownPostCode": "AB125EQ"
               }
             """,
@@ -78,7 +78,7 @@ fun readResourceFile(fileName: String): String {
                 "givenName": "Random",
                 "familyName": "Name",
                 "dateOfBirth": "2000-01-01",
-                "gender": "2",
+                "gender": "FEMALE",
                 "lastKnownPostCode": "CV49EE"
               }
             """,
@@ -130,7 +130,7 @@ fun readResourceFile(fileName: String): String {
                           "dateOfAddressCapture": "2009-04-25",
                           "dateOfBirth": "1976-08-16",
                           "placeOfBirth": "Blean ",
-                          "gender": "2",
+                          "gender": "FEMALE",
                           "emailAddress": "darcie.tucker@aol.compatibilitytest.com",
                           "scottishCandidateNumber": "845759406",
                           "abilityToShare": "1",
@@ -180,7 +180,7 @@ fun readResourceFile(fileName: String): String {
                             "dateOfAddressCapture": "2010-09-07",
                             "dateOfBirth": "1995-06-28",
                             "placeOfBirth": "Chard ",
-                            "gender": "2",
+                            "gender": "FEMALE",
                             "emailAddress": "anna.cheng@yahoo.compatibilitytest.co.uk",
                             "scottishCandidateNumber": "820208781",
                             "abilityToShare": "1",
@@ -208,7 +208,7 @@ fun readResourceFile(fileName: String): String {
                             "dateOfAddressCapture": "2010-09-07",
                             "dateOfBirth": "1995-06-28",
                             "placeOfBirth": "Chard ",
-                            "gender": "2",
+                            "gender": "FEMALE",
                             "emailAddress": "anna.cheng@yahoo.compatibilitytest.co.uk",
                             "scottishCandidateNumber": "820208781",
                             "abilityToShare": "1",
@@ -253,7 +253,7 @@ fun readResourceFile(fileName: String): String {
                             "dateOfAddressCapture": "2008-07-13",
                             "dateOfBirth": "1985-03-27",
                             "placeOfBirth": "Whittlesey ",
-                            "gender": "1",
+                            "gender": "MALE",
                             "emailAddress": "william-connor.carroll@inbox.compatibilitytest.com",
                             "scottishCandidateNumber": "145589606",
                             "abilityToShare": "1",

@@ -402,7 +402,7 @@ class ValidationTest : IntegrationTestBase() {
       {
         "lastName": "Tucker",
         "dateOfBirth": "2024-01-01",
-        "gender": 1,
+        "gender": "FEMALE",
         "postcode": "CV49EE"
       }
     """

@@ -58,7 +58,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                 "familyName": "Brennan-Ace",
                 "uln": "1026922983",
                 "dateOfBirth": "1992-03-27",
-                "gender": 3
+                "gender": "FEMALE"
               }
             """,
           ),

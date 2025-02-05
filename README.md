@@ -84,7 +84,7 @@ Example response body:
             "dateOfAddressCapture": "2009-04-25",
             "dateOfBirth": "1976-08-16",
             "placeOfBirth": "Blean ",
-            "gender": "2",
+            "gender": "FEMALE",
             "emailAddress": "darcie.tucker@aol.compatibilitytest.com",
             "scottishCandidateNumber": "845759406",
             "abilityToShare": "1",
