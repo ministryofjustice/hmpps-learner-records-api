@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
@@ -27,8 +26,6 @@ class LearnersService(
 
   private val log: LoggerUtil = LoggerUtil(javaClass)
 
-  private fun lrsClient(): LRSApiInterface = httpClientConfiguration.retrofit().create(LRSApiInterface::class.java)
-
   private fun parseError(xmlString: String): MIAPAPIException? {
     val regex = Regex("<ns10:MIAPAPIException[\\s\\S]*?</ns10:MIAPAPIException>")
     val match = regex.find(xmlString)
@@ -45,7 +42,7 @@ class LearnersService(
 
     log.debug("Calling LRS API")
 
-    val lrsResponse = lrsClient().findLearnerByDemographics(requestBody)
+    val lrsResponse = httpClientConfiguration.lrsClient.findLearnerByDemographics(requestBody)
     val lrsResponseBody = lrsResponse.body()?.body?.findLearnerResponse
 
     if (lrsResponse.isSuccessful && lrsResponseBody != null) {

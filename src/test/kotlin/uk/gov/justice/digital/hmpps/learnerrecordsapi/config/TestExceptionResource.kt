@@ -60,7 +60,7 @@ class TestExceptionResource(
       .url(mockTimeoutServer.url("/timeout")) // Point to the MockWebServer URL
       .build()
 
-    val response = httpClientConfiguration.buildSSLHttpClient().newCall(request).execute()
+    val response = httpClientConfiguration.sslHttpClient.newCall(request).execute()
     return response.body?.string()
   }
 }

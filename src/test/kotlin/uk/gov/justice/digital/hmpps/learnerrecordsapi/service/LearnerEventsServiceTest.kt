@@ -45,8 +45,7 @@ class LearnerEventsServiceTest {
     retrofitMock = mock(Retrofit::class.java)
     lrsApiInterfaceMock =
       mock(LRSApiInterface::class.java)
-    `when`(httpClientConfigurationMock.retrofit()).thenReturn(retrofitMock)
-    `when`(retrofitMock.create(LRSApiInterface::class.java)).thenReturn(lrsApiInterfaceMock)
+    `when`(httpClientConfigurationMock.lrsClient).thenReturn(lrsApiInterfaceMock)
     appConfigMock = mock(AppConfig::class.java)
     learnerEventsService = LearnerEventsService(httpClientConfigurationMock, appConfigMock)
     `when`(appConfigMock.ukprn()).thenReturn("test")
