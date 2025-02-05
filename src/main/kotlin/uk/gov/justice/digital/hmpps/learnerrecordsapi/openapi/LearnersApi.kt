@@ -105,7 +105,7 @@ fun readResourceFile(fileName: String): String {
                       "givenName": "Darcie",
                       "familyName": "Tucker",
                       "dateOfBirth": "1976-08-16",
-                      "gender": 2,
+                      "gender": "FEMALE",
                       "lastKnownPostcode": "CV49EE"
                   },
                   "responseType": "Exact Match",
@@ -150,7 +150,7 @@ fun readResourceFile(fileName: String): String {
                         "givenName": "Anna",
                         "familyName": "Cheng",
                         "dateOfBirth": "1995-06-28",
-                        "gender": 2,
+                        "gender": "FEMALE",
                         "lastKnownPostcode": "ZZ12ZZ"
                     },
                     "responseType": "Possible Match",
@@ -228,7 +228,7 @@ fun readResourceFile(fileName: String): String {
                         "givenName": "Connor",
                         "familyName": "Carroll",
                         "dateOfBirth": "1985-03-27",
-                        "gender": 1,
+                        "gender": "MALE",
                         "lastKnownPostcode": "AB125EQ"
                     },
                     "responseType": "Linked Learner Found",
@@ -273,7 +273,7 @@ fun readResourceFile(fileName: String): String {
                         "givenName": "Someone",
                         "familyName": "Unknown",
                         "dateOfBirth": "1976-08-16",
-                        "gender": 2,
+                        "gender": "FEMALE",
                         "lastKnownPostcode": "CV49EE"
                     },
                     "responseType": "No Match"
@@ -288,7 +288,7 @@ fun readResourceFile(fileName: String): String {
                         "givenName": "Someone",
                         "familyName": "Common",
                         "dateOfBirth": "1976-08-16",
-                        "gender": 2,
+                        "gender": "FEMALE",
                         "lastKnownPostcode": "CV49EE"
                     },
                     "responseType": "Too Many Matches"
