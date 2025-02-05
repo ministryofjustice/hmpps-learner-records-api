@@ -10,9 +10,6 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Lea
 
 interface LRSApiInterface {
   @Headers("Accept: application/xml", "Content-Type: text/xml")
-// This is the endpoint we want to call on the base url of the api
-// Want to figure out how to use the config for this instead of hardcoding
-// Need to change this endpoint to lrs when the profile is local
   @POST("LearnerService.svc")
   suspend fun findLearnerByDemographics(@Body body: RequestBody): Response<FindLearnerEnvelope>
 
