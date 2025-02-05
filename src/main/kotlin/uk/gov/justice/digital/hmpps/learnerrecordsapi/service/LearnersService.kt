@@ -72,7 +72,7 @@ class LearnersService(
         val requestValue = requestFieldNames[fieldName]?.call(request)?.toString()
         val learnerValue = learnerFieldNames[fieldName]?.call(learner)?.toString()
         val neitherAreNull = (learnerValue != null && requestValue != null)
-        if (requestValue.orEmpty().lowercase() != learnerValue.orEmpty().lowercase() && neitherAreNull) {
+        if (requestValue.orEmpty().trim().lowercase() != learnerValue.orEmpty().trim().lowercase() && neitherAreNull) {
           mismatchedFields.computeIfAbsent(fieldName) { mutableListOf() }
             .add(learnerValue.orEmpty())
         }
