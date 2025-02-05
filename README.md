@@ -47,7 +47,7 @@ Example request body:
   // below are optional fields
   "previousFamilyName": "CAMPBELL",
   "schoolAtAge16": "Mill Hill School Foundation ",
-  "placeOfBirth": "Blean",
+  "placeOfBirth": "Blean ",
   "emailAddress": "darcie.tucker@aol.compatibilitytest.com"
 }
 ```
