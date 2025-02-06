@@ -77,6 +77,7 @@ sonar-project.properties
 
 # Certificate files
 *.pfx
+*.jks
 
 # env files
 .env*

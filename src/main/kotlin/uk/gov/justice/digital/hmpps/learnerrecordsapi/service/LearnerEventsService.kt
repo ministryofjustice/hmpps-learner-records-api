@@ -38,7 +38,7 @@ class LearnerEventsService(
       .transformToLRSRequest(appConfig.ukprn(), appConfig.password(), appConfig.vendorId(), userName)
     log.debug("Calling LRS API")
 
-    val learningEventsResponse = httpClientConfiguration.lrsClient.getLearnerLearningEvents(requestBody)
+    val learningEventsResponse = httpClientConfiguration.lrsClient().getLearnerLearningEvents(requestBody)
     val learningEventsObject = learningEventsResponse.body()?.body?.learningEventsResponse
 
     if (learningEventsResponse.isSuccessful && learningEventsObject != null) {

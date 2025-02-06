@@ -42,7 +42,7 @@ class LearnersService(
 
     log.debug("Calling LRS API")
 
-    val lrsResponse = httpClientConfiguration.lrsClient.findLearnerByDemographics(requestBody)
+    val lrsResponse = httpClientConfiguration.lrsClient().findLearnerByDemographics(requestBody)
     val lrsResponseBody = lrsResponse.body()?.body?.findLearnerResponse
 
     if (lrsResponse.isSuccessful && lrsResponseBody != null) {

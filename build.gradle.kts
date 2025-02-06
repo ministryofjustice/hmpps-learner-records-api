@@ -32,12 +32,17 @@ kotlin {
   jvmToolchain(21)
 }
 
+tasks.register<Exec>("generateSSLCertificate") {
+  commandLine("bash", "./generateSSLCertificate.sh")
+}
+
 tasks {
   withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     compilerOptions.jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
   }
   test {
-    environment("PFX_FILE_PASSWORD", "TEST")
+    dependsOn("generateSSLCertificate")
+    environment("PFX_FILE_PASSWORD", "changeit")
     environment("UK_PRN", "TEST")
     environment("ORG_PASSWORD", "TEST")
     environment("VENDOR_ID", "TEST")
