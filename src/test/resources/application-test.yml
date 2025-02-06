@@ -11,3 +11,18 @@ hmpps-auth:
 lrs:
   base-url: "http://localhost:8082"
   pfx-path: "WebServiceClientCert.pfx"
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false  # not sure about false here
