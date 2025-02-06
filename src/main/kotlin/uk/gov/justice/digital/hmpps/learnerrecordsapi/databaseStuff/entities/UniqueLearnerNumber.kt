@@ -14,12 +14,9 @@ data class UniqueLearnerNumber(
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: Long? = null,
 
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false) // Not unique because we might attempt to create it twice.
   val uln: String,
 
 ) {
-  // Default constructor needed by JPA
-  constructor() : this(null, "")
-
   constructor(uln: String) : this(null, uln)
 }

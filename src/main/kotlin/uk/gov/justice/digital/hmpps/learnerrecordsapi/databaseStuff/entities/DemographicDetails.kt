@@ -29,9 +29,6 @@ data class DemographicDetails(
   val relatedUln: UniqueLearnerNumber?
 
 ) {
-  // Default needed by JPA
-  constructor() : this(null, "", "", "", "", null)
-
   constructor(
     givenName: String?,
     familyName: String,
