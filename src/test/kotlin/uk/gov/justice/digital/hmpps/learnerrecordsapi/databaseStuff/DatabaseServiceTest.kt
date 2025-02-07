@@ -13,6 +13,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.entities.Dem
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.repository.DemographicWithUlnRepository
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.service.DatabaseService
 
+// This tests the service's methods, and injects the repositories so that only a single service method is tested at once.
+
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
@@ -29,6 +31,7 @@ class DatabaseServiceTest {
 
   @AfterEach
   fun clearDatabase() {
+    // Replace this with a more standard way of clearing down H2 database.
     entityManager.createNativeQuery("DELETE FROM DEMOGRAPHIC_ULN").executeUpdate()
   }
 

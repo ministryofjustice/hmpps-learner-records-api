@@ -13,6 +13,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.entities.Dem
 @Repository
 interface DemographicWithUlnRepository : JpaRepository<DemographicWithUln, Long> {
 
+  // Here is an example of using the spring data DSL to construct a query.
+  // Gets by demographic info, and orders by descending ID so we can get the latest, and returns the first one in that ordering.
   // Refactor to perhaps use an indexed column containing a hash of the given demographic details.
   // Or, index all the demographic columns.
   fun findFirstByGivenNameAndFamilyNameAndDateOfBirthAndGenderOrderByIdDesc(
