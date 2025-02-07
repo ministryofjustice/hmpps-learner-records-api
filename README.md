@@ -10,9 +10,9 @@ This repository has been generated from https://github.com/ministryofjustice/hmp
 ## Hosting 
 
 This service is available at:
-* Local: `http://localhost:8080/`
-* Dev: `https://learner-records-api-dev.hmpps.service.justice.gov.uk/`
-* UAT: `https://learner-records-api-uat.hmpps.service.justice.gov.uk/`
+* Local: http://localhost:8080/
+* Dev: https://learner-records-api-dev.hmpps.service.justice.gov.uk/
+* UAT: https://learner-records-api-uat.hmpps.service.justice.gov.uk/
 * Preprod: tbc
 * Prod: tbc
 
@@ -171,7 +171,12 @@ Response codes:
 ---
 ## API Documentation
 
-OpenAPI documentation is available here - http://localhost:8080/swagger-ui/index.html
+OpenAPI documentation is available at:
+* Local: http://localhost:8080/swagger-ui/index.html
+* Dev: https://learner-records-api-dev.hmpps.service.justice.gov.uk/swagger-ui/index.html
+* UAT: https://learner-records-api-uat.hmpps.service.justice.gov.uk/swagger-ui/index.html
+* Preprod:  tbc 
+* Prod:  tbc
 
 ---
 
