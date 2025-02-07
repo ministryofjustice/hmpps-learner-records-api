@@ -3,11 +3,11 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.entities
 import jakarta.persistence.*
 
 // This is the entity that we can save and retrieve from our database.
-// We will need to confirm exactly what to save.
+// Note that it has a relatedUln property.
 
 @Entity
-@Table(name = "DEMOGRAPHIC_DETAILS")
-data class DemographicDetails(
+@Table(name = "DEMOGRAPHIC_ULN")
+data class DemographicWithUln(
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: Long? = null,
@@ -24,9 +24,8 @@ data class DemographicDetails(
   @Column(nullable = false)
   val gender: String,
 
-  @ManyToOne
-  @JoinColumn(name = "related_uln_id", nullable = false)
-  val relatedUln: UniqueLearnerNumber?
+  @Column(nullable = false)
+  val relatedUln: String?
 
 ) {
   constructor(
@@ -34,6 +33,6 @@ data class DemographicDetails(
     familyName: String,
     dateOfBirth: String,
     gender: String,
-    relatedUln: UniqueLearnerNumber? = null
+    relatedUln: String? = null
   ) : this(null, givenName, familyName, dateOfBirth, gender, relatedUln)
 }

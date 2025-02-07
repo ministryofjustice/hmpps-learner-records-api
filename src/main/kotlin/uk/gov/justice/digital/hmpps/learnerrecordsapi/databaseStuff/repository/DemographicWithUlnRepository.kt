@@ -2,8 +2,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.entities.DemographicDetails
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.entities.UniqueLearnerNumber
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.entities.DemographicWithUln
 
 // This is the spring data JpaRepository.
 // It helps us interface with our database without manually writing queries.
@@ -11,7 +10,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.entities.Uni
 // We can do .save() to save an entity to it.
 
 @Repository
-interface DemographicRepository : JpaRepository<DemographicDetails, Long> {
+interface DemographicWithUlnRepository : JpaRepository<DemographicWithUln, Long> {
 
   // refactor to perhaps use an indexed column with the details in a single string or hashed or something.
   // eg findByHashOrderByIdDesc
@@ -21,6 +20,6 @@ interface DemographicRepository : JpaRepository<DemographicDetails, Long> {
     familyName: String,
     dateOfBirth: String,
     gender: String,
-  ): DemographicDetails?
+  ): DemographicWithUln?
 
 }
