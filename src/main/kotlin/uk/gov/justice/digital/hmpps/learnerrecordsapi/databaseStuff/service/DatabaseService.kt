@@ -6,6 +6,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.repository.D
 
 // Our database service will be the co-ordinating point for everything.
 // It's nicer than calling the repository directly because we might need to refactor with extra logic.
+// Also nicer to unit test. See test/databaseStuff for an example test of this service.
 
 @Service
 class DatabaseService(

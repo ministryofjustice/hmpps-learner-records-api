@@ -8,13 +8,13 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.databaseStuff.entities.Dem
 // It helps us interface with our database without manually writing queries.
 // Things like .findById() are already provided by default.
 // We can do .save() to save an entity to it.
+// Note that we may in the future have more than one repository, each for a separate entity type.
 
 @Repository
 interface DemographicWithUlnRepository : JpaRepository<DemographicWithUln, Long> {
 
-  // refactor to perhaps use an indexed column with the details in a single string or hashed or something.
-  // eg findByHashOrderByIdDesc
-  // method name is long because of DSL, but it specifies how to find the most recent one.
+  // Refactor to perhaps use an indexed column containing a hash of the given demographic details.
+  // Or, index all the demographic columns.
   fun findFirstByGivenNameAndFamilyNameAndDateOfBirthAndGenderOrderByIdDesc(
     givenName: String?,
     familyName: String,

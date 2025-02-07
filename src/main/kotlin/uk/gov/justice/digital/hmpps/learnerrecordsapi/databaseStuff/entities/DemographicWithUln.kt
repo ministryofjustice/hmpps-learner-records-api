@@ -5,6 +5,8 @@ import jakarta.persistence.*
 // This is the entity that we can save and retrieve from our database.
 // Note that it has a relatedUln property.
 
+// See the comments on jira for how this will differ when we come to implementing.
+
 @Entity
 @Table(name = "DEMOGRAPHIC_ULN")
 data class DemographicWithUln(
