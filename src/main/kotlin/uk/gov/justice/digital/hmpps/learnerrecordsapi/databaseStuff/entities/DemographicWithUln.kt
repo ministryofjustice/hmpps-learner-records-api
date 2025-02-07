@@ -27,7 +27,7 @@ data class DemographicWithUln(
   val gender: String,
 
   @Column(nullable = false)
-  val relatedUln: String?
+  val relatedUln: String?,
 
 ) {
   constructor(
@@ -35,6 +35,6 @@ data class DemographicWithUln(
     familyName: String,
     dateOfBirth: String,
     gender: String,
-    relatedUln: String? = null
+    relatedUln: String? = null,
   ) : this(null, givenName, familyName, dateOfBirth, gender, relatedUln)
 }

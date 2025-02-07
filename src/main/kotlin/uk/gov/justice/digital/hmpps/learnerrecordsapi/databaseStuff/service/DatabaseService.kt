@@ -13,17 +13,12 @@ class DatabaseService(
   private val demographicWithUlnRepository: DemographicWithUlnRepository,
 ) {
 
-  fun findDemographicWithUln(demographicWithUln: DemographicWithUln): DemographicWithUln? {
-    return demographicWithUlnRepository.findFirstByGivenNameAndFamilyNameAndDateOfBirthAndGenderOrderByIdDesc(
-      demographicWithUln.givenName,
-      demographicWithUln.familyName,
-      demographicWithUln.dateOfBirth,
-      demographicWithUln.gender
-    )
-  }
+  fun findDemographicWithUln(demographicWithUln: DemographicWithUln): DemographicWithUln? = demographicWithUlnRepository.findFirstByGivenNameAndFamilyNameAndDateOfBirthAndGenderOrderByIdDesc(
+    demographicWithUln.givenName,
+    demographicWithUln.familyName,
+    demographicWithUln.dateOfBirth,
+    demographicWithUln.gender,
+  )
 
-  fun saveDemographicWithUln(demographicWithUln: DemographicWithUln): DemographicWithUln {
-    return demographicWithUlnRepository.save(demographicWithUln)
-  }
-
+  fun saveDemographicWithUln(demographicWithUln: DemographicWithUln): DemographicWithUln = demographicWithUlnRepository.save(demographicWithUln)
 }

@@ -37,14 +37,14 @@ class DatabaseServiceTest {
 
   @Test
   fun `can save a DemographicUlnLinkEntity`() {
-    val demographicWithUln = DemographicWithUln("test", "test", "test","test", "123456789")
+    val demographicWithUln = DemographicWithUln("test", "test", "test", "test", "123456789")
     val savedDemographicWithUln = databaseService.saveDemographicWithUln(demographicWithUln)
     assertEquals(demographicWithUln, savedDemographicWithUln)
   }
 
   @Test
   fun `can retrieve a DemographicUlnLinkEntity without providing its uln property`() {
-    val demographicWithoutUln = DemographicWithUln("test", "test", "test","test")
+    val demographicWithoutUln = DemographicWithUln("test", "test", "test", "test")
     val expectedDemographicWithUln = demographicWithoutUln.copy(relatedUln = "0987654321")
     demographicWithUlnRepository.save(expectedDemographicWithUln)
     val foundDemographicWithUln = databaseService.findDemographicWithUln(demographicWithoutUln)
@@ -53,9 +53,9 @@ class DatabaseServiceTest {
 
   @Test
   fun `only the latest DemographicUlnLinkEntity is retrieved`() {
-    val demographicWithoutUln = DemographicWithUln("test", "test", "test","test")
+    val demographicWithoutUln = DemographicWithUln("test", "test", "test", "test")
 
-    for (i in 0 .. 9) {
+    for (i in 0..9) {
       val demographicWithUln = demographicWithoutUln.copy(relatedUln = "112233445$i")
       demographicWithUlnRepository.save(demographicWithUln)
     }
@@ -65,5 +65,4 @@ class DatabaseServiceTest {
     val foundDemographicWithUln = databaseService.findDemographicWithUln(demographicWithoutUln)
     assertEquals(expectedDemographicWithUln, foundDemographicWithUln)
   }
-
 }

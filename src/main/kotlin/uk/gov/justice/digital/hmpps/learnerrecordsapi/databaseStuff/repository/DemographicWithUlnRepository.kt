@@ -23,5 +23,4 @@ interface DemographicWithUlnRepository : JpaRepository<DemographicWithUln, Long>
     dateOfBirth: String,
     gender: String,
   ): DemographicWithUln?
-
 }
