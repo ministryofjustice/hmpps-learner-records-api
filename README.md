@@ -10,9 +10,9 @@ This repository has been generated from https://github.com/ministryofjustice/hmp
 ## Hosting 
 
 This service is available at:
-* Local: `http://localhost:8080/`
-* Dev: `https://learner-records-api-dev.hmpps.service.justice.gov.uk/`
-* UAT: `https://learner-records-api-uat.hmpps.service.justice.gov.uk/`
+* Local: http://localhost:8080/
+* Dev: https://learner-records-api-dev.hmpps.service.justice.gov.uk/
+* UAT: https://learner-records-api-uat.hmpps.service.justice.gov.uk/
 * Preprod: tbc
 * Prod: tbc
 
