@@ -5,7 +5,7 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import java.io.IOException
-
+//TODO: check for null and empty
 class ResponseTypeAdapter : TypeAdapter<LRSResponseType>() {
 
   override fun write(out: JsonWriter, value: LRSResponseType) {

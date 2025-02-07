@@ -8,9 +8,11 @@ import java.time.format.DateTimeFormatter
 
 class LocalDateAdapter : TypeAdapter<LocalDate>() {
 
+  //TODO: what if value is null
   override fun write(out: JsonWriter, value: LocalDate) {
     out.value(DateTimeFormatter.ISO_LOCAL_DATE.format(value))
   }
 
+  //TODO: what if value is null
   override fun read(input: JsonReader): LocalDate = LocalDate.parse(input.nextString())
 }

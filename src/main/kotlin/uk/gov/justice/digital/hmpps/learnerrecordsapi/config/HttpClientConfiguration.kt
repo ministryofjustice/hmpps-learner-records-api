@@ -17,6 +17,8 @@ class HttpClientConfiguration(
   @Value("\${lrs.base-url}") val baseUrl: String,
   @Autowired
   private val appConfig: AppConfig,
+
+  private val sslContextConfiguration : SSLContextConfiguration
 ) {
   fun buildSSLHttpClient(): OkHttpClient {
     log.info("Building HTTP client with SSL")
@@ -24,7 +26,11 @@ class HttpClientConfiguration(
     loggingInterceptor.level = Level.BODY
 
     try {
-      val sslContextConfiguration = SSLContextConfiguration(pfxFilePath)
+      /*
+      no implicit initialisation needed as managed by Spring
+       */
+//      val sslContextConfiguration = SSLContextConfiguration(pfxFilePath)
+
       val sslContext = sslContextConfiguration.createSSLContext()
       val trustManager = sslContextConfiguration.getTrustManager()
 

@@ -2,7 +2,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.logging
 
 import com.google.gson.Gson
 import org.slf4j.LoggerFactory
-
+//TODO: Remove and use the default Logger
 class LoggerUtil(clazz: Class<Any>, private val gson: Gson? = null) {
   private val log = LoggerFactory.getLogger(clazz)
 
@@ -26,6 +26,7 @@ class LoggerUtil(clazz: Class<Any>, private val gson: Gson? = null) {
     }
   }
 
+  //TODO; maybe investigate how to keep this
   fun inboundRequest(clientId: String = "example_clientId", requestModelObject: Any) {
     val gsonInstance = gson ?: throw RuntimeException("Gson instance is null")
     val body = gsonInstance.toJson(requestModelObject)

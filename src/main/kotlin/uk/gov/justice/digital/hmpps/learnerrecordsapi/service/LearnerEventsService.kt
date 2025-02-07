@@ -22,14 +22,17 @@ class LearnerEventsService(
   @Autowired
   private val appConfig: AppConfig,
 ) {
+  //TODO: use default logger
   private val log: LoggerUtil = LoggerUtil(javaClass)
 
   private fun lrsClient(): LRSApiInterface = httpClientConfiguration.retrofit().create(LRSApiInterface::class.java)
 
+  //TODO: test if xmlString == null. Logging for null & IllegalArgumentException
   private fun parseError(xmlString: String): MIAPAPIException? {
     val regex = Regex("<ns10:MIAPAPIException[\\s\\S]*?</ns10:MIAPAPIException>")
     val match = regex.find(xmlString)
     val relevantXml = match?.value ?: throw IllegalArgumentException("Unparsable LRS Error")
+    //TODO:?? try/catch error logging if relevantXml fails
     val jaxbContext = JAXBContext.newInstance(MIAPAPIException::class.java)
     val unmarshaller = jaxbContext.createUnmarshaller()
     return unmarshaller.unmarshal(StringReader(relevantXml)) as MIAPAPIException

@@ -32,7 +32,8 @@ class HmppsBoldLrsExceptionHandler {
   fun handleMethodArgumentNotValidException(
     ex: MethodArgumentNotValidException,
     request: WebRequest,
-  ): ResponseEntity<Any> {
+    //TODO: maybe return type ErrorResponse -> ResponseEntity<ErrorResponse>
+  ): ResponseEntity<ErrorResponse> {
     val bindingResult: BindingResult = ex.bindingResult
     val errors = bindingResult.allErrors.map { it.defaultMessage }
     val erroredFields = bindingResult.fieldErrors.map { it.field }

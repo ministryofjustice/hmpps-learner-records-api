@@ -8,6 +8,7 @@ enum class LRSResponseType(val englishName: String, val lrsResponseCode: String)
   LINKED_LEARNER("Linked Learner Match", "WSRC0022"),
   NOT_SHARED("Learner opted to not share data", "WSEC0206"),
   NOT_VERIFIED("Learner could not be verified", "WSEC0208"),
+  //TODO: maybe UNKNOWN_RESPONSE_TYPE("Unknown Response Type", "UNKNOWN") ?? for clarity
   UNKNOWN_RESPONSE_TYPE("", ""),
   ;
 

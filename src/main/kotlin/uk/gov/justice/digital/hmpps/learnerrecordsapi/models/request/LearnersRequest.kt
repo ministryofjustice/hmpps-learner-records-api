@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.LearnersLRSRequest
 import java.time.LocalDate
 
+//TODO: Tests for the regex patterns
 data class LearnersRequest(
   @field:Pattern(regexp = "^[A-Za-z' ,.-]{3,35}$")
   @SerializedName("givenName")

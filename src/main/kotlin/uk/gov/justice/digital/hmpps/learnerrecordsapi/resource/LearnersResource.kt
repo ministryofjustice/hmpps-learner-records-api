@@ -1,5 +1,7 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.resource
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.security.access.prepost.PreAuthorize
@@ -22,6 +24,15 @@ class LearnersResource(
   @PostMapping
   @Tag(name = "Learners")
   @FindByDemographicApi
+  //TODO: Add Operation / ApiResponse
+  @Operation(
+    summary = "Returns completed response",
+    responses = [
+      ApiResponse(responseCode = "200", description = "Learners found"),
+      ApiResponse(responseCode = "400", description = "Bad Request"),
+      ApiResponse(responseCode = "500", description = "Internal Server Error"),
+    ],
+  )
   suspend fun findByDemographic(
     @RequestBody @Valid findLearnerByDemographicsRequest: LearnersRequest,
     @RequestHeader("X-Username", required = true) userName: String,
