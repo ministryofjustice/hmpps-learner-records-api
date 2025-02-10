@@ -3,7 +3,6 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 import com.google.gson.GsonBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase

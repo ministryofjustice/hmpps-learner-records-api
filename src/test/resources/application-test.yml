@@ -11,9 +11,9 @@ hmpps-auth:
 lrs:
   baseUrl: "http://localhost:8082"
   pfxPath: "certificateForTest.pfx"
-  ukprn: ${UK_PRN}
-  orgPassword: ${ORG_PASSWORD}
-  vendorId: ${VENDOR_ID}
+  ukprn: ${UK_PRN:}
+  orgPassword: ${ORG_PASSWORD:}
+  vendorId: ${VENDOR_ID:}
   connectTimeout: ${LRS_CONNECT_TIMEOUT:1}
   writeTimeout: ${LRS_WRITE_TIMEOUT:1}
   readTimeout: ${LRS_READ_TIMEOUT:1}

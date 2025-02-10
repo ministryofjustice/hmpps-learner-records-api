@@ -4,7 +4,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import retrofit2.Retrofit
@@ -13,7 +12,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
 import java.util.concurrent.TimeUnit
 
 @Configuration
-class HttpClientConfiguration (private val lrsConfiguration: LRSConfiguration) {
+class HttpClientConfiguration(private val lrsConfiguration: LRSConfiguration) {
 
   @Bean
   fun lrsClient(): LRSApiInterface = Retrofit.Builder()
