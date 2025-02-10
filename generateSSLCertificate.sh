@@ -4,11 +4,11 @@
 KEYSTORE_PASSWORD="changeit"
 ALIAS="dummyClientAlias"
 KEYSTORE_FILE="dummyClient.jks"
-PFX_FILE="WebServiceClientCert.pfx"
+PFX_FILE="certificateForTest.pfx"
 KEY_PASSWORD="changeit"
 VALIDITY_DAYS=3650
 
-rm -rf *.pfx *.jks
+rm -rf certificateForTest.pfx dummyClient.jks
 
 # Generate a self-signed certificate using keytool
 keytool -genkeypair -keyalg RSA -keysize 2048 -alias $ALIAS -keystore $KEYSTORE_FILE -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD -validity $VALIDITY_DAYS -dname "CN=Dummy Client, OU=Test, O=Test Corp, L=Test City, S=Test State, C=US" -noprompt
