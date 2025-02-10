@@ -15,8 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import retrofit2.Response
 import retrofit2.Retrofit
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.LRSConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsEnvelope
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
@@ -35,8 +35,7 @@ class LearnerEventsServiceTest {
   private lateinit var httpClientConfigurationMock: HttpClientConfiguration
   private lateinit var retrofitMock: Retrofit
   private lateinit var lrsApiInterfaceMock: LRSApiInterface
-  private lateinit var appConfigMock: AppConfig
-
+  private lateinit var lrsConfiguration: LRSConfiguration
   private lateinit var learnerEventsService: LearnerEventsService
 
   @BeforeEach
@@ -46,11 +45,11 @@ class LearnerEventsServiceTest {
     lrsApiInterfaceMock =
       mock(LRSApiInterface::class.java)
     `when`(httpClientConfigurationMock.lrsClient()).thenReturn(lrsApiInterfaceMock)
-    appConfigMock = mock(AppConfig::class.java)
-    learnerEventsService = LearnerEventsService(httpClientConfigurationMock, appConfigMock)
-    `when`(appConfigMock.ukprn()).thenReturn("test")
-    `when`(appConfigMock.password()).thenReturn("pass")
-    `when`(appConfigMock.vendorId()).thenReturn("01")
+    lrsConfiguration = mock(LRSConfiguration::class.java)
+    learnerEventsService = LearnerEventsService(httpClientConfigurationMock, lrsConfiguration)
+    `when`(lrsConfiguration.ukprn).thenReturn("test")
+    `when`(lrsConfiguration.orgPassword).thenReturn("pass")
+    `when`(lrsConfiguration.vendorId).thenReturn("01")
   }
 
   @Test
