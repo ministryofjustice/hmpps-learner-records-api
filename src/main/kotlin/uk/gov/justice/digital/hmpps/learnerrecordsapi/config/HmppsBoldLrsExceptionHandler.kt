@@ -86,10 +86,6 @@ class HmppsBoldLrsExceptionHandler {
     ex: HttpMessageNotReadableException,
     request: WebRequest,
   ): ResponseEntity<Any> {
-    log.info("LOGGING ERROR")
-    log.info(ex.mostSpecificCause.toString())
-    log.info(ex.mostSpecificCause.javaClass.simpleName)
-    log.info(ex.mostSpecificCause.message.toString())
     if (ex.mostSpecificCause.javaClass.simpleName == "UnrecognizedPropertyException") {
       return handleUnrecognizedPropertyException(ex, request)
     }
