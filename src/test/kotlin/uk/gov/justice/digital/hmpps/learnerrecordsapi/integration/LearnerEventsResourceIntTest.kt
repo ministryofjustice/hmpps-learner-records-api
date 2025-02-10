@@ -225,6 +225,32 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
       assertThat(actualResponseString).contains("Missing X-Username Header")
     }
+
+    @Test
+    fun `should return 400 with an appropriate error response if additional unknown parameters are passed`() {
+      lrsApiMock.stubLearningEventsExactMatchFull()
+      val extendedRequestBody = mutableMapOf<String, String>()
+      extendedRequestBody["givenName"] = "Sean"
+      extendedRequestBody["familyName"] = "Findlay"
+      extendedRequestBody["uln"] = "1174112637"
+      extendedRequestBody["unknownValue"] = "1234"
+
+      val actualResponse = webTestClient.post()
+        .uri("/learner-events")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .header("X-Username", "TestUser")
+        .bodyValue(extendedRequestBody)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .is4xxClientError
+        .expectBody()
+        .returnResult()
+        .responseBody
+
+      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
+      assertThat(actualResponseString).contains("Unrecognized field \\\"unknownValue\\\"")
+    }
   }
 
   val getLearningEventsRequest = LearnerEventsRequest(

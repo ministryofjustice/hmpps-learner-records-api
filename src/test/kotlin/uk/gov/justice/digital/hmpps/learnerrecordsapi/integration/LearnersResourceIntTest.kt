@@ -302,5 +302,37 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       val actualResponseString = executedRequest?.toString(Charsets.UTF_8)
       assertThat(actualResponseString).contains("Missing X-Username Header")
     }
+
+    @Test
+    fun `should return 400 with an appropriate error response if additional unknown parameters are passed`() {
+      lrsApiMock.stubLearnerByDemographicsExactMatch()
+      val extendedRequestBody = mutableMapOf<String, String>()
+      extendedRequestBody["givenName"] = "Some"
+      extendedRequestBody["familyName"] = "Person"
+      extendedRequestBody["dateOfBirth"] = "2024-01-01"
+      extendedRequestBody["gender"] = "1"
+      extendedRequestBody["lastKnownPostCode"] = "CV49EE"
+      extendedRequestBody["previousFamilyName"] = "Test"
+      extendedRequestBody["schoolAtAge16"] = "Test High School"
+      extendedRequestBody["placeOfBirth"] = "Some place"
+      extendedRequestBody["emailAddress"] = "test_email@test.com"
+      extendedRequestBody["unknownValue"] = "1234"
+
+      val executedRequest = webTestClient.post()
+        .uri("/learners")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .header("X-Username", "TestUser")
+        .bodyValue(extendedRequestBody)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .is4xxClientError
+        .expectBody()
+        .returnResult()
+        .responseBody
+
+      val actualResponseString = executedRequest?.toString(Charsets.UTF_8)
+      assertThat(actualResponseString).contains("Unrecognized field \\\"unknownValue\\\"")
+    }
   }
 }

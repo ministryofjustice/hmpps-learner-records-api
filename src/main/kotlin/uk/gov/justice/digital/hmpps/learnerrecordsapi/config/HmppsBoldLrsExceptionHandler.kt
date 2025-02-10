@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import org.apache.commons.lang3.StringUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -85,6 +86,13 @@ class HmppsBoldLrsExceptionHandler {
     ex: HttpMessageNotReadableException,
     request: WebRequest,
   ): ResponseEntity<Any> {
+    log.info("LOGGING ERROR")
+    log.info(ex.mostSpecificCause.toString())
+    log.info(ex.mostSpecificCause.javaClass.simpleName)
+    log.info(ex.mostSpecificCause.message.toString())
+    if (ex.mostSpecificCause.javaClass.simpleName == "UnrecognizedPropertyException") {
+      return handleUnrecognizedPropertyException(ex, request)
+    }
     val errorResponse = ErrorResponse(
       status = HttpStatus.BAD_REQUEST,
       errorCode = "Unreadable HTTP message",
@@ -110,6 +118,22 @@ class HmppsBoldLrsExceptionHandler {
       userMessage = "$errorMessage: ${ex.message}",
       developerMessage = "$errorMessage: ${ex.message}",
       moreInfo = errorMessage,
+    )
+    log.error("Unexpected Error: {}", ex)
+    return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+  }
+
+  @ExceptionHandler(UnrecognizedPropertyException::class)
+  fun handleUnrecognizedPropertyException(
+    ex: Exception,
+    request: WebRequest,
+  ): ResponseEntity<Any> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.BAD_REQUEST,
+      errorCode = "Unreadable HTTP message",
+      userMessage = "Unrecognized field in request",
+      developerMessage = "Unrecognized field: ${ex.message}",
+      moreInfo = "Unrecognized field",
     )
     log.error("Unexpected Error: {}", ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
