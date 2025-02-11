@@ -3,8 +3,8 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.LRSConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.debugLog
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerResponse
@@ -23,7 +23,7 @@ class LearnersService(
   @Autowired
   private val httpClientConfiguration: HttpClientConfiguration,
   @Autowired
-  private val appConfig: AppConfig,
+  private val lrsConfiguration: LRSConfiguration,
 ) {
 
   private val logger: Logger = LoggerUtil.getLogger<LearnersService>()
@@ -40,7 +40,7 @@ class LearnersService(
   suspend fun getLearners(findLearnerByDemographicsRequest: LearnersRequest, userName: String): LearnersResponse {
     logger.debugLog("Transforming inbound request object to LRS request object")
     val requestBody = findLearnerByDemographicsRequest.extractFromRequest()
-      .transformToLRSRequest(appConfig.ukprn(), appConfig.password(), userName)
+      .transformToLRSRequest(lrsConfiguration.ukprn, lrsConfiguration.orgPassword, userName)
 
     logger.debugLog("Calling LRS API")
 
