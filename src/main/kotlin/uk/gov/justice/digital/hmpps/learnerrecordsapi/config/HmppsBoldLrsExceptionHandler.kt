@@ -47,7 +47,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "Validation(s) failed for $erroredFields",
       moreInfo = "Validation(s) failed for $erroredFields with reason(s): $errors",
     )
-    logger.errorLog("Validation(s) failed for $erroredFields with reason(s): $errors", ex)
+    logger.errorLog("Validation(s) failed for $erroredFields", ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
@@ -63,7 +63,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "Requested Resource not found on the server",
       moreInfo = "Requested Resource not found on the server",
     )
-    logger.errorLog("Requested Resource was not found {}", ex)
+    logger.errorLog("Requested Resource was not found", ex)
     return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
   }
 
@@ -79,7 +79,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "Forbidden - Access Denied",
       moreInfo = "Forbidden - Access Denied",
     )
-    logger.errorLog("Forbidden (403) returned: {}", ex)
+    logger.errorLog("Forbidden (403) returned", ex)
     return ResponseEntity(errorResponse, HttpStatus.FORBIDDEN)
   }
 
@@ -98,7 +98,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "${ex.message}",
       moreInfo = "Unreadable HTTP message",
     )
-    logger.errorLog("Unexpected Error: {}", ex)
+    logger.errorLog("Unexpected Error", ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
@@ -117,7 +117,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "$errorMessage: ${ex.message}",
       moreInfo = errorMessage,
     )
-    logger.errorLog("Unexpected Error: {}", ex)
+    logger.errorLog("Unexpected Error", ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
@@ -133,7 +133,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "Unrecognized field: ${ex.message}",
       moreInfo = "Unrecognized field",
     )
-    logger.errorLog("Unexpected Error: {}", ex)
+    logger.errorLog("Unexpected Error", ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 

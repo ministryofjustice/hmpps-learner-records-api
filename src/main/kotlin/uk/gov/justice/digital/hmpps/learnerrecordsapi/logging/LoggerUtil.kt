@@ -2,32 +2,39 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.logging
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.time.Instant
 
 object LoggerUtil {
   inline fun <reified T> getLogger(): Logger = LoggerFactory.getLogger(T::class.java)
 
-  private fun formatDebug(className: String, message: String, vararg args: Any?): String = "[DEBUG] | Timestamp: ${Instant.now()} | Class: $className | Action: Debugging | Details: $message | Variables: ${args.joinToString()}"
+  private fun formatDebug(message: String, vararg args: Any?): String = "Details: $message".appendIfNotEmpty(" | Variables: ", args)
 
-  private fun formatInfo(className: String, message: String, vararg args: Any?): String = "[INFO] | Timestamp: ${Instant.now()} | Class: $className | Event: $message | Context: ${args.joinToString()}"
+  private fun formatInfo(message: String, vararg args: Any?): String = "Event: $message".appendIfNotEmpty(" | Context: ", args)
 
-  private fun formatWarn(className: String, message: String, vararg args: Any?): String = "[WARNING] | Timestamp: ${Instant.now()} | Class: $className | Issue: $message | Impact: ${args.joinToString()}"
+  private fun formatWarn(message: String, vararg args: Any?): String = "Issue: $message".appendIfNotEmpty(" | Impact: ", args)
 
-  private fun formatError(className: String, message: String, vararg args: Any?, exception: Throwable? = null): String = "[ERROR] | Timestamp: ${Instant.now()} | Class: $className | Failure: $message | Cause: ${args.joinToString()} | Exception: ${exception?.message}"
+  private fun formatError(message: String, vararg args: Any?, exception: Throwable? = null): String {
+    val baseMessage = "Failure: $message".appendIfNotEmpty(" | Cause: ", args)
+    return if (exception != null) "$baseMessage | Exception: ${exception.message}" else baseMessage
+  }
 
-  fun Logger.debugLog(message: String, vararg args: Any?) {
-    this.debug(formatDebug(this.name, message, *args))
+  private fun String.appendIfNotEmpty(prefix: String, args: Array<out Any?>): String {
+    val filteredArgs = args.filterNotNull()
+    return if (filteredArgs.isNotEmpty()) this + prefix + filteredArgs.joinToString() else this
+  }
+
+  fun Logger.debugLog(details: String, vararg args: Any?) {
+    this.debug(formatDebug(details, *args))
   }
 
   fun Logger.log(message: String, vararg args: Any?) {
-    this.info(formatInfo(this.name, message, *args))
+    this.info(formatInfo(message, *args))
   }
 
   fun Logger.warnLog(message: String, vararg args: Any?) {
-    this.warn(formatWarn(this.name, message, *args))
+    this.warn(formatWarn(message, *args))
   }
 
   fun Logger.errorLog(message: String, vararg args: Any?, exception: Throwable? = null) {
-    this.error(formatError(this.name, message, *args, exception = exception), exception)
+    this.error(formatError(message, *args, exception = exception), exception)
   }
 }
