@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 
 import com.google.gson.annotations.SerializedName
+import jakarta.validation.constraints.Past
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.LearnersLRSRequest
@@ -15,6 +16,7 @@ data class LearnersRequest(
   @SerializedName("familyName")
   val familyName: String,
 
+  @field:Past
   @SerializedName("dateOfBirth")
   val dateOfBirth: LocalDate,
 
