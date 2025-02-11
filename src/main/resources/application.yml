@@ -59,7 +59,7 @@ lrs:
   ukprn: ${UK_PRN:}
   orgPassword: ${ORG_PASSWORD:}
   vendorId: ${VENDOR_ID:}
-  connectTimeout: ${LRS_CONNECT_TIMEOUT:1}
-  writeTimeout: ${LRS_WRITE_TIMEOUT:1}
-  readTimeout: ${LRS_READ_TIMEOUT:1}
+  connectTimeout: ${LRS_CONNECT_TIMEOUT:20}
+  writeTimeout: ${LRS_WRITE_TIMEOUT:20}
+  readTimeout: ${LRS_READ_TIMEOUT:20}
 
