@@ -1,10 +1,12 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 
+import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.debugLog
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
@@ -21,7 +23,7 @@ class LearnerEventsService(
   @Autowired
   private val appConfig: AppConfig,
 ) {
-  private val log: LoggerUtil = LoggerUtil(javaClass)
+  private val logger: Logger = LoggerUtil.getLogger<LearnerEventsService>()
 
   private fun parseError(xmlString: String): MIAPAPIException? {
     val regex = Regex("<ns10:MIAPAPIException[\\s\\S]*?</ns10:MIAPAPIException>")
@@ -33,10 +35,10 @@ class LearnerEventsService(
   }
 
   suspend fun getLearningEvents(learnerEventsRequest: LearnerEventsRequest, userName: String): LearnerEventsResponse {
-    log.debug("Transforming inbound request object to LRS request object")
+    logger.debugLog("Transforming inbound request object to LRS request object")
     val requestBody = learnerEventsRequest.extractFromRequest()
       .transformToLRSRequest(appConfig.ukprn(), appConfig.password(), appConfig.vendorId(), userName)
-    log.debug("Calling LRS API")
+    logger.debugLog("Calling LRS API")
 
     val learningEventsResponse = httpClientConfiguration.lrsClient().getLearnerLearningEvents(requestBody)
     val learningEventsObject = learningEventsResponse.body()?.body?.learningEventsResponse

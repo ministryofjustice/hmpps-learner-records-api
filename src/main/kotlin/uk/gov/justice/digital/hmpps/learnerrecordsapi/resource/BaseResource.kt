@@ -12,5 +12,4 @@ open class BaseResource {
     .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
     .registerTypeAdapter(LRSResponseType::class.java, ResponseTypeAdapter().nullSafe())
     .create()
-  val log = LoggerUtil(javaClass, gson)
 }

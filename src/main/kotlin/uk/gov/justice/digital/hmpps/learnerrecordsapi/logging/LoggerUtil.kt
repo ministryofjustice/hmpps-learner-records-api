@@ -1,38 +1,33 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.logging
 
-import com.google.gson.Gson
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.time.Instant
 
-class LoggerUtil(clazz: Class<Any>, private val gson: Gson? = null) {
-  private val log = LoggerFactory.getLogger(clazz)
+object LoggerUtil {
+  inline fun <reified T> getLogger(): Logger = LoggerFactory.getLogger(T::class.java)
 
-  fun info(message: String, vararg args: Any?) {
-    log.info(message, *args)
+  private fun formatDebug(className: String, message: String, vararg args: Any?): String = "[DEBUG] | Timestamp: ${Instant.now()} | Class: $className | Action: Debugging | Details: $message | Variables: ${args.joinToString()}"
+
+  private fun formatInfo(className: String, message: String, vararg args: Any?): String = "[INFO] | Timestamp: ${Instant.now()} | Class: $className | Event: $message | Context: ${args.joinToString()}"
+
+  private fun formatWarn(className: String, message: String, vararg args: Any?): String = "[WARNING] | Timestamp: ${Instant.now()} | Class: $className | Issue: $message | Impact: ${args.joinToString()}"
+
+  private fun formatError(className: String, message: String, vararg args: Any?, exception: Throwable? = null): String = "[ERROR] | Timestamp: ${Instant.now()} | Class: $className | Failure: $message | Cause: ${args.joinToString()} | Exception: ${exception?.message}"
+
+  fun Logger.debugLog(message: String, vararg args: Any?) {
+    this.debug(formatDebug(this.name, message, *args))
   }
 
-  fun debug(message: String, vararg args: Any?) {
-    log.debug(message, *args)
+  fun Logger.log(message: String, vararg args: Any?) {
+    this.info(formatInfo(this.name, message, *args))
   }
 
-  fun warn(message: String, vararg args: Any?) {
-    log.warn(message, *args)
+  fun Logger.warnLog(message: String, vararg args: Any?) {
+    this.warn(formatWarn(this.name, message, *args))
   }
 
-  fun error(message: String, throwable: Throwable? = null, vararg args: Any?) {
-    if (throwable != null) {
-      log.error(message, throwable, *args)
-    } else {
-      log.error(message, *args)
-    }
-  }
-
-  fun inboundRequest(clientId: String = "example_clientId", requestModelObject: Any) {
-    val gsonInstance = gson ?: throw RuntimeException("Gson instance is null")
-    val body = gsonInstance.toJson(requestModelObject)
-    log.info(
-      "Request received with client id {} and body {}",
-      clientId,
-      body,
-    )
+  fun Logger.errorLog(message: String, vararg args: Any?, exception: Throwable? = null) {
+    this.error(formatError(this.name, message, *args, exception = exception), exception)
   }
 }
