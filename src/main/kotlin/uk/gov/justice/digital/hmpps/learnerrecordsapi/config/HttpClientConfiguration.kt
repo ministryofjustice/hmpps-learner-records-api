@@ -4,8 +4,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import retrofit2.Retrofit
@@ -14,20 +12,11 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
 import java.util.concurrent.TimeUnit
 
 @Configuration
-class HttpClientConfiguration {
-
-  @Value("\${lrs.pfx-path}")
-  lateinit var pfxFilePath: String
-
-  @Value("\${lrs.base-url}")
-  lateinit var baseUrl: String
-
-  @Autowired
-  lateinit var appConfig: AppConfig
+class HttpClientConfiguration(private val lrsConfiguration: LRSConfiguration) {
 
   @Bean
   fun lrsClient(): LRSApiInterface = Retrofit.Builder()
-    .baseUrl(baseUrl)
+    .baseUrl(lrsConfiguration.baseUrl)
     .client(sslHttpClient())
     .addConverterFactory(JaxbConverterFactory.create())
     .build().create(LRSApiInterface::class.java)
@@ -41,14 +30,14 @@ class HttpClientConfiguration {
     val loggingInterceptor = HttpLoggingInterceptor()
     loggingInterceptor.level = Level.BODY
 
-    val sslContextConfiguration = SSLContextConfiguration(pfxFilePath)
+    val sslContextConfiguration = SSLContextConfiguration(lrsConfiguration.pfxPath)
     val sslContext = sslContextConfiguration.createSSLContext()
     val trustManager = sslContextConfiguration.getTrustManager()
 
     val httpClientBuilder = OkHttpClient.Builder()
-      .connectTimeout(appConfig.lrsConnectTimeout(), TimeUnit.SECONDS)
-      .writeTimeout(appConfig.lrsWriteTimeout(), TimeUnit.SECONDS)
-      .readTimeout(appConfig.lrsReadTimeout(), TimeUnit.SECONDS)
+      .connectTimeout(lrsConfiguration.connectTimeout.toLong(), TimeUnit.SECONDS)
+      .writeTimeout(lrsConfiguration.writeTimeout.toLong(), TimeUnit.SECONDS)
+      .readTimeout(lrsConfiguration.readTimeout.toLong(), TimeUnit.SECONDS)
       .sslSocketFactory(sslContext.socketFactory, trustManager)
       .addInterceptor(loggingInterceptor)
 
