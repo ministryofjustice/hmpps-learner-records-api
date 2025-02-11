@@ -253,10 +253,9 @@ In order to make a connection to the LRS Development environment (achieved when 
 
 Reach out to the development team if you don't have this. Once downloaded, add the `WebServiceClientCert.pfx` to the project root directory.
 
-Uncomment these two lines in the Dockerfile when running locally:
+Uncomment this line in the Dockerfile when running locally:
 ```
 COPY WebServiceClientCert.pfx /app/WebServiceClientCert.pfx
-RUN ls -la /app/WebServiceClientCert.pfx
 ```
 
 ### Starting the service
