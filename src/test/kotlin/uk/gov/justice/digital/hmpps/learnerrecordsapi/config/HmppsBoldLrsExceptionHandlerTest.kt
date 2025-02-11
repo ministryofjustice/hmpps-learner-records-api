@@ -1,13 +1,13 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.GsonBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import java.time.Duration
 import java.time.LocalDate
@@ -17,6 +17,9 @@ import java.time.LocalDate
 
 class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
 
+  @Autowired
+  lateinit var objectMapper: ObjectMapper
+
   @BeforeEach
   fun setUp() {
     webTestClient = webTestClient.mutate()
@@ -24,17 +27,12 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       .build()
   }
 
-  val gson = GsonBuilder()
-    .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
-    .registerTypeAdapter(LRSResponseType::class.java, ResponseTypeAdapter().nullSafe())
-    .create()
-
   private fun testExceptionHandling(
     uri: String,
     expectedResponse: HmppsBoldLrsExceptionHandler.ErrorResponse,
     expectedStatus: HttpStatus,
   ) {
-    val actualResponse = webTestClient.post()
+    val actualResponse = objectMapper.readValue(webTestClient.post()
       .uri(uri)
       .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
       .exchange()
@@ -42,10 +40,9 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       .isEqualTo(expectedStatus)
       .expectBody()
       .returnResult()
-      .responseBody
+      .responseBody, HmppsBoldLrsExceptionHandler.ErrorResponse::class.java)
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -123,7 +120,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       moreInfo = "A request timed out while waiting for a response from an upstream service.",
     )
 
-    val actualResponse = webTestClient.post()
+    val actualResponse = objectMapper.readValue(webTestClient.post()
       .uri("/test/okhttp-timeout")
       .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
       .exchange()
@@ -131,14 +128,9 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       .isEqualTo(HttpStatus.REQUEST_TIMEOUT)
       .expectBody()
       .returnResult()
-      .responseBody
+      .responseBody, HmppsBoldLrsExceptionHandler.ErrorResponse::class.java)
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-
-    val actualResponseObject = gson.fromJson(actualResponseString, HmppsBoldLrsExceptionHandler.ErrorResponse::class.java)
-
-    assertThat(actualResponseObject.copy(developerMessage = "dev message can vary"))
-      .isEqualTo(expectedResponse)
+    assertThat(actualResponse.copy(developerMessage = "dev message can vary")).isEqualTo(expectedResponse)
   }
 
   @Test
