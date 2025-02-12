@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
@@ -40,7 +41,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
           .expectBody()
           .returnResult()
           .responseBody,
-        LearnerEventsResponse::class.java,
+        HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
       )
 
       assertThat(actualResponse.toString()).contains("LRS returned an error: MIAPAPIException")
@@ -93,7 +94,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         LearnerEventsResponse::class.java,
       )
 
-      assertThat(actualResponse).isEqualTo(expectedResponse)
+      assertThat(actualResponse).usingRecursiveComparison().isEqualTo(expectedResponse)
     }
 
     @Test
@@ -147,7 +148,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         LearnerEventsResponse::class.java,
       )
 
-      assertThat(actualResponse).isEqualTo(expectedResponse)
+      assertThat(actualResponse).usingRecursiveComparison().isEqualTo(expectedResponse)
     }
 
     @Test
@@ -178,7 +179,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         LearnerEventsResponse::class.java,
       )
 
-      assertThat(actualResponse).isEqualTo(expectedResponse)
+      assertThat(actualResponse).usingRecursiveComparison().isEqualTo(expectedResponse)
     }
 
     @Test
@@ -209,7 +210,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         LearnerEventsResponse::class.java,
       )
 
-      assertThat(actualResponse).isEqualTo(expectedResponse)
+      assertThat(actualResponse).usingRecursiveComparison().isEqualTo(expectedResponse)
     }
 
     @Test
@@ -228,10 +229,10 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
           .expectBody()
           .returnResult()
           .responseBody,
-        LearnerEventsResponse::class.java,
+        HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
       )
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
+      val actualResponseString = actualResponse?.toString()
       assertThat(actualResponseString).contains("Missing X-Username Header")
     }
 
@@ -257,11 +258,11 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
           .expectBody()
           .returnResult()
           .responseBody,
-        LearnerEventsResponse::class.java,
+        HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
       )
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).contains("Unrecognized field \\\"unknownValue\\\"")
+      val actualResponseString = actualResponse?.toString()
+      assertThat(actualResponseString).contains("Unrecognized field \"unknownValue\"")
     }
   }
 
