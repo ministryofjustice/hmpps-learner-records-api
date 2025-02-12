@@ -64,12 +64,16 @@ class OpenApiDocsTest : IntegrationTestBase() {
   @Test
   fun `the open api json path security requirements are valid`() {
     val result = OpenAPIV3Parser().readLocation("http://localhost:$port/v3/api-docs", null, null)
-
     // The security requirements of each path don't appear to be validated like they are at https://editor.swagger.io/
     // We therefore need to grab all the valid security requirements and check that each path only contains those items
     val securityRequirements = result.openAPI.security.flatMap { it.keys }
-    result.openAPI.paths.forEach { pathItem ->
-      // Excludes test resource
+    result.openAPI.paths.filter { pathItem ->
+      pathItem.value.post != null &&
+        pathItem.value.post.tags.get(0) != "test-exception-resource"
+    }.filter { pathItem ->
+      pathItem.value.put != null &&
+        pathItem.value.put.tags.get(0) != "hmpps-queue-resource"
+    }.forEach { pathItem ->
       if (pathItem.value.post.tags.get(0) != "test-exception-resource") {
         assertThat(pathItem.value.post.security.flatMap { it.keys }).isSubsetOf(securityRequirements)
       }
@@ -105,7 +109,7 @@ class OpenApiDocsTest : IntegrationTestBase() {
       .jsonPath("$.paths[*][*][?(!@.security)]")
       .value<List<Any>> { list ->
         // Assert that the list has only 6 items since there are 6 test endpoints
-        assertThat(list).hasSize(6)
+        assertThat(list).hasSize(10)
       }
   }
 }

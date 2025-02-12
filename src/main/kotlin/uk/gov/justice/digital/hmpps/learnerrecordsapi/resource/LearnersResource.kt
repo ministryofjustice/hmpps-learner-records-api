@@ -13,12 +13,17 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.FindByDemographicApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnersService
+import uk.gov.justice.hmpps.sqs.audit.HmppsAuditEvent
+import uk.gov.justice.hmpps.sqs.audit.HmppsAuditService
+import java.time.Instant
+import java.util.UUID
 
 @RestController
 @PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__RO')")
 @RequestMapping(value = ["/learners"], produces = ["application/json"])
 class LearnersResource(
   private val learnersService: LearnersService,
+  private val auditService: HmppsAuditService,
 ) : BaseResource() {
 
   val logger = LoggerUtil.getLogger<LearnersResource>()
@@ -31,6 +36,17 @@ class LearnersResource(
     @RequestHeader("X-Username", required = true) userName: String,
   ): String {
     logger.log("Received a post request to learners endpoint", findLearnerByDemographicsRequest)
+    val hmppsLRSEvent = HmppsAuditEvent(
+      "Read Request Received",
+      "From $userName",
+      "Read",
+      UUID.randomUUID().toString(),
+      Instant.now(),
+      userName,
+      "learner-records-api",
+      findLearnerByDemographicsRequest.toString(),
+    )
+    auditService.publishEvent(hmppsLRSEvent)
     return gson.toJson(learnersService.getLearners(findLearnerByDemographicsRequest, userName))
   }
 }
