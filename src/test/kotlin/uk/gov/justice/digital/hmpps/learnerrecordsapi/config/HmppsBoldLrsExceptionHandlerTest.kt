@@ -1,16 +1,13 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.gson.GsonBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import java.time.Duration
-import java.time.LocalDate
 
 // Tests that when exceptions are thrown, the exception handler will pick them up and behave correctly.
 // Test endpoints that throw exceptions are found in TestExceptionResource in this same package.
@@ -32,15 +29,18 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     expectedResponse: HmppsBoldLrsExceptionHandler.ErrorResponse,
     expectedStatus: HttpStatus,
   ) {
-    val actualResponse = objectMapper.readValue(webTestClient.post()
-      .uri(uri)
-      .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-      .exchange()
-      .expectStatus()
-      .isEqualTo(expectedStatus)
-      .expectBody()
-      .returnResult()
-      .responseBody, HmppsBoldLrsExceptionHandler.ErrorResponse::class.java)
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri(uri)
+        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+        .exchange()
+        .expectStatus()
+        .isEqualTo(expectedStatus)
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
     assertThat(actualResponse).isEqualTo(expectedResponse)
   }
@@ -120,15 +120,18 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       moreInfo = "A request timed out while waiting for a response from an upstream service.",
     )
 
-    val actualResponse = objectMapper.readValue(webTestClient.post()
-      .uri("/test/okhttp-timeout")
-      .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
-      .exchange()
-      .expectStatus()
-      .isEqualTo(HttpStatus.REQUEST_TIMEOUT)
-      .expectBody()
-      .returnResult()
-      .responseBody, HmppsBoldLrsExceptionHandler.ErrorResponse::class.java)
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/test/okhttp-timeout")
+        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.REQUEST_TIMEOUT)
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
     assertThat(actualResponse.copy(developerMessage = "dev message can vary")).isEqualTo(expectedResponse)
   }

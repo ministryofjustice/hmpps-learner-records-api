@@ -1,26 +1,21 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 
-import com.google.gson.GsonBuilder
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import java.time.LocalDate
 
 // Tests that HmppsBoldLrsExceptionHandler works as expected when actually calling our endpoints.
 
 class ValidationTest : IntegrationTestBase() {
 
-  val gson = GsonBuilder()
-    .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
-    .registerTypeAdapter(LRSResponseType::class.java, ResponseTypeAdapter().nullSafe())
-    .disableHtmlEscaping()
-    .create()
+  @Autowired
+  lateinit var objectMapper: ObjectMapper
 
   @Test
   fun `learners endpoint should return validation errors when user postcode is invalid`() {
@@ -45,20 +40,22 @@ class ValidationTest : IntegrationTestBase() {
         "test_email@test.com",
       )
 
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(findLearnerByDemographicsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learners")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .bodyValue(findLearnerByDemographicsRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -84,20 +81,22 @@ class ValidationTest : IntegrationTestBase() {
         "test_email@test.com",
       )
 
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(findLearnerByDemographicsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learners")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .bodyValue(findLearnerByDemographicsRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -119,20 +118,22 @@ class ValidationTest : IntegrationTestBase() {
         Gender.MALE,
       )
 
-    val actualResponse = webTestClient.post()
-      .uri("/learner-events")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(learnerEventsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learner-events")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .bodyValue(learnerEventsRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -157,20 +158,22 @@ class ValidationTest : IntegrationTestBase() {
         "test_email@test.com",
       )
 
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(findLearnerByDemographicsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learners")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .bodyValue(findLearnerByDemographicsRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -195,20 +198,22 @@ class ValidationTest : IntegrationTestBase() {
         "test_email@test.com",
       )
 
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(findLearnerByDemographicsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learners")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .bodyValue(findLearnerByDemographicsRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -233,20 +238,22 @@ class ValidationTest : IntegrationTestBase() {
         "test_email@@test.com",
       )
 
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(findLearnerByDemographicsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learners")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .bodyValue(findLearnerByDemographicsRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -267,20 +274,22 @@ class ValidationTest : IntegrationTestBase() {
         Gender.MALE,
       )
 
-    val actualResponse = webTestClient.post()
-      .uri("/learner-events")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(learnerEventsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learner-events")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .bodyValue(learnerEventsRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -301,20 +310,22 @@ class ValidationTest : IntegrationTestBase() {
         Gender.MALE,
       )
 
-    val actualResponse = webTestClient.post()
-      .uri("/learner-events")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .bodyValue(learnerEventsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learner-events")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .bodyValue(learnerEventsRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -335,20 +346,22 @@ class ValidationTest : IntegrationTestBase() {
         "gender": "TESTINGENUM",
         "postcode": "CV49EE"
         }"""
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .contentType(MediaType.APPLICATION_JSON)
-      .bodyValue(findLearnerByDemographicsRequest)
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learners")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(findLearnerByDemographicsRequest)
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -369,20 +382,22 @@ class ValidationTest : IntegrationTestBase() {
         "gender": "TESTINGENUM",
         "uln": "1234567890"
         }"""
-    val actualResponse = webTestClient.post()
-      .uri("/learner-events")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .contentType(MediaType.APPLICATION_JSON)
-      .bodyValue(findLearnerByDemographicsRequest)
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learner-events")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(findLearnerByDemographicsRequest)
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -407,21 +422,23 @@ class ValidationTest : IntegrationTestBase() {
       }
     """
 
-    val actualResponse = webTestClient.post()
-      .uri("/learners")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .contentType(MediaType.APPLICATION_JSON)
-      .bodyValue(requestJsonWithoutGivenName)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learners")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(requestJsonWithoutGivenName)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -446,20 +463,22 @@ class ValidationTest : IntegrationTestBase() {
       }
     """
 
-    val actualResponse = webTestClient.post()
-      .uri("/learner-events")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .contentType(MediaType.APPLICATION_JSON)
-      .bodyValue(requestJsonWithoutGivenName)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isBadRequest
-      .expectBody()
-      .returnResult()
-      .responseBody
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/learner-events")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(requestJsonWithoutGivenName)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
-    val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-    assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 }

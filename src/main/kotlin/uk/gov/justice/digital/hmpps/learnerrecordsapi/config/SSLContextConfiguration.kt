@@ -1,6 +1,8 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 
-import org.slf4j.LoggerFactory
+import org.slf4j.Logger
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
 import java.io.FileInputStream
 import java.security.KeyStore
 import java.security.SecureRandom
@@ -17,27 +19,27 @@ private const val PROTOCOL = "TLS"
 
 class SSLContextConfiguration(private val pfxFilePath: String) {
 
-  fun createSSLContext(): SSLContext {
-    val logger = LoggerFactory.getLogger(SSLContextConfiguration::class.java)
+  private val logger: Logger = LoggerUtil.getLogger<SSLContextConfiguration>()
 
+  fun createSSLContext(): SSLContext {
     val passwordEnv =
       System.getenv(PFX_FILE_PASSWORD)
         ?: throw IllegalArgumentException("Password environment variable not found.")
     val password = passwordEnv.toCharArray()
 
-    logger.info("Loading PFX file from path: $pfxFilePath")
+    logger.log("Loading PFX file from path: $pfxFilePath")
     val keyStore = KeyStore.getInstance(PFX_FILE_TYPE)
     keyStore.load(FileInputStream(pfxFilePath), password)
 
-    logger.info("Initializing KeyManagerFactory")
+    logger.log("Initializing KeyManagerFactory")
     val keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
     keyManagerFactory.init(keyStore, password)
 
-    logger.info("Initializing TrustManagerFactory")
+    logger.log("Initializing TrustManagerFactory")
     val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
     trustManagerFactory.init(keyStore)
 
-    logger.info("Initializing SSLContext")
+    logger.log("Initializing SSLContext")
     val sslContext = SSLContext.getInstance(PROTOCOL)
     sslContext.init(keyManagerFactory.keyManagers, null, SecureRandom())
 

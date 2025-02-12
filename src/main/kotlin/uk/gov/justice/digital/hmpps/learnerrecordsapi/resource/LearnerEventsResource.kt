@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.LearnerEventsApi
@@ -22,6 +24,8 @@ class LearnerEventsResource(
   private val learnerEventsService: LearnerEventsService,
 ) : BaseResource() {
 
+  val logger = LoggerUtil.getLogger<LearnerEventsResource>()
+
   @PostMapping
   @Tag(name = "Learning Events")
   @LearnerEventsApi
@@ -29,7 +33,7 @@ class LearnerEventsResource(
     @RequestBody @Valid learnerEventsRequest: LearnerEventsRequest,
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<LearnerEventsResponse> {
-    log.inboundRequest(requestModelObject = learnerEventsRequest)
+    logger.log("Received a post request to learner events endpoint", learnerEventsRequest)
     val learnerEventsResponse = learnerEventsService.getLearningEvents(learnerEventsRequest, userName)
     return ResponseEntity.status(HttpStatus.OK).body(learnerEventsResponse)
   }
