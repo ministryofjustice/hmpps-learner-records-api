@@ -22,8 +22,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnerEventsServi
 @RequestMapping(value = ["/learner-events"], produces = ["application/json"])
 class LearnerEventsResource(
   private val learnerEventsService: LearnerEventsService,
-) : BaseResource() {
-
+) {
   val logger = LoggerUtil.getLogger<LearnerEventsResource>()
 
   @PostMapping
