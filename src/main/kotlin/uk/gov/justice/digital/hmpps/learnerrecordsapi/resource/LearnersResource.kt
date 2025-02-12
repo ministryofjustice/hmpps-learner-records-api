@@ -27,6 +27,9 @@ class LearnersResource(
 ) : BaseResource() {
 
   val logger = LoggerUtil.getLogger<LearnersResource>()
+  val learnerRecordsApi = "learner-records-api"
+  val subjectTypeRead = "Read"
+  val readRequestReceived = "Read Request Received"
 
   @PostMapping
   @Tag(name = "Learners")
@@ -37,13 +40,13 @@ class LearnersResource(
   ): String {
     logger.log("Received a post request to learners endpoint", findLearnerByDemographicsRequest)
     val hmppsLRSEvent = HmppsAuditEvent(
-      "Read Request Received",
+      readRequestReceived,
       "From $userName",
-      "Read",
+      subjectTypeRead,
       UUID.randomUUID().toString(),
       Instant.now(),
       userName,
-      "learner-records-api",
+      learnerRecordsApi,
       findLearnerByDemographicsRequest.toString(),
     )
     auditService.publishEvent(hmppsLRSEvent)

@@ -28,6 +28,10 @@ class LearnerEventsResource(
 
   val logger = LoggerUtil.getLogger<LearnerEventsResource>()
 
+  val learnerRecordsApi = "learner-records-api"
+  val subjectTypeRead = "Read"
+  val readRequestReceived = "Read Request Received"
+
   @PostMapping
   @Tag(name = "Learning Events")
   @LearnerEventsApi
@@ -36,13 +40,13 @@ class LearnerEventsResource(
     @RequestHeader("X-Username", required = true) userName: String,
   ): String {
     val hmppsLRSEvent = HmppsAuditEvent(
-      "Read Request Received",
+      readRequestReceived,
       "From $userName",
-      "Read",
+      subjectTypeRead,
       UUID.randomUUID().toString(),
       Instant.now(),
       userName,
-      "learner-records-api",
+      learnerRecordsApi,
       learnerEventsRequest.toString(),
     )
     auditService.publishEvent(hmppsLRSEvent)
