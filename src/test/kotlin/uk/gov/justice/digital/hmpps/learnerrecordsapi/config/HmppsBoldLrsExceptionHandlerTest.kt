@@ -32,7 +32,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri(uri)
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .exchange()
         .expectStatus()
         .isEqualTo(expectedStatus)
@@ -123,7 +123,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/test/okhttp-timeout")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.REQUEST_TIMEOUT)
