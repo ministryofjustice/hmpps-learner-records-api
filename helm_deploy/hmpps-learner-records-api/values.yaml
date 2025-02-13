@@ -49,7 +49,6 @@ generic-service:
       PFX_FILE_PASSWORD: "PFX_FILE_PASSWORD"
       UK_PRN: "UK_PRN"
       VENDOR_ID: "VENDOR_ID"
-    sqs-hmpps-audit-secret:
       HMPPS_SQS_QUEUES_AUDIT_QUEUE_NAME: "sqs_queue_name"
 
   allowlist:
