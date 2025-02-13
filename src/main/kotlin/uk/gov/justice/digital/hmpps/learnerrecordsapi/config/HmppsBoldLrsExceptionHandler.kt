@@ -22,6 +22,9 @@ import java.net.SocketTimeoutException
 class HmppsBoldLrsExceptionHandler {
 
   private val logger: Logger = LoggerUtil.getLogger<HmppsBoldLrsExceptionHandler>()
+  val unExpectedError = "Unexpected error"
+  val unReadableHttpMessage = "Unreadable HTTP message"
+  val forbiddenAccessDenied = "Forbidden - Access Denied"
 
   data class ErrorResponse(
     val status: HttpStatus,
@@ -74,10 +77,10 @@ class HmppsBoldLrsExceptionHandler {
   ): ResponseEntity<ErrorResponse> {
     val errorResponse = ErrorResponse(
       status = HttpStatus.FORBIDDEN,
-      errorCode = "Forbidden - Access Denied",
+      errorCode = forbiddenAccessDenied,
       userMessage = "Forbidden: ${ex.message}",
-      developerMessage = "Forbidden - Access Denied",
-      moreInfo = "Forbidden - Access Denied",
+      developerMessage = forbiddenAccessDenied,
+      moreInfo = forbiddenAccessDenied,
     )
     logger.errorLog("Forbidden (403) returned", ex)
     return ResponseEntity(errorResponse, HttpStatus.FORBIDDEN)
@@ -93,12 +96,12 @@ class HmppsBoldLrsExceptionHandler {
     }
     val errorResponse = ErrorResponse(
       status = HttpStatus.BAD_REQUEST,
-      errorCode = "Unreadable HTTP message",
-      userMessage = "Unreadable HTTP message",
+      errorCode = unReadableHttpMessage,
+      userMessage = unReadableHttpMessage,
       developerMessage = "${ex.message}",
-      moreInfo = "Unreadable HTTP message",
+      moreInfo = unReadableHttpMessage,
     )
-    logger.errorLog("Unexpected Error", ex)
+    logger.errorLog(unExpectedError, ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
@@ -117,7 +120,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "$errorMessage: ${ex.message}",
       moreInfo = errorMessage,
     )
-    logger.errorLog("Unexpected Error", ex)
+    logger.errorLog(unExpectedError, ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
@@ -133,7 +136,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "Unrecognized field: ${ex.message}",
       moreInfo = "Unrecognized field",
     )
-    logger.errorLog("Unexpected Error", ex)
+    logger.errorLog(unExpectedError, ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
@@ -144,12 +147,12 @@ class HmppsBoldLrsExceptionHandler {
   ): ResponseEntity<ErrorResponse> {
     val errorResponse = ErrorResponse(
       status = HttpStatus.INTERNAL_SERVER_ERROR,
-      errorCode = "Unexpected error",
-      userMessage = "Unexpected error: ${ex.message}",
-      developerMessage = "Unexpected error: ${ex.message}",
-      moreInfo = "Unexpected error",
+      errorCode = unExpectedError,
+      userMessage = "$unExpectedError: ${ex.message}",
+      developerMessage = "$unExpectedError: ${ex.message}",
+      moreInfo = unExpectedError,
     )
-    logger.errorLog("Unexpected Error", ex)
+    logger.errorLog(unExpectedError, ex)
     return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
   }
 
