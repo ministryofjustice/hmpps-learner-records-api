@@ -2,6 +2,8 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.resource
 
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.LearnerEventsApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnerEventsService
 import uk.gov.justice.hmpps.sqs.audit.HmppsAuditEvent
@@ -24,7 +27,7 @@ import java.util.*
 class LearnerEventsResource(
   private val learnerEventsService: LearnerEventsService,
   private val auditService: HmppsAuditService,
-) : BaseResource() {
+) {
 
   val logger = LoggerUtil.getLogger<LearnerEventsResource>()
 
@@ -38,7 +41,7 @@ class LearnerEventsResource(
   suspend fun findByUln(
     @RequestBody @Valid learnerEventsRequest: LearnerEventsRequest,
     @RequestHeader("X-Username", required = true) userName: String,
-  ): String {
+  ): ResponseEntity<LearnerEventsResponse> {
     val hmppsLRSEvent = HmppsAuditEvent(
       readRequestReceived,
       "From $userName",
@@ -51,6 +54,7 @@ class LearnerEventsResource(
     )
     auditService.publishEvent(hmppsLRSEvent)
     logger.log("Received a post request to learner events endpoint", learnerEventsRequest)
-    return gson.toJson(learnerEventsService.getLearningEvents(learnerEventsRequest, userName))
+    val learnerEventsResponse = learnerEventsService.getLearningEvents(learnerEventsRequest, userName)
+    return ResponseEntity.status(HttpStatus.OK).body(learnerEventsResponse)
   }
 }
