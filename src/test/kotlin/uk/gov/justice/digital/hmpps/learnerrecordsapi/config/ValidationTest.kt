@@ -48,6 +48,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learners")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .bodyValue(findLearnerByDemographicsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -87,6 +88,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learners")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .bodyValue(findLearnerByDemographicsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -122,6 +124,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learner-events")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .bodyValue(learnerEventsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -160,6 +163,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learners")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .bodyValue(findLearnerByDemographicsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -198,6 +202,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learners")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .bodyValue(findLearnerByDemographicsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -236,6 +241,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learners")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .bodyValue(findLearnerByDemographicsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -270,6 +276,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learner-events")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .bodyValue(learnerEventsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -304,6 +311,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learner-events")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .bodyValue(learnerEventsRequest)
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -323,7 +331,7 @@ class ValidationTest : IntegrationTestBase() {
       HttpStatus.BAD_REQUEST,
       "Unreadable HTTP message",
       "Unreadable HTTP message",
-      "JSON parse error: Cannot deserialize value of type `uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender` from String \"TESTINGENUM\": not one of the values accepted for Enum class: [NOT_SPECIFIED, MALE, NOT_KNOWN, FEMALE]",
+      "JSON parse error: Cannot construct instance of `uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender`, problem: Invalid gender value: TESTINGENUM",
       "Unreadable HTTP message",
     )
 
@@ -338,6 +346,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learners")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .contentType(MediaType.APPLICATION_JSON)
       .bodyValue(findLearnerByDemographicsRequest)
       .exchange()
@@ -357,7 +366,7 @@ class ValidationTest : IntegrationTestBase() {
       HttpStatus.BAD_REQUEST,
       "Unreadable HTTP message",
       "Unreadable HTTP message",
-      "JSON parse error: Cannot deserialize value of type `uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender` from String \"TESTINGENUM\": not one of the values accepted for Enum class: [NOT_SPECIFIED, MALE, NOT_KNOWN, FEMALE]",
+      "JSON parse error: Cannot construct instance of `uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender`, problem: Invalid gender value: TESTINGENUM",
       "Unreadable HTTP message",
     )
 
@@ -372,6 +381,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learner-events")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .contentType(MediaType.APPLICATION_JSON)
       .bodyValue(findLearnerByDemographicsRequest)
       .exchange()
@@ -410,6 +420,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learners")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .contentType(MediaType.APPLICATION_JSON)
       .bodyValue(requestJsonWithoutGivenName)
       .accept(MediaType.parseMediaType("application/json"))
@@ -449,6 +460,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = webTestClient.post()
       .uri("/learner-events")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+      .header("X-Username", "TestUser")
       .contentType(MediaType.APPLICATION_JSON)
       .bodyValue(requestJsonWithoutGivenName)
       .accept(MediaType.parseMediaType("application/json"))
