@@ -31,6 +31,6 @@ class LearnerEventsRequest(
     familyName = familyName,
     uln = uln,
     dateOfBirth = dateOfBirth,
-    gender = gender?.value,
+    gender = gender?.code,
   )
 }

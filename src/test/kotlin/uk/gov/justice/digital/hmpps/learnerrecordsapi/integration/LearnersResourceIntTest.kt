@@ -304,7 +304,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       extendedRequestBody["givenName"] = "Some"
       extendedRequestBody["familyName"] = "Person"
       extendedRequestBody["dateOfBirth"] = "2024-01-01"
-      extendedRequestBody["gender"] = "1"
+      extendedRequestBody["gender"] = "MALE"
       extendedRequestBody["lastKnownPostCode"] = "CV49EE"
       extendedRequestBody["previousFamilyName"] = "Test"
       extendedRequestBody["schoolAtAge16"] = "Test High School"
