@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -18,15 +19,15 @@ class GenderTest {
 
   @Test
   fun `invalid gender should fail at runtime with an illegal argument exception`() {
-    assertThrows<IllegalArgumentException> {
+    assertThrows<ValueInstantiationException> {
       objectMapper.readValue("\"STRAWBERRY\"", Gender::class.java)
     }
 
-    assertThrows<IllegalArgumentException> {
+    assertThrows<ValueInstantiationException> {
       objectMapper.readValue("\"2\"", Gender::class.java)
     }
 
-    assertThrows<IllegalArgumentException> {
+    assertThrows<ValueInstantiationException> {
       objectMapper.readValue("\"1\"", Gender::class.java)
     }
   }
