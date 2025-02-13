@@ -140,5 +140,15 @@ class LearnersRequestTest {
         emailAddress = "test@example.com",
       )
     }
+    assertThrows<IllegalArgumentException> {
+      LearnersRequest(
+        givenName = "Firstname",
+        familyName = "Lastname",
+        dateOfBirth = LocalDate.of(1990, 1, 1),
+        gender = Gender.valueOf("2"),
+        lastKnownPostCode = "NE2 2AS",
+        emailAddress = "test@example.com",
+      )
+    }
   }
 }

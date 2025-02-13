@@ -46,18 +46,11 @@ data class LearnersRequest(
     givenName = givenName,
     familyName = familyName,
     dateOfBirth = dateOfBirth,
-    gender = gender.value,
+    gender = gender.code,
     lastKnownPostCode = lastKnownPostCode,
     previousFamilyName = previousFamilyName,
     schoolAtAge16 = schoolAtAge16,
     placeOfBirth = placeOfBirth,
     emailAddress = emailAddress,
   )
-}
-
-enum class Gender(val value: Int) {
-  MALE(1),
-  FEMALE(2),
-  NOT_KNOWN(0),
-  NOT_SPECIFIED(9),
 }

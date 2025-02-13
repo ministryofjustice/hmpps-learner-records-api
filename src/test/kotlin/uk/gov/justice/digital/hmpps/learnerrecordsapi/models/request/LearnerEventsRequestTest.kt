@@ -4,6 +4,7 @@ import jakarta.validation.Validation
 import jakarta.validation.ValidatorFactory
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 
 class LearnerEventsRequestTest {
@@ -97,5 +98,27 @@ class LearnerEventsRequestTest {
     )
 
     assertTrue(validator.validate(requestWithDateInFuture).size == 1)
+  }
+
+  @Test
+  fun `invalid gender should fail at runtime with an illegal argument exception`() {
+    assertThrows<IllegalArgumentException> {
+      LearnerEventsRequest(
+        givenName = "Firstname",
+        familyName = "Lastname",
+        uln = "1234567890",
+        dateOfBirth = LocalDate.of(1990, 1, 1),
+        gender = Gender.valueOf("ENGLAND"),
+      )
+    }
+    assertThrows<IllegalArgumentException> {
+      LearnerEventsRequest(
+        givenName = "Firstname",
+        familyName = "Lastname",
+        uln = "1234567890",
+        dateOfBirth = LocalDate.of(1990, 1, 1),
+        gender = Gender.valueOf("1"),
+      )
+    }
   }
 }
