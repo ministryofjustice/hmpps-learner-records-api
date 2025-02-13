@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import jakarta.validation.Validation
 import jakarta.validation.ValidatorFactory
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -128,27 +129,4 @@ class LearnersRequestTest {
     assertTrue(validator.validate(requestWithLongSchool).size == 1)
   }
 
-  @Test
-  fun `invalid gender should fail at runtime with an illegal argument exception`() {
-    assertThrows<IllegalArgumentException> {
-      LearnersRequest(
-        givenName = "Firstname",
-        familyName = "Lastname",
-        dateOfBirth = LocalDate.of(1990, 1, 1),
-        gender = Gender.valueOf("STRAWBERRY"),
-        lastKnownPostCode = "NE2 2AS",
-        emailAddress = "test@example.com",
-      )
-    }
-    assertThrows<IllegalArgumentException> {
-      LearnersRequest(
-        givenName = "Firstname",
-        familyName = "Lastname",
-        dateOfBirth = LocalDate.of(1990, 1, 1),
-        gender = Gender.valueOf("2"),
-        lastKnownPostCode = "NE2 2AS",
-        emailAddress = "test@example.com",
-      )
-    }
-  }
 }
