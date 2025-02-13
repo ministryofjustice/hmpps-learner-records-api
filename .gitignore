@@ -84,3 +84,6 @@ sonar-project.properties
 
 # Scratch File
 scratch
+
+# localstack volume folder for queues
+volume/

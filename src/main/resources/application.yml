@@ -56,3 +56,9 @@ lrs:
   writeTimeout: ${LRS_WRITE_TIMEOUT:20}
   readTimeout: ${LRS_READ_TIMEOUT:20}
 
+hmpps.sqs:
+  provider: localstack
+  queues:
+    audit:
+      queueName: ${SQS_QUEUE_NAME}
+  localstackUrl: http://localstack-sqs:4566

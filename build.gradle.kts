@@ -18,12 +18,15 @@ dependencies {
   implementation("javax.xml.bind:jaxb-api:2.3.1")
   implementation("org.glassfish.jaxb:jaxb-runtime:2.3.5")
   implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:5.2.2")
 
   testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:1.1.0")
   testImplementation("org.wiremock:wiremock-standalone:3.9.2")
   testImplementation("io.swagger.parser.v3:swagger-parser:2.1.24") {
     exclude(group = "io.swagger.core.v3")
   }
+  testImplementation("org.testcontainers:localstack:1.20.4")
+  testImplementation("org.awaitility:awaitility-kotlin:4.2.2")
   testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
   testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
 }

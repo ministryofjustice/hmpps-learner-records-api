@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
@@ -14,12 +15,25 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
+import uk.gov.justice.hmpps.sqs.HmppsQueueService
+import uk.gov.justice.hmpps.sqs.MissingQueueException
+import uk.gov.justice.hmpps.sqs.audit.HmppsAuditEvent
+import java.time.Instant
 import java.time.LocalDate
+import java.util.*
 
 class LearnersResourceIntTest : IntegrationTestBase() {
+  @Autowired
+  protected lateinit var hmppsQueueService: HmppsQueueService
 
   @Autowired
-  lateinit var objectMapper: ObjectMapper
+  protected lateinit var objectMapper: ObjectMapper
+
+  private val auditQueue by lazy {
+    hmppsQueueService.findByQueueId("audit") ?: throw MissingQueueException("HmppsQueue audit not found")
+  }
+  protected val auditSqsClient by lazy { auditQueue.sqsClient }
+  protected val auditQueueUrl by lazy { auditQueue.queueUrl }
 
   @Nested
   @DisplayName("POST /learners")
@@ -327,6 +341,37 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
       val actualResponseString = executedRequest?.toString(Charsets.UTF_8)
       assertThat(actualResponseString).contains("Unrecognized field \\\"unknownValue\\\"")
+    }
+
+    @Test
+    fun `should emit an event that request is received for findByDemographics `() {
+      lrsApiMock.stubLearnerByDemographicsExactMatch()
+      webTestClient.post()
+        .uri("/learners")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .header("X-Username", "TestUser")
+        .bodyValue(findLearnerByDemographicsRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .is2xxSuccessful
+        .expectBody()
+        .returnResult()
+        .responseBody
+
+      val receivedEvent = objectMapper.readValue(
+        auditSqsClient.receiveMessage(
+          ReceiveMessageRequest.builder().queueUrl(auditQueueUrl).build(),
+        ).get().messages()[0].body(),
+        HmppsAuditEvent::class.java,
+      )
+
+      assertThat(receivedEvent.what).isEqualTo("Read Request Received")
+      assertThat(receivedEvent.subjectId).isEqualTo("From TestUser")
+      assertThat(receivedEvent.subjectType).isEqualTo("Read")
+      assertThat(receivedEvent.who).isEqualTo("TestUser")
+      assertThat(receivedEvent.service).isEqualTo("learner-records-api")
+      assertThat(receivedEvent.`when`).isBeforeOrEqualTo(Instant.now())
     }
   }
 }
