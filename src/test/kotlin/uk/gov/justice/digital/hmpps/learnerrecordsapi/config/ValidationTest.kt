@@ -331,7 +331,7 @@ class ValidationTest : IntegrationTestBase() {
       HttpStatus.BAD_REQUEST,
       "Unreadable HTTP message",
       "Unreadable HTTP message",
-      "JSON parse error: Cannot deserialize value of type `uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender` from String \"TESTINGENUM\": not one of the values accepted for Enum class: [NOT_SPECIFIED, MALE, NOT_KNOWN, FEMALE]",
+      "JSON parse error: Cannot construct instance of `uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender`, problem: Invalid gender value: TESTINGENUM",
       "Unreadable HTTP message",
     )
 
@@ -366,7 +366,7 @@ class ValidationTest : IntegrationTestBase() {
       HttpStatus.BAD_REQUEST,
       "Unreadable HTTP message",
       "Unreadable HTTP message",
-      "JSON parse error: Cannot deserialize value of type `uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender` from String \"TESTINGENUM\": not one of the values accepted for Enum class: [NOT_SPECIFIED, MALE, NOT_KNOWN, FEMALE]",
+      "JSON parse error: Cannot construct instance of `uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender`, problem: Invalid gender value: TESTINGENUM",
       "Unreadable HTTP message",
     )
 

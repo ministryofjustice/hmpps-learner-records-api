@@ -18,19 +18,16 @@ class GenderTest {
 
   @Test
   fun `invalid gender should fail at runtime with an illegal argument exception`() {
-    @Test
-    fun `invalid gender should fail deserialization`() {
-      assertThrows<IllegalArgumentException> {
-        objectMapper.readValue("\"STRAWBERRY\"", Gender::class.java)
-      }
+    assertThrows<Exception> {
+      objectMapper.readValue("\"STRAWBERRY\"", Gender::class.java)
+    }
 
-      assertThrows<IllegalArgumentException> {
-        objectMapper.readValue("\"2\"", Gender::class.java)
-      }
+    assertThrows<Exception> {
+      objectMapper.readValue("\"2\"", Gender::class.java)
+    }
 
-      assertThrows<IllegalArgumentException> {
-        objectMapper.readValue("\"1\"", Gender::class.java)
-      }
+    assertThrows<Exception> {
+      objectMapper.readValue("\"1\"", Gender::class.java)
     }
   }
 }

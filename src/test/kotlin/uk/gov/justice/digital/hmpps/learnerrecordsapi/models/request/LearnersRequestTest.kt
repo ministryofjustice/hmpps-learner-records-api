@@ -1,11 +1,9 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import jakarta.validation.Validation
 import jakarta.validation.ValidatorFactory
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 
 class LearnersRequestTest {
@@ -128,5 +126,4 @@ class LearnersRequestTest {
     )
     assertTrue(validator.validate(requestWithLongSchool).size == 1)
   }
-
 }
