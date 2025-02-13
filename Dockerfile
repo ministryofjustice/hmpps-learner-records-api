@@ -4,7 +4,7 @@ ARG BUILD_NUMBER
 ENV BUILD_NUMBER ${BUILD_NUMBER:-1_0_0}
 
 WORKDIR /app
-ADD . .
+COPY . .
 RUN ./gradlew --no-daemon assemble
 
 FROM eclipse-temurin:21-jre-jammy
@@ -18,9 +18,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 ENV TZ=Europe/London
-RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
-
-RUN addgroup --gid 2000 --system appgroup && \
+RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone &&  \
+    addgroup --gid 2000 --system appgroup && \
     adduser --uid 2000 --system appuser --gid 2000
 
 WORKDIR /app

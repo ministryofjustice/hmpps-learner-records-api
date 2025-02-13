@@ -102,12 +102,16 @@ class LearnerEventsServiceTest {
       ),
     )
 
-    val inputStream = javaClass.classLoader.getResourceAsStream("error_ful.xml") ?: throw IllegalArgumentException("File not found in resources: error_ful.xml")
+    val inputStream = javaClass.classLoader.getResourceAsStream("error_ful.xml")
+      ?: throw IllegalArgumentException("File not found in resources: error_ful.xml")
 
     `when`(lrsApiInterfaceMock.getLearnerLearningEvents(any())).thenReturn(
       Response.error(
         500,
-        ResponseBody.create("text/xml".toMediaTypeOrNull(), InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()),
+        ResponseBody.create(
+          "text/xml".toMediaTypeOrNull(),
+          InputStreamReader(inputStream, StandardCharsets.UTF_8).readText(),
+        ),
       ),
     )
 

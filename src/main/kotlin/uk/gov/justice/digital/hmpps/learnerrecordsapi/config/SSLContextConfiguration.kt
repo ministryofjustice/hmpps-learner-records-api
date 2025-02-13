@@ -15,7 +15,7 @@ private const val PFX_FILE_PASSWORD = "PFX_FILE_PASSWORD"
 
 private const val PFX_FILE_TYPE = "PKCS12"
 
-private const val PROTOCOL = "TLS"
+private const val PROTOCOL = "TLSv1.2"
 
 class SSLContextConfiguration(private val pfxFilePath: String) {
 
