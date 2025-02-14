@@ -1,5 +1,7 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response
 
+import com.fasterxml.jackson.annotation.JsonValue
+
 enum class LRSResponseType(val englishName: String, val lrsResponseCode: String) {
   NO_MATCH("No Match", "WSRC0001"),
   TOO_MANY_MATCHES("Too Many Matches", "WSRC0002"),
@@ -14,4 +16,7 @@ enum class LRSResponseType(val englishName: String, val lrsResponseCode: String)
   companion object {
     fun fromLrsResponseCode(lrsResponseCode: String): LRSResponseType = entries.firstOrNull { it.lrsResponseCode == lrsResponseCode } ?: UNKNOWN_RESPONSE_TYPE
   }
+
+  @JsonValue
+  fun whichToUseForJson(): String = englishName
 }

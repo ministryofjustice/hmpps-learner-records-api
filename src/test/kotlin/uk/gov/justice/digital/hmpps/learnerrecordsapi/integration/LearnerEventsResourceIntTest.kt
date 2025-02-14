@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.gson.GsonBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -9,9 +8,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.LocalDateAdapter
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.gsonadapters.ResponseTypeAdapter
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
@@ -21,15 +19,14 @@ import uk.gov.justice.hmpps.sqs.HmppsQueueService
 import uk.gov.justice.hmpps.sqs.MissingQueueException
 import uk.gov.justice.hmpps.sqs.audit.HmppsAuditEvent
 import java.time.Instant
-import java.time.LocalDate
 
 class LearnerEventsResourceIntTest : IntegrationTestBase() {
 
   @Autowired
-  protected lateinit var hmppsQueueService: HmppsQueueService
+  lateinit var objectMapper: ObjectMapper
 
   @Autowired
-  protected lateinit var objectMapper: ObjectMapper
+  protected lateinit var hmppsQueueService: HmppsQueueService
 
   private val auditQueue by lazy { hmppsQueueService.findByQueueId("audit") ?: throw MissingQueueException("HmppsQueue audit not found") }
   protected val auditSqsClient by lazy { auditQueue.sqsClient }
@@ -39,30 +36,27 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
   @DisplayName("POST /learner-events")
   inner class LearnersEndpoint {
 
-    val gson = GsonBuilder()
-      .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
-      .registerTypeAdapter(LRSResponseType::class.java, ResponseTypeAdapter().nullSafe())
-      .create()
-
     @Test
     fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
       lrsApiMock.stubPostServerError()
 
-      val actualResponse = webTestClient.post()
-        .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-        .header("X-Username", "TestUser")
-        .bodyValue(getLearningEventsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .is5xxServerError
-        .expectBody()
-        .returnResult()
-        .responseBody
+      val actualResponse = objectMapper.readValue(
+        webTestClient.post()
+          .uri("/learner-events")
+          .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+          .header("X-Username", "TestUser")
+          .bodyValue(getLearningEventsRequest)
+          .accept(MediaType.parseMediaType("application/json"))
+          .exchange()
+          .expectStatus()
+          .is5xxServerError
+          .expectBody()
+          .returnResult()
+          .responseBody,
+        HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+      )
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).contains("LRS returned an error: MIAPAPIException")
+      assertThat(actualResponse.toString()).contains("LRS returned an error: MIAPAPIException")
     }
 
     @Test
@@ -96,21 +90,23 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         ),
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-        .header("X-Username", "TestUser")
-        .bodyValue(getLearningEventsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
+      val actualResponse = objectMapper.readValue(
+        webTestClient.post()
+          .uri("/learner-events")
+          .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+          .header("X-Username", "TestUser")
+          .bodyValue(getLearningEventsRequest)
+          .accept(MediaType.parseMediaType("application/json"))
+          .exchange()
+          .expectStatus()
+          .isOk
+          .expectBody()
+          .returnResult()
+          .responseBody,
+        LearnerEventsResponse::class.java,
+      )
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+      assertThat(actualResponse).usingRecursiveComparison().isEqualTo(expectedResponse)
     }
 
     @Test
@@ -148,21 +144,23 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         ),
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-        .header("X-Username", "TestUser")
-        .bodyValue(getLearningEventsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
+      val actualResponse = objectMapper.readValue(
+        webTestClient.post()
+          .uri("/learner-events")
+          .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+          .header("X-Username", "TestUser")
+          .bodyValue(getLearningEventsRequest)
+          .accept(MediaType.parseMediaType("application/json"))
+          .exchange()
+          .expectStatus()
+          .isOk
+          .expectBody()
+          .returnResult()
+          .responseBody,
+        LearnerEventsResponse::class.java,
+      )
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+      assertThat(actualResponse).usingRecursiveComparison().isEqualTo(expectedResponse)
     }
 
     @Test
@@ -177,21 +175,23 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         emptyList(),
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-        .header("X-Username", "TestUser")
-        .bodyValue(getLearningEventsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
+      val actualResponse = objectMapper.readValue(
+        webTestClient.post()
+          .uri("/learner-events")
+          .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+          .header("X-Username", "TestUser")
+          .bodyValue(getLearningEventsRequest)
+          .accept(MediaType.parseMediaType("application/json"))
+          .exchange()
+          .expectStatus()
+          .isOk
+          .expectBody()
+          .returnResult()
+          .responseBody,
+        LearnerEventsResponse::class.java,
+      )
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+      assertThat(actualResponse).usingRecursiveComparison().isEqualTo(expectedResponse)
     }
 
     @Test
@@ -206,40 +206,45 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         emptyList(),
       )
 
-      val actualResponse = webTestClient.post()
-        .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-        .header("X-Username", "TestUser")
-        .bodyValue(getLearningEventsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody
+      val actualResponse = objectMapper.readValue(
+        webTestClient.post()
+          .uri("/learner-events")
+          .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+          .header("X-Username", "TestUser")
+          .bodyValue(getLearningEventsRequest)
+          .accept(MediaType.parseMediaType("application/json"))
+          .exchange()
+          .expectStatus()
+          .isOk
+          .expectBody()
+          .returnResult()
+          .responseBody,
+        LearnerEventsResponse::class.java,
+      )
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).isEqualTo(gson.toJson(expectedResponse))
+      assertThat(actualResponse).usingRecursiveComparison().isEqualTo(expectedResponse)
     }
 
     @Test
     fun `should return 400 with an appropriate error response if X-Username header is missing`() {
       lrsApiMock.stubLearningEventsExactMatchFull()
 
-      val actualResponse = webTestClient.post()
-        .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-        .bodyValue(getLearningEventsRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .is4xxClientError
-        .expectBody()
-        .returnResult()
-        .responseBody
+      val actualResponse = objectMapper.readValue(
+        webTestClient.post()
+          .uri("/learner-events")
+          .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+          .bodyValue(getLearningEventsRequest)
+          .accept(MediaType.parseMediaType("application/json"))
+          .exchange()
+          .expectStatus()
+          .is4xxClientError
+          .expectBody()
+          .returnResult()
+          .responseBody,
+        HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+      )
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
+      val actualResponseString = actualResponse?.toString()
       assertThat(actualResponseString).contains("Missing X-Username Header")
     }
 
@@ -252,21 +257,24 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       extendedRequestBody["uln"] = "1174112637"
       extendedRequestBody["unknownValue"] = "1234"
 
-      val actualResponse = webTestClient.post()
-        .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-        .header("X-Username", "TestUser")
-        .bodyValue(extendedRequestBody)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .is4xxClientError
-        .expectBody()
-        .returnResult()
-        .responseBody
+      val actualResponse = objectMapper.readValue(
+        webTestClient.post()
+          .uri("/learner-events")
+          .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+          .header("X-Username", "TestUser")
+          .bodyValue(extendedRequestBody)
+          .accept(MediaType.parseMediaType("application/json"))
+          .exchange()
+          .expectStatus()
+          .is4xxClientError
+          .expectBody()
+          .returnResult()
+          .responseBody,
+        HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+      )
 
-      val actualResponseString = actualResponse?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).contains("Unrecognized field \\\"unknownValue\\\"")
+      val actualResponseString = actualResponse?.toString()
+      assertThat(actualResponseString).contains("Unrecognized field \"unknownValue\"")
     }
   }
 
