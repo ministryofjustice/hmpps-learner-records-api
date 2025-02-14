@@ -1,5 +1,4 @@
 generic-service:
-  serviceAccountName: hmpps-learner-records-api
   nameOverride: hmpps-learner-records-api
   productId: "DPS121" # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
