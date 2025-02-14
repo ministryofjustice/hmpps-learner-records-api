@@ -15,8 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import retrofit2.Response
 import retrofit2.Retrofit
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.LRSConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerBody
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerEnvelope
@@ -38,7 +38,7 @@ class LearnersServiceTest {
   private lateinit var httpClientConfigurationMock: HttpClientConfiguration
   private lateinit var retrofitMock: Retrofit
   private lateinit var lrsApiInterfaceMock: LRSApiInterface
-  private lateinit var appConfigMock: AppConfig
+  private lateinit var lrsConfiguration: LRSConfiguration
 
   private lateinit var learnersService: LearnersService
 
@@ -48,12 +48,11 @@ class LearnersServiceTest {
     retrofitMock = mock(Retrofit::class.java)
     lrsApiInterfaceMock =
       mock(LRSApiInterface::class.java)
-    `when`(httpClientConfigurationMock.retrofit()).thenReturn(retrofitMock)
-    `when`(retrofitMock.create(LRSApiInterface::class.java)).thenReturn(lrsApiInterfaceMock)
-    appConfigMock = mock(AppConfig::class.java)
-    learnersService = LearnersService(httpClientConfigurationMock, appConfigMock)
-    `when`(appConfigMock.ukprn()).thenReturn("test")
-    `when`(appConfigMock.password()).thenReturn("pass")
+    `when`(httpClientConfigurationMock.lrsClient()).thenReturn(lrsApiInterfaceMock)
+    lrsConfiguration = mock(LRSConfiguration::class.java)
+    learnersService = LearnersService(httpClientConfigurationMock, lrsConfiguration)
+    `when`(lrsConfiguration.ukprn).thenReturn("test")
+    `when`(lrsConfiguration.orgPassword).thenReturn("pass")
   }
 
   @Test

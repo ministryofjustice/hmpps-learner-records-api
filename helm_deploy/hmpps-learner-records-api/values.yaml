@@ -1,4 +1,5 @@
 generic-service:
+  serviceAccountName: hmpps-learner-records-api
   nameOverride: hmpps-learner-records-api
   productId: "DPS121" # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
@@ -24,6 +25,7 @@ generic-service:
     LRS_CONNECT_TIMEOUT: "20"
     LRS_WRITE_TIMEOUT: "20"
     LRS_READ_TIMEOUT: "20"
+    HMPPS_SQS_USE_WEB_TOKEN: "true"
 
   volumeMounts:
     - mountPath: "/certs"
@@ -47,6 +49,7 @@ generic-service:
       PFX_FILE_PASSWORD: "PFX_FILE_PASSWORD"
       UK_PRN: "UK_PRN"
       VENDOR_ID: "VENDOR_ID"
+      HMPPS_SQS_QUEUES_AUDIT_QUEUE_NAME: "SQS_QUEUE_NAME"
 
   allowlist:
     groups:

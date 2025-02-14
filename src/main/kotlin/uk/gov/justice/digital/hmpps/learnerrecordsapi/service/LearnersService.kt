@@ -1,11 +1,12 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 
+import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AppConfig
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.LRSConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.debugLog
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
@@ -22,12 +23,10 @@ class LearnersService(
   @Autowired
   private val httpClientConfiguration: HttpClientConfiguration,
   @Autowired
-  private val appConfig: AppConfig,
+  private val lrsConfiguration: LRSConfiguration,
 ) {
 
-  private val log: LoggerUtil = LoggerUtil(javaClass)
-
-  private fun lrsClient(): LRSApiInterface = httpClientConfiguration.retrofit().create(LRSApiInterface::class.java)
+  private val logger: Logger = LoggerUtil.getLogger<LearnersService>()
 
   private fun parseError(xmlString: String): MIAPAPIException? {
     val regex = Regex("<ns10:MIAPAPIException[\\s\\S]*?</ns10:MIAPAPIException>")
@@ -39,13 +38,13 @@ class LearnersService(
   }
 
   suspend fun getLearners(findLearnerByDemographicsRequest: LearnersRequest, userName: String): LearnersResponse {
-    log.debug("Transforming inbound request object to LRS request object")
+    logger.debugLog("Transforming inbound request object to LRS request object")
     val requestBody = findLearnerByDemographicsRequest.extractFromRequest()
-      .transformToLRSRequest(appConfig.ukprn(), appConfig.password(), userName)
+      .transformToLRSRequest(lrsConfiguration.ukprn, lrsConfiguration.orgPassword, userName)
 
-    log.debug("Calling LRS API")
+    logger.debugLog("Calling LRS API")
 
-    val lrsResponse = lrsClient().findLearnerByDemographics(requestBody)
+    val lrsResponse = httpClientConfiguration.lrsClient().findLearnerByDemographics(requestBody)
     val lrsResponseBody = lrsResponse.body()?.body?.findLearnerResponse
 
     if (lrsResponse.isSuccessful && lrsResponseBody != null) {

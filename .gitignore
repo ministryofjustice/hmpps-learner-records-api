@@ -77,9 +77,13 @@ sonar-project.properties
 
 # Certificate files
 *.pfx
+*.jks
 
 # env files
 .env*
 
 # Scratch File
 scratch
+
+# localstack volume folder for queues
+volume/

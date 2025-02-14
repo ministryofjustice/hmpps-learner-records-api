@@ -12,6 +12,8 @@ spring:
     date-format: "yyyy-MM-dd HH:mm:ss"
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+    deserialization:
+      fail-on-unknown-properties: true
 
   security:
     oauth2:
@@ -68,5 +70,18 @@ management:
         time-to-live: 2000ms
 
 lrs:
-  base-url: ${lrs.base-url}
-  pfx-path: ${lrs.pfx-path}
+  baseUrl: ${lrs.base-url:}
+  pfxPath: ${lrs.pfx-path:}
+  ukprn: ${UK_PRN:}
+  orgPassword: ${ORG_PASSWORD:}
+  vendorId: ${VENDOR_ID:}
+  connectTimeout: ${LRS_CONNECT_TIMEOUT:20}
+  writeTimeout: ${LRS_WRITE_TIMEOUT:20}
+  readTimeout: ${LRS_READ_TIMEOUT:20}
+
+hmpps.sqs:
+  provider: localstack
+  queues:
+    audit:
+      queueName: ${SQS_QUEUE_NAME}
+  localstackUrl: http://localstack-sqs:4566

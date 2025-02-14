@@ -1,6 +1,8 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import org.apache.commons.lang3.StringUtils
+import org.slf4j.Logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -12,13 +14,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.resource.NoResourceFoundException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.errorLog
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 import java.net.SocketTimeoutException
 
 @RestControllerAdvice
 class HmppsBoldLrsExceptionHandler {
 
-  private val log: LoggerUtil = LoggerUtil(javaClass)
+  private val logger: Logger = LoggerUtil.getLogger<HmppsBoldLrsExceptionHandler>()
+  val unExpectedError = "Unexpected error"
+  val unReadableHttpMessage = "Unreadable HTTP message"
+  val forbiddenAccessDenied = "Forbidden - Access Denied"
 
   data class ErrorResponse(
     val status: HttpStatus,
@@ -32,7 +38,7 @@ class HmppsBoldLrsExceptionHandler {
   fun handleMethodArgumentNotValidException(
     ex: MethodArgumentNotValidException,
     request: WebRequest,
-  ): ResponseEntity<Any> {
+  ): ResponseEntity<ErrorResponse> {
     val bindingResult: BindingResult = ex.bindingResult
     val errors = bindingResult.allErrors.map { it.defaultMessage }
     val erroredFields = bindingResult.fieldErrors.map { it.field }
@@ -44,7 +50,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "Validation(s) failed for $erroredFields",
       moreInfo = "Validation(s) failed for $erroredFields with reason(s): $errors",
     )
-    log.error("Validation(s) failed for $erroredFields with reason(s): $errors", ex)
+    logger.errorLog("Validation(s) failed for $erroredFields", ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
@@ -52,7 +58,7 @@ class HmppsBoldLrsExceptionHandler {
   fun handleNoResourceFoundException(
     ex: NoResourceFoundException,
     request: WebRequest,
-  ): ResponseEntity<Any> {
+  ): ResponseEntity<ErrorResponse> {
     val errorResponse = ErrorResponse(
       status = HttpStatus.NOT_FOUND,
       errorCode = "No Resource Found",
@@ -60,7 +66,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "Requested Resource not found on the server",
       moreInfo = "Requested Resource not found on the server",
     )
-    log.error("Requested Resource was not found {}", ex)
+    logger.errorLog("Requested Resource was not found", ex)
     return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
   }
 
@@ -68,15 +74,15 @@ class HmppsBoldLrsExceptionHandler {
   fun handleAccessDeniedException(
     ex: AccessDeniedException,
     request: WebRequest,
-  ): ResponseEntity<Any> {
+  ): ResponseEntity<ErrorResponse> {
     val errorResponse = ErrorResponse(
       status = HttpStatus.FORBIDDEN,
-      errorCode = "Forbidden - Access Denied",
+      errorCode = forbiddenAccessDenied,
       userMessage = "Forbidden: ${ex.message}",
-      developerMessage = "Forbidden - Access Denied",
-      moreInfo = "Forbidden - Access Denied",
+      developerMessage = forbiddenAccessDenied,
+      moreInfo = forbiddenAccessDenied,
     )
-    log.error("Forbidden (403) returned: {}", ex)
+    logger.errorLog("Forbidden (403) returned", ex)
     return ResponseEntity(errorResponse, HttpStatus.FORBIDDEN)
   }
 
@@ -84,15 +90,18 @@ class HmppsBoldLrsExceptionHandler {
   fun handleUnreadableHttpMessage(
     ex: HttpMessageNotReadableException,
     request: WebRequest,
-  ): ResponseEntity<Any> {
+  ): ResponseEntity<ErrorResponse> {
+    if (ex.mostSpecificCause.javaClass.simpleName == "UnrecognizedPropertyException") {
+      return handleUnrecognizedPropertyException(ex, request)
+    }
     val errorResponse = ErrorResponse(
       status = HttpStatus.BAD_REQUEST,
-      errorCode = "Unreadable HTTP message",
-      userMessage = "Unreadable HTTP message",
+      errorCode = unReadableHttpMessage,
+      userMessage = unReadableHttpMessage,
       developerMessage = "${ex.message}",
-      moreInfo = "Unreadable HTTP message",
+      moreInfo = unReadableHttpMessage,
     )
-    log.error("Unexpected Error: {}", ex)
+    logger.errorLog(unExpectedError, ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
@@ -100,7 +109,7 @@ class HmppsBoldLrsExceptionHandler {
   fun handleMissingRequestHeaderException(
     ex: Exception,
     request: WebRequest,
-  ): ResponseEntity<Any> {
+  ): ResponseEntity<ErrorResponse> {
     val errorMessage =
       if (request.getHeader("X-Username") == null) "Missing X-Username Header" else "Missing Request Header"
 
@@ -111,7 +120,23 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "$errorMessage: ${ex.message}",
       moreInfo = errorMessage,
     )
-    log.error("Unexpected Error: {}", ex)
+    logger.errorLog(unExpectedError, ex)
+    return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+  }
+
+  @ExceptionHandler(UnrecognizedPropertyException::class)
+  fun handleUnrecognizedPropertyException(
+    ex: Exception,
+    request: WebRequest,
+  ): ResponseEntity<ErrorResponse> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.BAD_REQUEST,
+      errorCode = "Unreadable HTTP message",
+      userMessage = "Unrecognized field in request",
+      developerMessage = "Unrecognized field: ${ex.message}",
+      moreInfo = "Unrecognized field",
+    )
+    logger.errorLog(unExpectedError, ex)
     return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 
@@ -119,15 +144,15 @@ class HmppsBoldLrsExceptionHandler {
   fun handleException(
     ex: Exception,
     request: WebRequest,
-  ): ResponseEntity<Any> {
+  ): ResponseEntity<ErrorResponse> {
     val errorResponse = ErrorResponse(
       status = HttpStatus.INTERNAL_SERVER_ERROR,
-      errorCode = "Unexpected error",
-      userMessage = "Unexpected error: ${ex.message}",
-      developerMessage = "Unexpected error: ${ex.message}",
-      moreInfo = "Unexpected error",
+      errorCode = unExpectedError,
+      userMessage = "$unExpectedError: ${ex.message}",
+      developerMessage = "$unExpectedError: ${ex.message}",
+      moreInfo = unExpectedError,
     )
-    log.error("Unexpected Error: {}", ex)
+    logger.errorLog(unExpectedError, ex)
     return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
   }
 
@@ -135,7 +160,7 @@ class HmppsBoldLrsExceptionHandler {
   fun handleLRSException(
     ex: LRSException,
     request: WebRequest,
-  ): ResponseEntity<Any> {
+  ): ResponseEntity<ErrorResponse> {
     val errorResponse = ErrorResponse(
       status = HttpStatus.INTERNAL_SERVER_ERROR,
       errorCode = "LRS Error",
@@ -143,7 +168,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "${ex.message}",
       moreInfo = "LRS Error",
     )
-    log.error(ex.message.orEmpty())
+    logger.errorLog(ex.message.orEmpty())
     return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
   }
 
@@ -151,7 +176,7 @@ class HmppsBoldLrsExceptionHandler {
   fun handleSocketTimeoutException(
     ex: SocketTimeoutException,
     request: WebRequest,
-  ): ResponseEntity<Any> {
+  ): ResponseEntity<ErrorResponse> {
     val errorResponse = ErrorResponse(
       status = HttpStatus.REQUEST_TIMEOUT,
       errorCode = "Request Timeout",
@@ -159,7 +184,7 @@ class HmppsBoldLrsExceptionHandler {
       developerMessage = "${ex.message}",
       moreInfo = "A request timed out while waiting for a response from an upstream service.",
     )
-    log.error("Socket Timeout Error: {}", ex)
+    logger.errorLog("Socket Timeout Error", ex)
     return ResponseEntity(errorResponse, HttpStatus.REQUEST_TIMEOUT)
   }
 }

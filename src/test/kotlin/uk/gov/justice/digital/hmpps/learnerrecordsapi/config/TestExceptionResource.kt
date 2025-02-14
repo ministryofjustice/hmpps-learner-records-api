@@ -53,14 +53,14 @@ class TestExceptionResource(
   @PostMapping("/test/okhttp-timeout")
   fun triggerOkhttpTimeout(): String? {
     val mockTimeoutServer = MockWebServer()
-    mockTimeoutServer.enqueue(MockResponse().setBody("Delayed response").setBodyDelay(15, TimeUnit.SECONDS))
+    mockTimeoutServer.enqueue(MockResponse().setBody("Delayed response").setBodyDelay(40, TimeUnit.SECONDS))
     mockTimeoutServer.start()
 
     val request = Request.Builder()
       .url(mockTimeoutServer.url("/timeout")) // Point to the MockWebServer URL
       .build()
 
-    val response = httpClientConfiguration.buildSSLHttpClient().newCall(request).execute()
+    val response = httpClientConfiguration.sslHttpClient().newCall(request).execute()
     return response.body?.string()
   }
 }

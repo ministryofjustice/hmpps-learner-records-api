@@ -3,60 +3,45 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
-import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
+import org.slf4j.Logger
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import retrofit2.Retrofit
 import retrofit2.converter.jaxb.JaxbConverterFactory
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
 import java.util.concurrent.TimeUnit
 
 @Configuration
-class HttpClientConfiguration(
-  @Value("\${lrs.pfx-path}") val pfxFilePath: String,
-  @Value("\${lrs.base-url}") val baseUrl: String,
-  @Autowired
-  private val appConfig: AppConfig,
-) {
-  fun buildSSLHttpClient(): OkHttpClient {
-    log.info("Building HTTP client with SSL")
+class HttpClientConfiguration(private val lrsConfiguration: LRSConfiguration) {
+
+  private val logger: Logger = LoggerUtil.getLogger<HttpClientConfiguration>()
+
+  @Bean
+  fun lrsClient(): LRSApiInterface = Retrofit.Builder()
+    .baseUrl(lrsConfiguration.baseUrl)
+    .client(sslHttpClient())
+    .addConverterFactory(JaxbConverterFactory.create())
+    .build().create(LRSApiInterface::class.java)
+
+  fun sslHttpClient(): OkHttpClient {
+    logger.log("Building HTTP client with SSL")
     val loggingInterceptor = HttpLoggingInterceptor()
     loggingInterceptor.level = Level.BODY
 
-    try {
-      val sslContextConfiguration = SSLContextConfiguration(pfxFilePath)
-      val sslContext = sslContextConfiguration.createSSLContext()
-      val trustManager = sslContextConfiguration.getTrustManager()
+    val sslContextConfiguration = SSLContextConfiguration(lrsConfiguration.pfxPath)
+    val sslContext = sslContextConfiguration.createSSLContext()
+    val trustManager = sslContextConfiguration.getTrustManager()
 
-      val httpClientBuilder = OkHttpClient.Builder()
-        .connectTimeout(appConfig.lrsConnectTimeout(), TimeUnit.SECONDS)
-        .writeTimeout(appConfig.lrsWriteTimeout(), TimeUnit.SECONDS)
-        .readTimeout(appConfig.lrsReadTimeout(), TimeUnit.SECONDS)
-        .sslSocketFactory(sslContext.socketFactory, trustManager)
-        .addInterceptor(loggingInterceptor)
+    val httpClientBuilder = OkHttpClient.Builder()
+      .connectTimeout(lrsConfiguration.connectTimeout.toLong(), TimeUnit.SECONDS)
+      .writeTimeout(lrsConfiguration.writeTimeout.toLong(), TimeUnit.SECONDS)
+      .readTimeout(lrsConfiguration.readTimeout.toLong(), TimeUnit.SECONDS)
+      .sslSocketFactory(sslContext.socketFactory, trustManager)
+      .addInterceptor(loggingInterceptor)
 
-      log.info("HTTP client with SSL built successfully!")
-      return httpClientBuilder.build()
-    } catch (e: Exception) {
-      log.info(e.message + " Falling back to HTTP client without SSL")
-      val httpClientBuilder = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-
-      return httpClientBuilder.build()
-    }
-  }
-
-  fun retrofit(): Retrofit {
-    log.info("Retrofit Client")
-
-    return Retrofit.Builder()
-      .baseUrl(baseUrl)
-      .client(buildSSLHttpClient())
-      .addConverterFactory(JaxbConverterFactory.create())
-      .build()
-  }
-
-  companion object {
-    private val log = LoggerFactory.getLogger(this::class.java)
+    logger.log("HTTP client with SSL built successfully!")
+    return httpClientBuilder.build()
   }
 }
