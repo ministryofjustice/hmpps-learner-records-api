@@ -16,4 +16,3 @@ hmpps.sqs:
   queues:
     audit:
       queueName: audit-queue
-  localstackUrl: http://localstack-sqs:4566

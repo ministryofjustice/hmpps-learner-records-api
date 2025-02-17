@@ -10,3 +10,10 @@ lrs:
   connectTimeout: ${LRS_CONNECT_TIMEOUT:20}
   writeTimeout: ${LRS_WRITE_TIMEOUT:20}
   readTimeout: ${LRS_READ_TIMEOUT:20}
+
+hmpps.sqs:
+  provider: localstack
+  queues:
+    audit:
+      queueName: audit-queue
+  localstackUrl: http://localstack-sqs:4566
