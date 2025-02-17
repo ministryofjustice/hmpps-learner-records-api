@@ -11,8 +11,6 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
-// This tests the service's methods, and injects the repositories so that only a single service method is tested at once.
-
 @Transactional
 class MatchServiceTest : IntegrationTestBase() {
 
