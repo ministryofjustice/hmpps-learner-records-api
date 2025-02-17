@@ -1,0 +1,6 @@
+
+CREATE TABLE IF NOT EXISTS matches (
+    id BIGSERIAL PRIMARY KEY,
+    nomis_id VARCHAR(255) NOT NULL,
+    matched_uln VARCHAR(255) NOT NULL
+);

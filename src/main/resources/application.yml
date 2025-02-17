@@ -22,9 +22,9 @@ spring:
           jwk-set-uri: ${hmpps-auth.url}/.well-known/jwks.json
 
   datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://host.docker.internal:5432/db69a78c516637aeef
+    username: cp0gTlqPAY
+    password: DOPYVIkSg4BrR0ob
     driver-class-name: org.postgresql.Driver
 
   jpa:
