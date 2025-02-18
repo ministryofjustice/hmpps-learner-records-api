@@ -11,6 +11,7 @@ import org.springframework.http.HttpInputMessage
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.BindException
 import org.springframework.validation.FieldError
+import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
@@ -63,4 +64,8 @@ class TestExceptionResource(
     val response = httpClientConfiguration.sslHttpClient().newCall(request).execute()
     return response.body?.string()
   }
+
+  @PostMapping("/test/dfe-maintenance-time")
+  fun triggerHttpRequestMethodNotSupportedException(): Nothing = throw
+    HttpRequestMethodNotSupportedException("Something")
 }

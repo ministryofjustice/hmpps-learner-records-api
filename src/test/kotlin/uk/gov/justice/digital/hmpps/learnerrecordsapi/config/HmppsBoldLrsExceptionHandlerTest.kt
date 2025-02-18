@@ -148,4 +148,17 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
 
     testExceptionHandling("/test/generic-exception", expectedResponse, expectedStatus = HttpStatus.INTERNAL_SERVER_ERROR)
   }
+
+  @Test
+  fun `should catch DfE maintenance time exceptions and return Failed Dependency Error`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.FAILED_DEPENDENCY,
+      "DfE API failed to Respond",
+      "DfE API failed to Respond",
+      "DfE API failed to Respond",
+      "DfE API failed to Respond",
+    )
+
+    testExceptionHandling("/test/dfe-maintenance-time", expectedResponse, expectedStatus = HttpStatus.FAILED_DEPENDENCY)
+  }
 }

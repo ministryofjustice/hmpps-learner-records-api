@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.BindingResult
+import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.MissingRequestHeaderException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -25,6 +26,7 @@ class HmppsBoldLrsExceptionHandler {
   val unExpectedError = "Unexpected error"
   val unReadableHttpMessage = "Unreadable HTTP message"
   val forbiddenAccessDenied = "Forbidden - Access Denied"
+  val dFEApiFailedToRespond = "DfE API failed to Respond"
 
   data class ErrorResponse(
     val status: HttpStatus,
@@ -186,5 +188,21 @@ class HmppsBoldLrsExceptionHandler {
     )
     logger.errorLog("Socket Timeout Error", ex)
     return ResponseEntity(errorResponse, HttpStatus.REQUEST_TIMEOUT)
+  }
+
+  @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
+  fun handleHttpRequestMethodNotSupportedException(
+    ex: HttpRequestMethodNotSupportedException,
+    request: WebRequest,
+  ): ResponseEntity<ErrorResponse> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.FAILED_DEPENDENCY,
+      errorCode = dFEApiFailedToRespond,
+      userMessage = dFEApiFailedToRespond,
+      developerMessage = dFEApiFailedToRespond,
+      moreInfo = dFEApiFailedToRespond,
+    )
+    logger.errorLog("Socket Timeout Error", ex)
+    return ResponseEntity(errorResponse, HttpStatus.FAILED_DEPENDENCY)
   }
 }
