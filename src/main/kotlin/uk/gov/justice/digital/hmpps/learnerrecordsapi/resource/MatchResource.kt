@@ -12,34 +12,27 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.CreateMatchRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.FindByDemographicApi
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnersService
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
-import uk.gov.justice.hmpps.sqs.audit.HmppsAuditEvent
-import uk.gov.justice.hmpps.sqs.audit.HmppsAuditService
-import java.time.Instant
-import java.util.UUID
 
 @RestController
 @PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__RO')")
-@RequestMapping(value = ["/match"], produces = ["application/json"])
+@RequestMapping(value = ["/"], produces = ["application/json"])
 class MatchResource(
   private val matchService: MatchService
 ) {
 
   val logger = LoggerUtil.getLogger<MatchResource>()
 
-  @PostMapping(value = ["/create"])
+  @PostMapping(value = ["/confirm-match"])
   @Tag(name = "Match")
-  suspend fun createMatch(
-    @RequestBody @Valid matchRequest: CreateMatchRequest,
+  suspend fun confirmMatch(
+    @RequestBody @Valid matchRequest: ConfirmMatchRequest,
     @RequestHeader("X-Username", required = true) userName: String,
-  ): ResponseEntity<String> {
+  ): ResponseEntity<MatchEntity> {
     logger.log("Received a post request to match endpoint", matchRequest)
-    val learnersResponse = matchService.saveMatch(matchRequest.asMatchEntity())
-    return ResponseEntity.status(HttpStatus.OK).body("Match Created")
+    val savedMatchEntity = matchService.saveMatch(matchRequest.asMatchEntity())
+    return ResponseEntity.status(HttpStatus.OK).body(savedMatchEntity)
   }
 }

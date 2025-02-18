@@ -3,13 +3,13 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 import com.google.gson.annotations.SerializedName
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 
-data class CreateMatchRequest(
+data class ConfirmMatchRequest(
 
   @SerializedName("nomisId")
   val nomisId: String,
 
   @SerializedName("uln")
-  val uln: String,
+  val matchingUln: String,
 ) {
-  fun asMatchEntity() = MatchEntity(nomisId, uln)
+  fun asMatchEntity() = MatchEntity(nomisId, matchingUln)
 }
