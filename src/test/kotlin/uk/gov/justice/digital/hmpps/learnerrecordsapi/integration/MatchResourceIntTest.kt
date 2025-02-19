@@ -3,15 +3,12 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.any
-import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.MatchResponse
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
 class MatchResourceIntTest : IntegrationTestBase() {
 
@@ -65,10 +62,11 @@ class MatchResourceIntTest : IntegrationTestBase() {
     )
 
     val expectedError = HmppsBoldLrsExceptionHandler.ErrorResponse(
-      HttpStatus.BAD_REQUEST, errorCode = "Validation Failed",
+      HttpStatus.BAD_REQUEST,
+      errorCode = "Validation Failed",
       userMessage = "Please correct the error and retry",
       developerMessage = "Validation(s) failed for [nomisId]",
-      moreInfo = "Validation(s) failed for [nomisId] with reason(s): [must match \"^[A-Z]\\d{4}[A-Z]{2}\$"
+      moreInfo = "Validation(s) failed for [nomisId] with reason(s): [must match \"^[A-Z]\\d{4}[A-Z]{2}\$]",
     )
 
     assertThat(actualResponse).isEqualTo(expectedError)
