@@ -150,15 +150,26 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
   }
 
   @Test
+  fun `should catch Method Not Supported exception and return Method Not Supported Error`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.METHOD_NOT_ALLOWED,
+      "Method (GET) not allowed",
+      "HTTP Method (GET) is not allowed",
+      "HTTP Method (GET) is not allowed, use only (POST) method",
+      "HTTP Method (GET) is not allowed, use only this (POST) method",
+    )
+    testExceptionHandling("/test/unsupported-http-verb", expectedResponse, expectedStatus = HttpStatus.METHOD_NOT_ALLOWED)
+  }
+
+  @Test
   fun `should catch DfE maintenance time exceptions and return Failed Dependency Error`() {
     val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
       HttpStatus.FAILED_DEPENDENCY,
       "DfE API failed to Respond",
-      "DfE API failed to Respond",
-      "DfE API failed to Respond",
-      "DfE API failed to Respond",
+      "LRS API Dependency Failed - DfE API is under maintenance",
+      "LRS API Dependency Failed - DfE API is under maintenance, please check DfE API maintenance window for more details",
+      "LRS API Dependency Failed - DfE API is under maintenance",
     )
-
-    testExceptionHandling("/test/dfe-maintenance-time", expectedResponse, expectedStatus = HttpStatus.FAILED_DEPENDENCY)
+    testExceptionHandling("/test/test-dfe-api-down", expectedResponse, expectedStatus = HttpStatus.FAILED_DEPENDENCY)
   }
 }
