@@ -279,6 +279,28 @@ docker-compose --profile=development --env-file .env.development up --build
 
 ---
 
+### Running in IntelliJ
+
+To run the service in IntelliJ, add the following line to your `hosts` file
+(located in `/etc/` on a Mac) and restart your machine.
+
+```
+127.0.0.1       localstack-sqs
+```
+
+Make sure all containers are running except `hmpps-learner-records-api`.
+Add the following lines to `.env.local`.
+
+```
+lrs.base-url=http://localhost:8080
+lrs.pfx-path=WebServiceClientCert.pfx
+```
+
+Finally modify the run configuration for the main class so that
+it uses `.env.local` for environment variables.
+
+---
+
 ## Running tests:
 
 Ensure no docker services are running as there may be port collisions.
