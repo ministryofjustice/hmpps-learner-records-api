@@ -137,7 +137,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
   }
 
   @Test
-  fun `POST to confirm match should return 500 if repository fails to save`() {
+  fun `POST to confirm match should return 500 if match service fails to save`() {
     val confirmMatchRequest = ConfirmMatchRequest("A1417AE", "1234567890")
 
     doThrow(RuntimeException("Database error")).`when`(spiedMatchService).saveMatch(any())
