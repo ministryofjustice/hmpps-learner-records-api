@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito.doThrow
 import org.mockito.Mockito.never
 import org.mockito.Mockito.reset
 import org.mockito.Mockito.spy
@@ -16,7 +17,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.MatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
@@ -31,9 +31,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
     lateinit var matchRepository: MatchRepository
 
     @Bean
-    fun matchService(): MatchService {
-      return spy(MatchService(matchRepository))
-    }
+    fun matchService(): MatchService = spy(MatchService(matchRepository))
   }
 
   @Autowired
@@ -44,7 +42,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @BeforeEach
   fun setUp() {
-    reset(spiedMatchService) // Reset mock behavior before each test
+    reset(spiedMatchService)
   }
 
   @Test
@@ -135,6 +133,40 @@ class MatchResourceIntTest : IntegrationTestBase() {
     )
 
     verify(spiedMatchService, never()).saveMatch(any())
+    assertThat(actualResponse).isEqualTo(expectedError)
+  }
+
+  @Test
+  fun `POST to confirm match should return 500 if repository fails to save`() {
+    val confirmMatchRequest = ConfirmMatchRequest("A1417AE", "1234567890")
+
+    doThrow(RuntimeException("Database error")).`when`(spiedMatchService).saveMatch(any())
+
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/match/confirm")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .header("X-Username", "TestUser")
+        .bodyValue(confirmMatchRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .is5xxServerError
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
+
+    val expectedError = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      errorCode = "Unexpected error",
+      userMessage = "Unexpected error: Database error",
+      developerMessage = "Unexpected error: Database error",
+      moreInfo = "Unexpected error",
+    )
+
+    verify(spiedMatchService, times(1)).saveMatch(any())
     assertThat(actualResponse).isEqualTo(expectedError)
   }
 }
