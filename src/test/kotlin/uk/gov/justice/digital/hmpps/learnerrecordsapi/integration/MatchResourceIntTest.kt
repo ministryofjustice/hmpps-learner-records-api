@@ -66,7 +66,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
       errorCode = "Validation Failed",
       userMessage = "Please correct the error and retry",
       developerMessage = "Validation(s) failed for [nomisId]",
-      moreInfo = "Validation(s) failed for [nomisId] with reason(s): [must match \"^[A-Z]\\d{4}[A-Z]{2}\$]",
+      moreInfo = "Validation(s) failed for [nomisId] with reason(s): [must match \"^[A-Z]\\d{4}[A-Z]{2}\$\"]",
     )
 
     assertThat(actualResponse).isEqualTo(expectedError)
