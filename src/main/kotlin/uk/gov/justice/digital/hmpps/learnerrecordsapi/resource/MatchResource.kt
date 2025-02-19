@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.CheckMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.FindByDemographicApi
@@ -29,15 +30,19 @@ class MatchResource(
   @PostMapping(value = ["/check"])
   @Tag(name = "Check")
   @FindByDemographicApi
-  suspend fun checkMatch(
+  fun findMatch(
     @RequestBody @Valid checkMatchRequest: CheckMatchRequest,
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<CheckMatchResponse> {
     logger.log("Received a post request to match endpoint", checkMatchRequest)
-    val optCheckMatchResponse = matchService.findMatch(checkMatchRequest)
-    if (optCheckMatchResponse.isEmpty) {
+    val entity = matchService.findMatch(MatchEntity(
+      nomisId = checkMatchRequest.nomisId,
+    ))
+    if (entity == null) {
       return ResponseEntity(HttpStatus.NOT_FOUND)
     }
-    return ResponseEntity.status(HttpStatus.OK).body(optCheckMatchResponse.get())
+    return ResponseEntity.status(HttpStatus.OK).body(CheckMatchResponse(
+      matchedUln = entity.matchedUln?:""
+    ))
   }
 }

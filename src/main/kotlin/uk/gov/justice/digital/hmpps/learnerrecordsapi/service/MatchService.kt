@@ -13,13 +13,9 @@ class MatchService(
   private val matchRepository: MatchRepository,
 ) {
 
-  fun findMatch(checkMatchRequest: CheckMatchRequest): Optional<CheckMatchResponse> {
-    val entity = matchRepository.findFirstByNomisIdOrderByIdDesc(checkMatchRequest.nomisId)
-    if (entity != null) {
-      return Optional.of(CheckMatchResponse(entity.matchedUln?:""))
-    }
-    return Optional.empty()
-  }
+  fun findMatch(matchEntity: MatchEntity): MatchEntity? = matchRepository.findFirstByNomisIdOrderByIdDesc(
+    matchEntity.nomisId,
+  )
 
   fun saveMatch(matchEntity: MatchEntity): MatchEntity = matchRepository.save(matchEntity)
 }
