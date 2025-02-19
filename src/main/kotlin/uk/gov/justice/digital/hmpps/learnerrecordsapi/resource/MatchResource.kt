@@ -38,15 +38,15 @@ class MatchResource(
     val entity = matchService.findMatch(
       MatchEntity(
         nomisId = checkMatchRequest.nomisId,
-      )
+      ),
     )
     if (entity == null) {
       return ResponseEntity(HttpStatus.NOT_FOUND)
     }
     return ResponseEntity.status(HttpStatus.OK).body(
       CheckMatchResponse(
-        matchedUln = entity.matchedUln ?: ""
-      )
+        matchedUln = entity.matchedUln ?: "",
+      ),
     )
   }
 }

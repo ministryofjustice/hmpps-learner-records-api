@@ -13,8 +13,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 
 @ExtendWith(MockitoExtension::class)
 class MatchServiceTest {
-  private val NOMIS_ID = "nomisId"
-  private val LEARNER_ID = "learnerId"
+  private val NOMIS_ID = "q1234"
+  private val LEARNER_ID = "a1234"
 
   private lateinit var mockMatchRepository: MatchRepository
   private lateinit var matchService: MatchService
@@ -31,7 +31,7 @@ class MatchServiceTest {
 
     val actual = matchService.findMatch(
       MatchEntity(
-        nomisId = NOMIS_ID
+        nomisId = NOMIS_ID,
       )
     )
     assertThat(actual).isEqualTo(null)
@@ -41,13 +41,14 @@ class MatchServiceTest {
   fun `should return entity if record found`() {
     `when`(mockMatchRepository.findFirstByNomisIdOrderByIdDesc(any())).thenReturn(
       MatchEntity(
-      nomisId = NOMIS_ID,
-      matchedUln = LEARNER_ID,
-    ))
+        nomisId = NOMIS_ID,
+        matchedUln = LEARNER_ID,
+      )
+    )
 
     val actual = matchService.findMatch(
       MatchEntity(
-        nomisId = NOMIS_ID
+        nomisId = NOMIS_ID,
       )
     )
     assertThat(actual).isNotEqualTo(null)

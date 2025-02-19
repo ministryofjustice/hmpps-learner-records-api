@@ -15,8 +15,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
 @ExtendWith(MockitoExtension::class)
 class MatchResourceTest {
-  private val NOMIS_ID = "nomisId"
-  private val LEARNER_ID = "learnerId"
+  private val NOMIS_ID = "a1234"
+  private val LEARNER_ID = "q1234"
 
   private lateinit var mockMatchService: MatchService
   private lateinit var matchResource: MatchResource
