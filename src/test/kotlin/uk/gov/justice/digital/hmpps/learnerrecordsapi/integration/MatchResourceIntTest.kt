@@ -18,7 +18,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `POST to confirm match should return 200 with a response confirming a match`() {
-    val confirmMatchRequest = ConfirmMatchRequest("ABCDEFGH", "1234567890")
+    val confirmMatchRequest = ConfirmMatchRequest("A1417AE", "1234567890")
 
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
@@ -42,7 +42,8 @@ class MatchResourceIntTest : IntegrationTestBase() {
     assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
-  fun `POST to confirm match should return 400 with appropriate error response`() {
+  @Test
+  fun `POST to confirm match should return 400 if nomis id is malformed`() {
     val confirmMatchRequest = ConfirmMatchRequest("ABCDEFGH", "1234567890")
 
     val actualResponse = objectMapper.readValue(
