@@ -111,8 +111,4 @@ class LearnersService(
       matchedLearners = response.learners,
     )
   }
-
-  suspend fun checkLearnerMatch(checkMatchRequest: CheckMatchRequest, userName: String): CheckMatchResponse {
-    return CheckMatchResponse(checkMatchRequest.nomisId)
-  }
 }

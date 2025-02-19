@@ -59,27 +59,4 @@ class LearnersResource(
     val learnersResponse = learnersService.getLearners(findLearnerByDemographicsRequest, userName)
     return ResponseEntity.status(HttpStatus.OK).body(learnersResponse)
   }
-
-  @PostMapping(value = ["/check"])
-  @Tag(name = "Check")
-  @FindByDemographicApi
-  suspend fun checkMatch(
-    @RequestBody @Valid checkMatchRequest: CheckMatchRequest,
-    @RequestHeader("X-Username", required = true) userName: String,
-  ): ResponseEntity<CheckMatchResponse> {
-    logger.log("Received a get request to learners endpoint", checkMatchRequest)
-    val hmppsLRSEvent = HmppsAuditEvent(
-      readRequestReceived,
-      "From $userName",
-      subjectTypeRead,
-      UUID.randomUUID().toString(),
-      Instant.now(),
-      userName,
-      learnerRecordsApi,
-      checkMatchRequest.toString(),
-    )
-    // auditService.publishEvent(hmppsLRSEvent)
-    val checkMatchResponse = learnersService.checkLearnerMatch(checkMatchRequest, userName)
-    return ResponseEntity.status(HttpStatus.OK).body(checkMatchResponse)
-  }
 }
