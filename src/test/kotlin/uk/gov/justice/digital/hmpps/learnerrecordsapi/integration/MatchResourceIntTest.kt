@@ -71,4 +71,35 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
     assertThat(actualResponse).isEqualTo(expectedError)
   }
+
+  @Test
+  fun `POST to confirm match should return 400 if uln is malformed`() {
+    val confirmMatchRequest = ConfirmMatchRequest("A1417AE", "1234567890abcdef")
+
+    val actualResponse = objectMapper.readValue(
+      webTestClient.post()
+        .uri("/match/confirm")
+        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .header("X-Username", "TestUser")
+        .bodyValue(confirmMatchRequest)
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
+
+    val expectedError = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.BAD_REQUEST,
+      errorCode = "Validation Failed",
+      userMessage = "Please correct the error and retry",
+      developerMessage = "Validation(s) failed for [matchingUln]",
+      moreInfo = "Validation(s) failed for [matchingUln] with reason(s): [must match \"^[0-9]{1,10}\$\"]",
+    )
+
+    assertThat(actualResponse).isEqualTo(expectedError)
+  }
 }
