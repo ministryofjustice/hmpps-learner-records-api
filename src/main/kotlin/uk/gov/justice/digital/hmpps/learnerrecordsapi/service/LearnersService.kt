@@ -11,9 +11,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Fin
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.CheckMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
 import java.io.StringReader

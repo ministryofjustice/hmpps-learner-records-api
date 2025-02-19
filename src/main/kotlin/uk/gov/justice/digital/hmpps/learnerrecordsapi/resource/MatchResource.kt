@@ -35,14 +35,18 @@ class MatchResource(
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<CheckMatchResponse> {
     logger.log("Received a post request to match endpoint", checkMatchRequest)
-    val entity = matchService.findMatch(MatchEntity(
-      nomisId = checkMatchRequest.nomisId,
-    ))
+    val entity = matchService.findMatch(
+      MatchEntity(
+        nomisId = checkMatchRequest.nomisId,
+      )
+    )
     if (entity == null) {
       return ResponseEntity(HttpStatus.NOT_FOUND)
     }
-    return ResponseEntity.status(HttpStatus.OK).body(CheckMatchResponse(
-      matchedUln = entity.matchedUln?:""
-    ))
+    return ResponseEntity.status(HttpStatus.OK).body(
+      CheckMatchResponse(
+        matchedUln = entity.matchedUln ?: ""
+      )
+    )
   }
 }

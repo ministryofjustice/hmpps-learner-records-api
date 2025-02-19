@@ -5,7 +5,6 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -13,16 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.CheckMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.FindByDemographicApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnersService
 import uk.gov.justice.hmpps.sqs.audit.HmppsAuditEvent
 import uk.gov.justice.hmpps.sqs.audit.HmppsAuditService
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 @RestController
 @PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__RO')")

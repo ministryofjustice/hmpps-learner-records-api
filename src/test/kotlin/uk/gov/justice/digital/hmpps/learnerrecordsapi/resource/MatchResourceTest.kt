@@ -15,8 +15,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
 @ExtendWith(MockitoExtension::class)
 class MatchResourceTest {
-  private val NOMIS_ID = "NOMIS_ID"
-  private val LEARNER_ID = "LEARNER_ID"
+  private val NOMIS_ID = "nomisId"
+  private val LEARNER_ID = "learnerId"
 
   private lateinit var mockMatchService: MatchService
   private lateinit var matchResource: MatchResource
@@ -31,22 +31,30 @@ class MatchResourceTest {
   fun `should return NOT_FOUND if no record found`() {
     `when`(mockMatchService.findMatch(any())).thenReturn(null)
 
-    val actual = matchResource.findMatch(CheckMatchRequest(
-      nomisId = NOMIS_ID
-    ), "")
+    val actual = matchResource.findMatch(
+      CheckMatchRequest(
+        nomisId = NOMIS_ID
+      ),
+      ""
+    )
     assertThat(actual.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
   }
 
   @Test
   fun `should return entity if record found`() {
-    `when`(mockMatchService.findMatch(any())).thenReturn(MatchEntity(
-      nomisId = NOMIS_ID,
-      matchedUln = LEARNER_ID,
-    ))
+    `when`(mockMatchService.findMatch(any())).thenReturn(
+      MatchEntity(
+        nomisId = NOMIS_ID,
+        matchedUln = LEARNER_ID,
+      )
+    )
 
-    val actual = matchResource.findMatch(CheckMatchRequest(
-      nomisId = NOMIS_ID
-    ), "")
+    val actual = matchResource.findMatch(
+      CheckMatchRequest(
+        nomisId = NOMIS_ID
+      ),
+      ""
+    )
     assertThat(actual.statusCode).isEqualTo(HttpStatus.OK)
     assertThat(actual.body?.matchedUln ?: "").isEqualTo(LEARNER_ID)
   }
