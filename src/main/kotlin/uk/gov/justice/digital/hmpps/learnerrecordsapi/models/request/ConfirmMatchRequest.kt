@@ -3,13 +3,10 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 import jakarta.validation.constraints.Pattern
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 
-data class ConfirmMatchRequest(
-
-  @field:Pattern(regexp = "^[A-Z]\\d{4}[A-Z]{2}\$")
-  val nomisId: String,
-
+class ConfirmMatchRequest(
+  nomisId: String,
   @field:Pattern(regexp = "^[0-9]{1,10}\$")
   val matchingUln: String,
-) {
+) : CheckMatchRequest(nomisId) {
   fun asMatchEntity() = MatchEntity(nomisId, matchingUln)
 }
