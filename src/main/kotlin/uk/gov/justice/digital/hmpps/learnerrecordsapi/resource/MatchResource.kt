@@ -13,6 +13,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.MatchResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.ConfirmMatchApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
 @RestController
@@ -26,6 +27,7 @@ class MatchResource(
 
   @PostMapping(value = ["/confirm"])
   @Tag(name = "Match")
+  @ConfirmMatchApi
   suspend fun confirmMatch(
     @RequestBody @Valid confirmMatchRequest: ConfirmMatchRequest,
   ): ResponseEntity<MatchResponse> {
