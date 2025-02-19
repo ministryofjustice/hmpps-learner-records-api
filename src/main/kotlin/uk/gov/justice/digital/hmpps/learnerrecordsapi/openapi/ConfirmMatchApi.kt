@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -21,7 +22,17 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
       Content(
         mediaType = "application/json",
         schema = Schema(implementation = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest::class),
-
+        examples = [
+          ExampleObject(
+            name = "Example Request",
+            value = """
+              {
+                "nomisId": "A1417AE",
+                "matchingUln": "1964986809"
+              }
+            """,
+          ),
+        ],
       ),
     ],
   ),
