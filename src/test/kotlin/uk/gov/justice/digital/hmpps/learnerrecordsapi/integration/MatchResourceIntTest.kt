@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.any
 import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.MatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
@@ -55,16 +57,20 @@ class MatchResourceIntTest : IntegrationTestBase() {
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
-        .isOk
+        .isBadRequest
         .expectBody()
         .returnResult()
         .responseBody,
-      MatchResponse::class.java,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    val expectedSavedMatchEntity = confirmMatchRequest.asMatchEntity().copy(id = 1)
-    val expectedResponse = MatchResponse("Match confirmed successfully", expectedSavedMatchEntity)
+    val expectedError = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.BAD_REQUEST, errorCode = "Validation Failed",
+      userMessage = "Please correct the error and retry",
+      developerMessage = "Validation(s) failed for [nomisId]",
+      moreInfo = "Validation(s) failed for [nomisId] with reason(s): [must match \"^[A-Z]\\d{4}[A-Z]{2}\$"
+    )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    assertThat(actualResponse).isEqualTo(expectedError)
   }
 }
