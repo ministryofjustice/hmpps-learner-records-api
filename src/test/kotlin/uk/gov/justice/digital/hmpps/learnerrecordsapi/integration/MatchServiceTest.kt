@@ -31,7 +31,7 @@ class MatchServiceTest : IntegrationTestBase() {
   @Test
   fun `can save a MatchEntity with a uln`() {
     val matchWithUln = MatchEntity("ABCDEFGH", "123456789")
-    val savedMatchWithUln = matchService.saveMatch(matchWithUln)
+    val savedMatchWithUln = matchService.saveMatch(matchWithUln.nomisId, matchWithUln.matchedUln.orEmpty())
     assertEquals(matchWithUln, savedMatchWithUln)
   }
 

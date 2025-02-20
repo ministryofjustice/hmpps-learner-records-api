@@ -13,5 +13,5 @@ class MatchService(
     matchEntity.nomisId,
   )
 
-  fun saveMatch(matchEntity: MatchEntity): MatchEntity = matchRepository.save(matchEntity)
+  fun saveMatch(nomisId: String, uln: String): MatchEntity = matchRepository.save(MatchEntity(nomisId, uln))
 }

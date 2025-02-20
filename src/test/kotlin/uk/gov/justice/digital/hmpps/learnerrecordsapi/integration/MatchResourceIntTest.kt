@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.MatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
@@ -47,14 +48,15 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `POST to confirm match should return 200 with a response confirming a match`() {
-    val confirmMatchRequest = MatchRequest("A1417AE", "1234567890")
+    val nomisId = "A1417AE"
+    val uln = "1234567890"
 
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
-        .uri("/match/confirm")
+        .uri("/match/confirm/$nomisId")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .header("X-Username", "TestUser")
-        .bodyValue(confirmMatchRequest)
+        .bodyValue(MatchRequest(matchingUln = uln))
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
@@ -65,55 +67,24 @@ class MatchResourceIntTest : IntegrationTestBase() {
       MatchResponse::class.java,
     )
 
-    val expectedSavedMatchEntity = confirmMatchRequest.asMatchEntity().copy(id = 1)
+    val expectedSavedMatchEntity = MatchEntity(1, nomisId, uln)
     val expectedResponse = MatchResponse("Match confirmed successfully", expectedSavedMatchEntity)
 
-    verify(spiedMatchService, times(1)).saveMatch(any())
+    verify(spiedMatchService, times(1)).saveMatch(any(), any())
     assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
-  fun `POST to confirm match should return 400 if nomis id is malformed`() {
-    val confirmMatchRequest = MatchRequest("ABCDEFGH", "1234567890")
-
-    val actualResponse = objectMapper.readValue(
-      webTestClient.post()
-        .uri("/match/confirm")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-        .header("X-Username", "TestUser")
-        .bodyValue(confirmMatchRequest)
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isBadRequest
-        .expectBody()
-        .returnResult()
-        .responseBody,
-      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
-    )
-
-    val expectedError = HmppsBoldLrsExceptionHandler.ErrorResponse(
-      HttpStatus.BAD_REQUEST,
-      errorCode = "Validation Failed",
-      userMessage = "Please correct the error and retry",
-      developerMessage = "Validation(s) failed for [nomisId]",
-      moreInfo = "Validation(s) failed for [nomisId] with reason(s): [must match \"^[A-Z]\\d{4}[A-Z]{2}\$\"]",
-    )
-
-    verify(spiedMatchService, never()).saveMatch(any())
-    assertThat(actualResponse).isEqualTo(expectedError)
-  }
-
-  @Test
   fun `POST to confirm match should return 400 if uln is malformed`() {
-    val matchRequest = MatchRequest("A1417AE", "1234567890abcdef")
+    val nomisId = "A1417AE"
+    val uln = "1234567890abcdef"
 
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
-        .uri("/match/confirm")
+        .uri("/match/confirm/$nomisId")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .header("X-Username", "TestUser")
-        .bodyValue(matchRequest)
+        .bodyValue(MatchRequest(matchingUln = uln))
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
@@ -132,22 +103,23 @@ class MatchResourceIntTest : IntegrationTestBase() {
       moreInfo = "Validation(s) failed for [matchingUln] with reason(s): [must match \"^[0-9]{1,10}\$\"]",
     )
 
-    verify(spiedMatchService, never()).saveMatch(any())
+    verify(spiedMatchService, never()).saveMatch(any(), any())
     assertThat(actualResponse).isEqualTo(expectedError)
   }
 
   @Test
   fun `POST to confirm match should return 500 if match service fails to save`() {
-    val matchRequest = MatchRequest("A1417AE", "1234567890")
+    val nomisId = "A1417AE"
+    val uln = "1234567890"
 
-    doThrow(RuntimeException("Database error")).`when`(spiedMatchService).saveMatch(any())
+    doThrow(RuntimeException("Database error")).`when`(spiedMatchService).saveMatch(any(), any())
 
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
-        .uri("/match/confirm")
+        .uri("/match/confirm/$nomisId")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .header("X-Username", "TestUser")
-        .bodyValue(matchRequest)
+        .bodyValue(MatchRequest(matchingUln = uln))
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
@@ -166,7 +138,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
       moreInfo = "Unexpected error",
     )
 
-    verify(spiedMatchService, times(1)).saveMatch(any())
+    verify(spiedMatchService, times(1)).saveMatch(any(), any())
     assertThat(actualResponse).isEqualTo(expectedError)
   }
 }

@@ -13,7 +13,6 @@ class MatchRequestTest {
   @Test
   fun `valid request should pass validation`() {
     val request = MatchRequest(
-      nomisId = "A1417AE",
       matchingUln = "1234567890",
     )
 
@@ -23,18 +22,7 @@ class MatchRequestTest {
   @Test
   fun `invalid uln should fail validation`() {
     val request = MatchRequest(
-      nomisId = "A1417AE",
       matchingUln = "1234567890abcdedf",
-    )
-
-    assertTrue(validator.validate(request).size == 1)
-  }
-
-  @Test
-  fun `invalid nomisId should fail validation`() {
-    val request = MatchRequest(
-      nomisId = "A1424357AE",
-      matchingUln = "1234567890",
     )
 
     assertTrue(validator.validate(request).size == 1)
