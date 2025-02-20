@@ -37,6 +37,7 @@ class MatchResource(
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<CheckMatchResponse> {
     logger.log("Received a get request to match endpoint", nomisId)
+    logger.log("Records in database", matchService.count())
     val entity = matchService.findMatch(
       MatchEntity(
         nomisId = nomisId,

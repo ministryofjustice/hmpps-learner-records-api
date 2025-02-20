@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 
 @Transactional
 class MatchResourceIntTest : IntegrationTestBase() {
@@ -22,6 +23,9 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Autowired
   protected lateinit var objectMapper: ObjectMapper
+
+  @Autowired
+  lateinit var matchRepository: MatchRepository
 
   val found = "A1234BC"
   val noMatch = "X1234YZ"
@@ -62,6 +66,8 @@ class MatchResourceIntTest : IntegrationTestBase() {
   @Test
   fun `should find a match by id`() {
     setUpDatabase(found, matchedUln)
+    val entity = matchRepository.findFirstByNomisIdOrderByIdDesc(found)
+    assertThat(entity).isNotNull
     checkWebCall(
       found,
       200,
