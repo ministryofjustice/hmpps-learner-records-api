@@ -15,8 +15,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
 @ExtendWith(MockitoExtension::class)
 class MatchResourceTest {
-  private val NOMIS_ID = "a1234"
-  private val LEARNER_ID = "q1234"
+  private val nomisId = "A1234BC"
+  private val matchedUln = "q1234"
 
   private lateinit var mockMatchService: MatchService
   private lateinit var matchResource: MatchResource
@@ -33,9 +33,9 @@ class MatchResourceTest {
 
     val actual = matchResource.findMatch(
       CheckMatchRequest(
-        nomisId = NOMIS_ID
+        nomisId = nomisId,
       ),
-      ""
+      "",
     )
     assertThat(actual.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
   }
@@ -44,18 +44,18 @@ class MatchResourceTest {
   fun `should return entity if record found`() {
     `when`(mockMatchService.findMatch(any())).thenReturn(
       MatchEntity(
-        nomisId = NOMIS_ID,
-        matchedUln = LEARNER_ID,
-      )
+        nomisId = nomisId,
+        matchedUln = matchedUln,
+      ),
     )
 
     val actual = matchResource.findMatch(
       CheckMatchRequest(
-        nomisId = NOMIS_ID
+        nomisId = nomisId,
       ),
-      ""
+      "",
     )
     assertThat(actual.statusCode).isEqualTo(HttpStatus.OK)
-    assertThat(actual.body?.matchedUln ?: "").isEqualTo(LEARNER_ID)
+    assertThat(actual.body?.matchedUln ?: "").isEqualTo(matchedUln)
   }
 }
