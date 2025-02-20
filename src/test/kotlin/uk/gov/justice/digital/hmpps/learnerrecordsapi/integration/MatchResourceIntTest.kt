@@ -67,11 +67,11 @@ class MatchResourceIntTest : IntegrationTestBase() {
       MatchResponse::class.java,
     )
 
-    val expectedSavedMatchEntity = MatchEntity(1, nomisId, uln)
+    val expectedSavedMatchEntity = MatchEntity(nomisId, uln)
     val expectedResponse = MatchResponse("Match confirmed successfully", expectedSavedMatchEntity)
 
     verify(spiedMatchService, times(1)).saveMatch(any(), any())
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    assertThat(actualResponse.copy(entity = actualResponse.entity.copy(id = null))).isEqualTo(expectedResponse)
   }
 
   @Test
