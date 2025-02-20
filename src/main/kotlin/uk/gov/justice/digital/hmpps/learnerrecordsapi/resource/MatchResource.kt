@@ -5,16 +5,18 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.CheckMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.FindByDemographicApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
@@ -27,25 +29,35 @@ class MatchResource(
 
   val logger = LoggerUtil.getLogger<MatchResource>()
 
-  @PostMapping(value = ["/check"])
+  @GetMapping(value = ["/check"])
   @Tag(name = "Check")
   @FindByDemographicApi
   fun findMatch(
-    @RequestBody @Valid checkMatchRequest: CheckMatchRequest,
+    @RequestParam(name = "nomisId", required = true) nomisId: String,
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<CheckMatchResponse> {
-    logger.log("Received a post request to match endpoint", checkMatchRequest)
+    logger.log("Received a get request to match endpoint", nomisId)
     val entity = matchService.findMatch(
       MatchEntity(
-        nomisId = checkMatchRequest.nomisId,
+        nomisId = nomisId,
       ),
     )
     if (entity == null) {
-      return ResponseEntity(HttpStatus.NOT_FOUND)
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+        CheckMatchResponse(
+          status = CheckMatchStatus.NotFound,
+        ),
+      )
     }
+    val matchedUln = entity.matchedUln ?: ""
     return ResponseEntity.status(HttpStatus.OK).body(
       CheckMatchResponse(
-        matchedUln = entity.matchedUln ?: "",
+        matchedUln = matchedUln,
+        status = if (matchedUln.isNotBlank()) {
+          CheckMatchStatus.Found
+        } else {
+          CheckMatchStatus.NoMatch
+        },
       ),
     )
   }
