@@ -1,39 +1,26 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import jakarta.persistence.EntityManager
-import jakarta.persistence.PersistenceContext
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.transaction.annotation.Transactional
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 
-@Transactional
 class MatchResourceIntTest : IntegrationTestBase() {
-
-  @PersistenceContext
-  lateinit var entityManager: EntityManager
 
   @Autowired
   protected lateinit var objectMapper: ObjectMapper
 
   @Autowired
-  lateinit var matchRepository: MatchRepository
+  protected lateinit var matchRepository: MatchRepository
 
-  val found = "A1234BC"
-  val noMatch = "X1234YZ"
+  val nomisId = "A1234BC"
   val matchedUln = "A"
-
-  fun setUpDatabase(nomisId: String, matchedUln: String) {
-    entityManager.createNativeQuery("INSERT INTO matches (nomis_id, matched_uln) VALUES ('$nomisId', '$matchedUln')").executeUpdate()
-  }
 
   private fun checkWebCall(
     nomisId: String,
@@ -63,16 +50,38 @@ class MatchResourceIntTest : IntegrationTestBase() {
     }
   }
 
+  @AfterEach
+  fun cleanup() {
+    matchRepository.deleteAll()
+  }
+
   @Test
   fun `should find a match by id`() {
-    setUpDatabase(found, matchedUln)
-    val entity = matchRepository.findFirstByNomisIdOrderByIdDesc(found)
-    assertThat(entity).isNotNull
+    matchRepository.save(MatchEntity(nomisId, matchedUln))
     checkWebCall(
-      found,
+      nomisId,
       200,
       CheckMatchStatus.Found,
       matchedUln,
+    )
+  }
+
+  @Test
+  fun `should return NOT_FOUND if no match`() {
+    checkWebCall(
+      nomisId,
+      404,
+      CheckMatchStatus.NotFound,
+    )
+  }
+
+  @Test
+  fun `should return no match if record marked as such`() {
+    matchRepository.save(MatchEntity(nomisId, ""))
+    checkWebCall(
+      nomisId,
+      200,
+      CheckMatchStatus.NoMatch,
     )
   }
 }

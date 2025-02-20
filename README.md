@@ -25,24 +25,24 @@ The service provides the following endpoints to consumers.
 * `/learners` - Search for a learner's ULN via their demographic data
 * `/learner-events` - Request a learner's learning record via their ULN
 
-### `POST:/match/check`
+### `GET:/match/check?nomisId=:id`
 This endpoint is to search for a ULN given a NOMIS ID. The response will
 be OK (200) with the ULN if a match exists and NOT_FOUND (404) if there
 is no match.
 
-Example request body:
-```json
-{
-  "nomisId": "A1234BC"
-}
-```
-
 Example response body:
 ```json
 {
-  "matchedUln": "a1234"
+  "matchedUln": "a1234",
+  "status": "Found"
 }
 ```
+
+In the response body, the `status` will have one of the following values
+ax explained below.
+* `Found` = A match has been found for `id` and ULN is in `matchedUln`
+* `NotFound` = No match has been found for `id`
+* `NoMatch` = `id` cannot be matched
 
 Response codes:
 * 200 - Success
