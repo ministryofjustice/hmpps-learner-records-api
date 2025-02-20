@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.MatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
@@ -47,7 +47,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `POST to confirm match should return 200 with a response confirming a match`() {
-    val confirmMatchRequest = ConfirmMatchRequest("A1417AE", "1234567890")
+    val confirmMatchRequest = MatchRequest("A1417AE", "1234567890")
 
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
@@ -74,7 +74,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `POST to confirm match should return 400 if nomis id is malformed`() {
-    val confirmMatchRequest = ConfirmMatchRequest("ABCDEFGH", "1234567890")
+    val confirmMatchRequest = MatchRequest("ABCDEFGH", "1234567890")
 
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
@@ -106,14 +106,14 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `POST to confirm match should return 400 if uln is malformed`() {
-    val confirmMatchRequest = ConfirmMatchRequest("A1417AE", "1234567890abcdef")
+    val matchRequest = MatchRequest("A1417AE", "1234567890abcdef")
 
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/match/confirm")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .header("X-Username", "TestUser")
-        .bodyValue(confirmMatchRequest)
+        .bodyValue(matchRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
@@ -138,7 +138,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `POST to confirm match should return 500 if match service fails to save`() {
-    val confirmMatchRequest = ConfirmMatchRequest("A1417AE", "1234567890")
+    val matchRequest = MatchRequest("A1417AE", "1234567890")
 
     doThrow(RuntimeException("Database error")).`when`(spiedMatchService).saveMatch(any())
 
@@ -147,7 +147,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
         .uri("/match/confirm")
         .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
         .header("X-Username", "TestUser")
-        .bodyValue(confirmMatchRequest)
+        .bodyValue(matchRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()

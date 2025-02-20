@@ -5,14 +5,14 @@ import jakarta.validation.ValidatorFactory
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
-class ConfirmMatchRequestTest {
+class MatchRequestTest {
 
   private val factory: ValidatorFactory = Validation.buildDefaultValidatorFactory()
   private val validator = factory.validator
 
   @Test
   fun `valid request should pass validation`() {
-    val request = ConfirmMatchRequest(
+    val request = MatchRequest(
       nomisId = "A1417AE",
       matchingUln = "1234567890",
     )
@@ -22,7 +22,7 @@ class ConfirmMatchRequestTest {
 
   @Test
   fun `invalid uln should fail validation`() {
-    val request = ConfirmMatchRequest(
+    val request = MatchRequest(
       nomisId = "A1417AE",
       matchingUln = "1234567890abcdedf",
     )
@@ -32,7 +32,7 @@ class ConfirmMatchRequestTest {
 
   @Test
   fun `invalid nomisId should fail validation`() {
-    val request = ConfirmMatchRequest(
+    val request = MatchRequest(
       nomisId = "A1424357AE",
       matchingUln = "1234567890",
     )

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.MatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.ConfirmMatchApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
@@ -29,7 +29,7 @@ class MatchResource(
   @Tag(name = "Match")
   @ConfirmMatchApi
   suspend fun confirmMatch(
-    @RequestBody @Valid confirmMatchRequest: ConfirmMatchRequest,
+    @RequestBody @Valid confirmMatchRequest: MatchRequest,
   ): ResponseEntity<MatchResponse> {
     logger.log("Received a post request to confirm match endpoint", confirmMatchRequest)
     val savedMatchEntity = matchService.saveMatch(confirmMatchRequest.asMatchEntity())

@@ -21,7 +21,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
     content = [
       Content(
         mediaType = "application/json",
-        schema = Schema(implementation = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest::class),
+        schema = Schema(implementation = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchRequest::class),
         examples = [
           ExampleObject(
             name = "Example Request",
