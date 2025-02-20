@@ -25,4 +25,6 @@ data class MatchEntity(
     nomisId: String,
     matchedUln: String?,
   ) : this(null, nomisId, matchedUln)
+
+  constructor() : this("", "")
 }

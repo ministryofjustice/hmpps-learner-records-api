@@ -9,11 +9,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import org.springframework.transaction.annotation.Transactional
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 
+@Transactional
 class MatchResourceIntTest : IntegrationTestBase() {
 
   @PersistenceContext
@@ -22,25 +23,12 @@ class MatchResourceIntTest : IntegrationTestBase() {
   @Autowired
   protected lateinit var objectMapper: ObjectMapper
 
-  @Autowired
-  lateinit var matchRepository: MatchRepository
-
   val found = "A1234BC"
   val noMatch = "X1234YZ"
   val matchedUln = "A"
 
-  @BeforeEach
-  fun setUpDatabase() {
-    val entities = listOf(
-      MatchEntity(found, matchedUln),
-      MatchEntity(noMatch, ""),
-    )
-    matchRepository.saveAllAndFlush(entities)
-  }
-
-  @AfterEach
-  fun clearDatabase() {
-    entityManager.createNativeQuery("DELETE FROM matches").executeUpdate()
+  fun setUpDatabase(nomisId: String, matchedUln: String) {
+    entityManager.createNativeQuery("INSERT INTO matches (nomis_id, matched_uln) VALUES ('$nomisId', '$matchedUln')").executeUpdate()
   }
 
   private fun checkWebCall(
@@ -73,6 +61,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `should find a match by id`() {
+    setUpDatabase(found, matchedUln)
     checkWebCall(
       found,
       200,
