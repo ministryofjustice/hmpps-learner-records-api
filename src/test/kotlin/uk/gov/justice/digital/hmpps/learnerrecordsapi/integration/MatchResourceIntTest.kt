@@ -29,7 +29,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
     expectedUln: String? = null,
   ) {
     val executedRequest = webTestClient.get()
-      .uri("/match/check?nomisId=$nomisId")
+      .uri("/match/$nomisId")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
       .header("X-Username", "TestUser")
       .accept(MediaType.parseMediaType("application/json"))

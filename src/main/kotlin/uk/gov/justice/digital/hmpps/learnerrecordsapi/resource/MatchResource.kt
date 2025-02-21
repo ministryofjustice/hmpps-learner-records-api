@@ -5,16 +5,16 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.FindByDemographicApi
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchCheckApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
 @RestController
@@ -26,11 +26,11 @@ class MatchResource(
 
   val logger = LoggerUtil.getLogger<MatchResource>()
 
-  @GetMapping(value = ["/check"])
-  @Tag(name = "Check")
-  @FindByDemographicApi
+  @GetMapping("/{nomisId}")
+  @Tag(name = "Match")
+  @MatchCheckApi
   fun findMatch(
-    @RequestParam(name = "nomisId", required = true) nomisId: String,
+    @PathVariable(name = "nomisId", required = true) nomisId: String,
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<CheckMatchResponse> {
     logger.log("Received a get request to match endpoint", nomisId)

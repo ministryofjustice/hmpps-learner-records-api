@@ -12,7 +12,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
 @Transactional
-class MatchServiceTest : IntegrationTestBase() {
+class MatchServiceIntTest : IntegrationTestBase() {
 
   @PersistenceContext
   lateinit var entityManager: EntityManager
