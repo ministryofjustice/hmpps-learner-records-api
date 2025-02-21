@@ -19,7 +19,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnersService
 import uk.gov.justice.hmpps.sqs.audit.HmppsAuditEvent
 import uk.gov.justice.hmpps.sqs.audit.HmppsAuditService
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 @RestController
 @PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__RO')")
