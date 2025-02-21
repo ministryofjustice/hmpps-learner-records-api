@@ -2,11 +2,13 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import software.amazon.awssdk.services.sqs.model.PurgeQueueRequest
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
@@ -31,6 +33,15 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
   private val auditQueue by lazy { hmppsQueueService.findByQueueId("audit") ?: throw MissingQueueException("HmppsQueue audit not found") }
   protected val auditSqsClient by lazy { auditQueue.sqsClient }
   protected val auditQueueUrl by lazy { auditQueue.queueUrl }
+
+  @BeforeEach
+  fun purgeQueue() {
+    auditSqsClient.purgeQueue(
+      PurgeQueueRequest.builder()
+        .queueUrl(auditQueueUrl)
+        .build(),
+    )
+  }
 
   @Nested
   @DisplayName("POST /learner-events")
@@ -304,11 +315,9 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
 
     val receivedEvent = objectMapper.readValue(auditSqsClient.receiveMessage(ReceiveMessageRequest.builder().queueUrl(auditQueueUrl).build()).get().messages()[0].body(), HmppsAuditEvent::class.java)
 
-    assertThat(receivedEvent.what).isEqualTo("Read Request Received")
-    assertThat(receivedEvent.subjectId).isEqualTo("From TestUser")
-    assertThat(receivedEvent.subjectType).isEqualTo("Read")
+    assertThat(receivedEvent.what).isEqualTo("SEARCH_LEARNER_EVENTS_BY_ULN")
     assertThat(receivedEvent.who).isEqualTo("TestUser")
-    assertThat(receivedEvent.service).isEqualTo("learner-records-api")
+    assertThat(receivedEvent.service).isEqualTo("hmpps-learner-records-api")
     assertThat(receivedEvent.`when`).isBeforeOrEqualTo(Instant.now())
   }
 }
