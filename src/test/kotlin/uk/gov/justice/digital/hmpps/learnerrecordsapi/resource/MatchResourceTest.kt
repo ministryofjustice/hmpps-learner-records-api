@@ -31,7 +31,7 @@ class MatchResourceTest {
   fun `should return NOT_FOUND if no record found`() {
     `when`(mockMatchService.findMatch(any())).thenReturn(null)
 
-    val actual = matchResource.findMatch(nomisId, "")
+    val actual = matchResource.findMatch(nomisId)
     assertThat(actual.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
     assertThat(actual.body?.status ?: "").isEqualTo(CheckMatchStatus.NotFound)
   }
@@ -45,7 +45,7 @@ class MatchResourceTest {
       ),
     )
 
-    val actual = matchResource.findMatch(nomisId, "")
+    val actual = matchResource.findMatch(nomisId)
     assertThat(actual.statusCode).isEqualTo(HttpStatus.OK)
     assertThat(actual.body?.matchedUln ?: "").isEqualTo(matchedUln)
     assertThat(actual.body?.status ?: "").isEqualTo(CheckMatchStatus.Found)
@@ -60,7 +60,7 @@ class MatchResourceTest {
       ),
     )
 
-    val actual = matchResource.findMatch(nomisId, "")
+    val actual = matchResource.findMatch(nomisId)
     assertThat(actual.statusCode).isEqualTo(HttpStatus.OK)
     assertThat(actual.body?.status ?: "").isEqualTo(CheckMatchStatus.NoMatch)
   }
