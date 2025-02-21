@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
 
 @Target(AnnotationTarget.FUNCTION)
@@ -26,7 +27,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
     content = [
       Content(
         mediaType = "application/json",
-        schema = Schema(implementation = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest::class),
+        schema = Schema(implementation = ConfirmMatchRequest::class),
         examples = [
           ExampleObject(
             name = "Example Request",
