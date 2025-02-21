@@ -19,6 +19,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
   summary = "Find match for nomisId",
   description = "Checks if the given nomisId has already been matched and returns ULN if found",
   parameters = [
+    Parameter(name = "X-Username", `in` = ParameterIn.HEADER, required = true),
     Parameter(name = "nomisId", `in` = ParameterIn.PATH, required = true),
   ],
   security = [SecurityRequirement(name = "learner-records-search-read-only-role")],

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
@@ -36,6 +37,7 @@ class MatchResource(
   @MatchCheckApi
   fun findMatch(
     @PathVariable(name = "nomisId", required = true) nomisId: String,
+    @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<CheckMatchResponse> {
     logger.log("Received a get request to match endpoint", nomisId)
     val entity = matchService.findMatch(
@@ -67,6 +69,7 @@ class MatchResource(
   @Tag(name = "Match")
   @MatchConfirmApi
   suspend fun confirmMatch(
+    @RequestHeader("X-Username", required = true) userName: String,
     @PathVariable(name = "nomisId", required = true) nomisId: String,
     @RequestBody @Valid confirmMatchRequest: ConfirmMatchRequest,
   ): ResponseEntity<Void> {
