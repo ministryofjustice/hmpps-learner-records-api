@@ -26,7 +26,7 @@ class MatchServiceTest {
   }
 
   @Test
-  fun `should return null if no record found`() {
+  fun `findMatch should return null if no record found`() {
     `when`(mockMatchRepository.findFirstByNomisIdOrderByIdDesc(any())).thenReturn(null)
 
     val actual = matchService.findMatch(
@@ -38,7 +38,7 @@ class MatchServiceTest {
   }
 
   @Test
-  fun `should return entity if record found`() {
+  fun `findMatch should return entity if record found`() {
     `when`(mockMatchRepository.findFirstByNomisIdOrderByIdDesc(any())).thenReturn(
       MatchEntity(
         nomisId = nomisId,
@@ -53,5 +53,25 @@ class MatchServiceTest {
     )
     assertThat(actual).isNotEqualTo(null)
     assertThat(actual?.matchedUln).isEqualTo(matchedUln)
+  }
+
+  @Test
+  fun `saveMatch should return the entity the it saves via the repository`() {
+    `when`(mockMatchRepository.save(any())).thenReturn(
+      MatchEntity(
+        nomisId = nomisId,
+        matchedUln = matchedUln,
+      ),
+    )
+
+    val saved = matchService.saveMatch(
+      MatchEntity(
+        nomisId = nomisId,
+        matchedUln = matchedUln,
+      ),
+    )
+    assertThat(saved).isNotEqualTo(null)
+    assertThat(saved.nomisId).isEqualTo(nomisId)
+    assertThat(saved.matchedUln).isEqualTo(matchedUln)
   }
 }
