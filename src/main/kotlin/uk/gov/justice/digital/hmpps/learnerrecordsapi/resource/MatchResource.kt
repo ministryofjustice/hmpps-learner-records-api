@@ -18,8 +18,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatc
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ConfirmMatchResponse
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.ConfirmMatchApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchCheckApi
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchConfirmApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
 @RestController
@@ -65,7 +65,7 @@ class MatchResource(
 
   @PostMapping(value = ["/{nomisId}"])
   @Tag(name = "Match")
-  @ConfirmMatchApi
+  @MatchConfirmApi
   suspend fun confirmMatch(
     @PathVariable(name = "nomisId", required = true) nomisId: String,
     @RequestBody @Valid confirmMatchRequest: ConfirmMatchRequest,

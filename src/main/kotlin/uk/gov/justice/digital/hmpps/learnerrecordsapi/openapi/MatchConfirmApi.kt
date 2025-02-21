@@ -59,4 +59,4 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
     ),
   ],
 )
-annotation class ConfirmMatchApi
+annotation class MatchConfirmApi
