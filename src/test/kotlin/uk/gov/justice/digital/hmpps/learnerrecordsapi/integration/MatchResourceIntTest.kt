@@ -78,7 +78,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
     }
   }
 
-  private inline fun <reified T> postConfirmMatch(nomisId: String, uln: String, expectedStatus: Int): T {
+  private inline fun <reified T> postMatch(nomisId: String, uln: String, expectedStatus: Int): T {
     val responseBody = webTestClient.post()
       .uri("/match/$nomisId")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
@@ -134,7 +134,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
   @Test
   fun `POST to confirm match should return 200 with a response confirming a match`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
-    val actualResponse: ConfirmMatchResponse = postConfirmMatch(nomisId, uln, 200)
+    val actualResponse: ConfirmMatchResponse = postMatch(nomisId, uln, 200)
     val expectedSavedMatchEntity = MatchEntity(nomisId, uln)
     verify(matchService, times(1)).saveMatch(any())
     assertThat(actualResponse.entity.copy(id = null)).isEqualTo(expectedSavedMatchEntity)
@@ -144,7 +144,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
   @Test
   fun `POST to confirm match should return 400 if ULN is malformed`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890abcdef")
-    val actualResponse: HmppsBoldLrsExceptionHandler.ErrorResponse = postConfirmMatch(nomisId, uln, 400)
+    val actualResponse: HmppsBoldLrsExceptionHandler.ErrorResponse = postMatch(nomisId, uln, 400)
 
     val expectedError = HmppsBoldLrsExceptionHandler.ErrorResponse(
       HttpStatus.BAD_REQUEST,
@@ -162,7 +162,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
   fun `POST to confirm match should return 500 if match service fails to save`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
     doThrow(RuntimeException("Database error")).`when`(matchService).saveMatch(any())
-    val actualResponse: HmppsBoldLrsExceptionHandler.ErrorResponse = postConfirmMatch(nomisId, uln, 500)
+    val actualResponse: HmppsBoldLrsExceptionHandler.ErrorResponse = postMatch(nomisId, uln, 500)
 
     val expectedError = HmppsBoldLrsExceptionHandler.ErrorResponse(
       HttpStatus.INTERNAL_SERVER_ERROR,
