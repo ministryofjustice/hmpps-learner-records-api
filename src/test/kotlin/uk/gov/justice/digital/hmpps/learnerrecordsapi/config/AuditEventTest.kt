@@ -21,10 +21,9 @@ class AuditEventTest {
       lastKnownPostCode = "NE2 2AS",
       emailAddress = "test@example.com",
     )
-    val hmppsAuditEvent = AuditEvent.createAuditEvent("User", request.toString())
-    assertEquals("learner-records-api", hmppsAuditEvent.service)
-    assertEquals("Read", hmppsAuditEvent.subjectType)
-    assertEquals("Read Request Received", hmppsAuditEvent.what)
+    val hmppsAuditEvent = AuditEvent.createAuditEvent("searchLearnersByDemographics", "User", request.toString())
+    assertEquals("hmpps-learner-records-api", hmppsAuditEvent.service)
+    assertEquals("searchLearnersByDemographics", hmppsAuditEvent.what)
     assertEquals("User", hmppsAuditEvent.who)
     assertThat(hmppsAuditEvent.`when`).isBeforeOrEqualTo(Instant.now())
     assertTrue(hmppsAuditEvent.details.toString().contains("NE2 2AS"))

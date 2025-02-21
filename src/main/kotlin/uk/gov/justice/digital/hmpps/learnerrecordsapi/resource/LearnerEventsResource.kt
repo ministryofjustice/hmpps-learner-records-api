@@ -28,6 +28,7 @@ class LearnerEventsResource(
 ) {
 
   val logger = LoggerUtil.getLogger<LearnerEventsResource>()
+  val searchLearnerEventsByULN = "SEARCH_LEARNER_EVENTS_BY_ULN"
 
   @PostMapping
   @Tag(name = "Learning Events")
@@ -36,7 +37,7 @@ class LearnerEventsResource(
     @RequestBody @Valid learnerEventsRequest: LearnerEventsRequest,
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<LearnerEventsResponse> {
-    auditService.publishEvent(createAuditEvent(userName, learnerEventsRequest.toString()))
+    auditService.publishEvent(createAuditEvent(searchLearnerEventsByULN, userName, learnerEventsRequest.toString()))
     logger.log("Received a post request to learner events endpoint", learnerEventsRequest)
     val learnerEventsResponse = learnerEventsService.getLearningEvents(learnerEventsRequest, userName)
     return ResponseEntity.status(HttpStatus.OK).body(learnerEventsResponse)

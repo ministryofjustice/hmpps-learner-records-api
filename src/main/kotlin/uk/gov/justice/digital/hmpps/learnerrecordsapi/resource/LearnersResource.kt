@@ -28,6 +28,7 @@ class LearnersResource(
 ) {
 
   val logger = LoggerUtil.getLogger<LearnersResource>()
+  val searchLearnersByDemographics = "SEARCH_LEARNER_BY_DEMOGRAPHICS"
 
   @PostMapping
   @Tag(name = "Learners")
@@ -37,7 +38,13 @@ class LearnersResource(
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<LearnersResponse> {
     logger.log("Received a post request to learners endpoint", findLearnerByDemographicsRequest)
-    auditService.publishEvent(createAuditEvent(userName, findLearnerByDemographicsRequest.toString()))
+    auditService.publishEvent(
+      createAuditEvent(
+        searchLearnersByDemographics,
+        userName,
+        findLearnerByDemographicsRequest.toString(),
+      ),
+    )
     val learnersResponse = learnersService.getLearners(findLearnerByDemographicsRequest, userName)
     return ResponseEntity.status(HttpStatus.OK).body(learnersResponse)
   }

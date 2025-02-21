@@ -6,20 +6,14 @@ import java.util.UUID
 
 object AuditEvent {
 
-  val learnerRecordsApi = "learner-records-api"
-  val subjectTypeRead = "Read"
-  val readRequestReceived = "Read Request Received"
-
-  fun createAuditEvent(userName: String, requestParams: String): HmppsAuditEvent {
+  fun createAuditEvent(whatEvent: String, userName: String, requestParams: String): HmppsAuditEvent {
     val hmppsLRSEvent = HmppsAuditEvent(
-      readRequestReceived,
-      "From $userName",
-      subjectTypeRead,
-      UUID.randomUUID().toString(),
-      Instant.now(),
-      userName,
-      learnerRecordsApi,
-      requestParams,
+      what = whatEvent,
+      correlationId = UUID.randomUUID().toString(),
+      `when` = Instant.now(),
+      who = userName,
+      service = "hmpps-learner-records-api",
+      details = requestParams,
     )
     return hmppsLRSEvent
   }
