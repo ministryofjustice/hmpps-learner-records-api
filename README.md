@@ -21,9 +21,10 @@ This service is available at:
 ## Endpoints
 
 The service provides the following endpoints to consumers.
-* `/match/:id` - Search for a learner's ULN via their NOMIS ID
-* `/learners` - Search for a learner's ULN via their demographic data
-* `/learner-events` - Request a learner's learning record via their ULN
+* `GET /match/:nomisId` - Search for a learner's ULN via their NOMIS ID
+* `POST /match/:nomisId` - Confirm a match between a learner's NOMIS ID and ULN
+* `POST /learners` - Search for a learner's ULN via their demographic data
+* `POST /learner-events` - Request a learner's learning record via their ULN
 
 ### `GET:/match/:id`
 This endpoint is to search for a ULN given a NOMIS ID. The response will
@@ -50,6 +51,35 @@ Response codes:
 * 401 - Unauthorised
 * 403 - Forbidden
 * 404 - Not found
+
+### `POST:/match/:id`
+This endpoint is to confirm a match between a learner's NOMIS ID and ULN.
+The match will be saved as a `MatchEntity` in the database.
+
+Example request body:
+```json
+{
+  "matchingUln": "a1234"
+}
+```
+
+Example response body:
+```json
+{
+  "message": "Match confirmed successfully",
+  "entity": {
+    "id": 1,
+    "nomisId": "A1417AE",
+    "matchedUln": "1234567890"
+  }
+}
+```
+Response codes:
+* 200 - Success
+* 400 - Bad Request, malformed ULN or json body.
+* 401 - Unauthorised
+* 403 - Forbidden
+* 500 - Likely that database is unreachable
 
 ### `POST:/learners`
 This endpoint is to search for learners by their demographic information.
