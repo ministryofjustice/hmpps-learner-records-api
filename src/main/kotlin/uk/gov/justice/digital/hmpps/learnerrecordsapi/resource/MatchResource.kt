@@ -17,10 +17,10 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ConfirmMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchCheckApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchConfirmApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
+import java.net.URI
 
 @RestController
 @PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__RO')")
@@ -69,10 +69,9 @@ class MatchResource(
   suspend fun confirmMatch(
     @PathVariable(name = "nomisId", required = true) nomisId: String,
     @RequestBody @Valid confirmMatchRequest: ConfirmMatchRequest,
-  ): ResponseEntity<ConfirmMatchResponse> {
+  ): ResponseEntity<Void> {
     logger.log("Received a post request to confirm match endpoint", confirmMatchRequest)
-    val savedMatchEntity = matchService.saveMatch(MatchEntity(nomisId, confirmMatchRequest.matchingUln))
-    val confirmMatchResponse = ConfirmMatchResponse("Match confirmed successfully", savedMatchEntity)
-    return ResponseEntity.status(HttpStatus.OK).body(confirmMatchResponse)
+    matchService.saveMatch(MatchEntity(nomisId, confirmMatchRequest.matchingUln))
+    return ResponseEntity.created(URI.create("/match/$nomisId")).build()
   }
 }

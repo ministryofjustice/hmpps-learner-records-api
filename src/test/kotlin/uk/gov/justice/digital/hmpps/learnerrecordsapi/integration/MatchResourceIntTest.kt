@@ -17,12 +17,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.test.web.reactive.server.WebTestClient
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ConfirmMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
@@ -59,7 +59,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
     val executedRequest = webTestClient.get()
       .uri("/match/$nomisId")
       .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .header("X-Username", "TestUser")
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
       .expectStatus()
@@ -78,22 +77,14 @@ class MatchResourceIntTest : IntegrationTestBase() {
     }
   }
 
-  private inline fun <reified T> postMatch(nomisId: String, uln: String, expectedStatus: Int): T {
-    val responseBody = webTestClient.post()
-      .uri("/match/$nomisId")
-      .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
-      .header("X-Username", "TestUser")
-      .bodyValue(ConfirmMatchRequest(matchingUln = uln))
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isEqualTo(expectedStatus)
-      .expectBody()
-      .returnResult()
-      .responseBody!!
-
-    return objectMapper.readValue(responseBody, T::class.java)
-  }
+  private fun postMatch(nomisId: String, uln: String, expectedStatus: Int): WebTestClient.ResponseSpec = webTestClient.post()
+    .uri("/match/$nomisId")
+    .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+    .bodyValue(ConfirmMatchRequest(matchingUln = uln))
+    .accept(MediaType.parseMediaType("application/json"))
+    .exchange()
+    .expectStatus()
+    .isEqualTo(expectedStatus)
 
   @AfterEach
   fun cleanup() {
@@ -132,19 +123,20 @@ class MatchResourceIntTest : IntegrationTestBase() {
   }
 
   @Test
-  fun `POST to confirm match should return 200 with a response confirming a match`() {
+  fun `POST to confirm match should return 201 CREATED with a response confirming a match`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
-    val actualResponse: ConfirmMatchResponse = postMatch(nomisId, uln, 200)
-    val expectedSavedMatchEntity = MatchEntity(nomisId, uln)
-    verify(matchService, times(1)).saveMatch(any())
-    assertThat(actualResponse.entity.copy(id = null)).isEqualTo(expectedSavedMatchEntity)
-    assertThat(actualResponse.message).isEqualTo("Match confirmed successfully")
+    val actualResponse = postMatch(nomisId, uln, 201)
+    verify(matchService, times(1)).saveMatch(MatchEntity(1, nomisId, uln))
+    actualResponse.expectStatus().isCreated
   }
 
   @Test
   fun `POST to confirm match should return 400 if ULN is malformed`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890abcdef")
-    val actualResponse: HmppsBoldLrsExceptionHandler.ErrorResponse = postMatch(nomisId, uln, 400)
+    val actualResponse = objectMapper.readValue(
+      postMatch(nomisId, uln, 400).expectBody().returnResult().responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
     val expectedError = HmppsBoldLrsExceptionHandler.ErrorResponse(
       HttpStatus.BAD_REQUEST,
@@ -162,7 +154,10 @@ class MatchResourceIntTest : IntegrationTestBase() {
   fun `POST to confirm match should return 500 if match service fails to save`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
     doThrow(RuntimeException("Database error")).`when`(matchService).saveMatch(any())
-    val actualResponse: HmppsBoldLrsExceptionHandler.ErrorResponse = postMatch(nomisId, uln, 500)
+    val actualResponse = objectMapper.readValue(
+      postMatch(nomisId, uln, 500).expectBody().returnResult().responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
 
     val expectedError = HmppsBoldLrsExceptionHandler.ErrorResponse(
       HttpStatus.INTERNAL_SERVER_ERROR,

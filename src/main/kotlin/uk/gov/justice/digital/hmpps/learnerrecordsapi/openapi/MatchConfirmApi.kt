@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.ConfirmMatchResponse
 import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
 
 @Target(AnnotationTarget.FUNCTION)
@@ -38,14 +37,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
   security = [SecurityRequirement(name = "learner-records-search-read-only-role")],
   responses = [
     ApiResponse(
-      responseCode = "200",
-      description = "The request was successful and a response was returned.",
-      content = [
-        Content(
-          mediaType = "application/json",
-          schema = Schema(implementation = ConfirmMatchResponse::class),
-        ),
-      ],
+      responseCode = "201",
+      description = "The request was successful and the match was created.",
     ),
     ApiResponse(
       responseCode = "401",
