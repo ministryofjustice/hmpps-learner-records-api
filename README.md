@@ -21,7 +21,7 @@ This service is available at:
 ## Endpoints
 
 The service provides the following endpoints to consumers.
-* `/match/check` - Search for a learner's ULN via their NOMIS ID
+* `/match/:id` - Search for a learner's ULN via their NOMIS ID
 * `/learners` - Search for a learner's ULN via their demographic data
 * `/learner-events` - Request a learner's learning record via their ULN
 
