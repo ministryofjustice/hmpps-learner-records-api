@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.BindingResult
+import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.MissingRequestHeaderException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -15,6 +16,7 @@ import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.resource.NoResourceFoundException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.errorLog
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.DFEApiDownException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 import java.net.SocketTimeoutException
 
@@ -25,6 +27,8 @@ class HmppsBoldLrsExceptionHandler {
   val unExpectedError = "Unexpected error"
   val unReadableHttpMessage = "Unreadable HTTP message"
   val forbiddenAccessDenied = "Forbidden - Access Denied"
+  val dFEApiFailedToRespond = "DfE API failed to Respond"
+  val dfeApiDependencyFailed = "LRS API Dependency Failed - DfE API is under maintenance"
 
   data class ErrorResponse(
     val status: HttpStatus,
@@ -186,5 +190,37 @@ class HmppsBoldLrsExceptionHandler {
     )
     logger.errorLog("Socket Timeout Error", ex)
     return ResponseEntity(errorResponse, HttpStatus.REQUEST_TIMEOUT)
+  }
+
+  @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
+  fun handleHttpRequestMethodNotSupportedException(
+    ex: HttpRequestMethodNotSupportedException,
+    request: WebRequest,
+  ): ResponseEntity<ErrorResponse> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.METHOD_NOT_ALLOWED,
+      errorCode = "Method (${ex.method}) not allowed",
+      userMessage = "HTTP Method (${ex.method}) is not allowed",
+      developerMessage = "HTTP Method (${ex.method}) is not allowed, use only (${ex.supportedMethods?.get(0)}) method",
+      moreInfo = "HTTP Method (${ex.method}) is not allowed, use only this (${ex.supportedMethods?.get(0)}) method",
+    )
+    logger.errorLog("HTTP Verb Not Supported", ex)
+    return ResponseEntity(errorResponse, HttpStatus.METHOD_NOT_ALLOWED)
+  }
+
+  @ExceptionHandler(DFEApiDownException::class)
+  fun handleDFEApiDownException(
+    ex: DFEApiDownException,
+    request: WebRequest,
+  ): ResponseEntity<ErrorResponse> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.FAILED_DEPENDENCY,
+      errorCode = dFEApiFailedToRespond,
+      userMessage = dfeApiDependencyFailed,
+      developerMessage = "LRS API Dependency Failed - DfE API is under maintenance, please check DfE API maintenance window for more details",
+      moreInfo = "LRS API Dependency Failed - DfE API is under maintenance",
+    )
+    logger.errorLog("LRS API Dependency Failed - DfE API is under maintenance")
+    return ResponseEntity(errorResponse, HttpStatus.FAILED_DEPENDENCY)
   }
 }

@@ -10,6 +10,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.debugLo
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.DFEApiDownException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
@@ -49,6 +50,8 @@ class LearnersService(
 
     if (lrsResponse.isSuccessful && lrsResponseBody != null) {
       return convertLrsResponseToOurResponse(findLearnerByDemographicsRequest, lrsResponseBody)
+    } else if (lrsResponse.body()?.body.toString().contains("UnsupportedHttpVerb")) {
+      throw DFEApiDownException(lrsResponse.body()?.body.toString())
     } else {
       throw LRSException(parseError(lrsResponse.errorBody()?.string().toString()))
     }
