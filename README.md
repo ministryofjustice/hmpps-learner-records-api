@@ -64,7 +64,7 @@ Example request body:
 ```
 
 Response codes:
-* 200 - Success
+* 201 - Created
 * 400 - Bad Request, malformed ULN or json body.
 * 401 - Unauthorised
 * 403 - Forbidden
