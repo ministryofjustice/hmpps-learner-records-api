@@ -62,18 +62,6 @@ Example request body:
   "matchingUln": "1234567890"
 }
 ```
-
-Example response body:
-```json
-{
-  "message": "Match confirmed successfully",
-  "entity": {
-    "id": 1,
-    "nomisId": "A1417AE",
-    "matchedUln": "1234567890"
-  }
-}
-```
 Response codes:
 * 200 - Success
 * 400 - Bad Request, malformed ULN or json body.
