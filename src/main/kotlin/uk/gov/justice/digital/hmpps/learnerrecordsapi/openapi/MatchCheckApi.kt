@@ -39,6 +39,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                   "matchedUln": "a1234",
                   "givenName": "Charlie",
                   "familyName": "Brown",
+                  "dateOfBirth": "2022-01-01",
+                  "gender": "MALE",
                   "status": "Found"
                 }
                 """,
