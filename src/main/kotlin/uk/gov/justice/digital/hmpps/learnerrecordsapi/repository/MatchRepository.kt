@@ -10,4 +10,6 @@ interface MatchRepository : JpaRepository<MatchEntity, Long> {
   fun findFirstByNomisIdOrderByIdDesc(
     nomisId: String,
   ): MatchEntity?
+
+  fun findAllByNomisId(nomisId: String): List<MatchEntity>
 }

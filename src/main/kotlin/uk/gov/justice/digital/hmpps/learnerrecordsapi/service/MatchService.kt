@@ -16,4 +16,6 @@ class MatchService(
   fun saveMatch(matchEntity: MatchEntity): MatchEntity = matchRepository.save(matchEntity)
 
   fun count(): Long = matchRepository.count()
+
+  fun getDataForSubjectAccessRequest(nomisId: String) = matchRepository
 }
