@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
-import java.time.LocalDate
 
 // Tests that HmppsBoldLrsExceptionHandler works as expected when actually calling our endpoints.
 
@@ -31,7 +30,7 @@ class ValidationTest : IntegrationTestBase() {
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
         "Darcie",
         "Tucker",
-        LocalDate.parse("2024-01-01"),
+        "2024-01-01",
         Gender.MALE,
         "ABC123",
         "Test",
@@ -73,7 +72,7 @@ class ValidationTest : IntegrationTestBase() {
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
         "DarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcie",
         "Tucker",
-        LocalDate.parse("2024-01-01"),
+        "2024-01-01",
         Gender.MALE,
         "CV49EE",
         "Test",
@@ -116,7 +115,7 @@ class ValidationTest : IntegrationTestBase() {
         "DarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcie",
         "Tucker",
         "1234567890",
-        LocalDate.parse("2024-01-01"),
+        "2024-01-01",
         Gender.MALE,
       )
 
@@ -152,7 +151,7 @@ class ValidationTest : IntegrationTestBase() {
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
         "Darcie",
         "TuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTucker",
-        LocalDate.parse("2024-01-01"),
+        "2024-01-01",
         Gender.MALE,
         "CV49EE",
         "Test",
@@ -193,7 +192,7 @@ class ValidationTest : IntegrationTestBase() {
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
         "Darcie",
         "Tucker",
-        LocalDate.parse("2024-01-01"),
+        "2024-01-01",
         Gender.MALE,
         "CV49EE",
         "TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
@@ -234,7 +233,7 @@ class ValidationTest : IntegrationTestBase() {
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
         "Darcie",
         "Tucker",
-        LocalDate.parse("2024-01-01"),
+        "2024-01-01",
         Gender.MALE,
         "CV49EE",
         "Test",
@@ -276,7 +275,7 @@ class ValidationTest : IntegrationTestBase() {
         "Darcie",
         "TuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTucker",
         "1234567890",
-        LocalDate.parse("2024-01-01"),
+        "2024-01-01",
         Gender.MALE,
       )
 
@@ -313,7 +312,7 @@ class ValidationTest : IntegrationTestBase() {
         "Darcie",
         "Tucker",
         "12345678901234567890",
-        LocalDate.parse("2024-01-01"),
+        "2024-01-01",
         Gender.MALE,
       )
 

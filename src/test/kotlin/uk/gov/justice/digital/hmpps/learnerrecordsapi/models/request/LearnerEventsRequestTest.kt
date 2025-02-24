@@ -5,6 +5,7 @@ import jakarta.validation.ValidatorFactory
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.utils.toISOFormat
 import java.time.LocalDate
 
 class LearnerEventsRequestTest {
@@ -18,7 +19,7 @@ class LearnerEventsRequestTest {
       givenName = "Firstname",
       familyName = "Lastname",
       uln = "1234567890",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
     )
 
@@ -31,7 +32,7 @@ class LearnerEventsRequestTest {
       givenName = "Firstname!",
       familyName = "L@stname",
       uln = "1234567890",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
     )
 
@@ -39,7 +40,7 @@ class LearnerEventsRequestTest {
       givenName = "Fi",
       familyName = "La",
       uln = "1234567890",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
     )
 
@@ -47,7 +48,7 @@ class LearnerEventsRequestTest {
       givenName = "F" + "i".repeat(35),
       familyName = "L" + "a".repeat(35),
       uln = "1234567890",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
     )
 
@@ -62,7 +63,7 @@ class LearnerEventsRequestTest {
       givenName = "Firstname",
       familyName = "Lastname",
       uln = "I2E4S67B90",
-      dateOfBirth = LocalDate.of(2000, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
     )
 
@@ -70,7 +71,7 @@ class LearnerEventsRequestTest {
       givenName = "Firstname",
       familyName = "Lastname",
       uln = "1".repeat(50),
-      dateOfBirth = LocalDate.of(2000, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
     )
 
@@ -78,7 +79,7 @@ class LearnerEventsRequestTest {
       givenName = "Firstname",
       familyName = "Lastname",
       uln = "",
-      dateOfBirth = LocalDate.of(2000, 1, 1),
+      dateOfBirth = "2000-01-01",
       gender = Gender.MALE,
     )
 
@@ -93,7 +94,7 @@ class LearnerEventsRequestTest {
       givenName = "Firstname",
       familyName = "Lastname",
       uln = "1234567890",
-      dateOfBirth = LocalDate.now().plusDays(1),
+      dateOfBirth = LocalDate.now().plusDays(1).toISOFormat(),
       gender = Gender.MALE,
     )
 
@@ -107,7 +108,7 @@ class LearnerEventsRequestTest {
         givenName = "Firstname",
         familyName = "Lastname",
         uln = "1234567890",
-        dateOfBirth = LocalDate.of(1990, 1, 1),
+        dateOfBirth = "1990-01-01",
         gender = Gender.valueOf("ENGLAND"),
       )
     }
@@ -116,7 +117,7 @@ class LearnerEventsRequestTest {
         givenName = "Firstname",
         familyName = "Lastname",
         uln = "1234567890",
-        dateOfBirth = LocalDate.of(1990, 1, 1),
+        dateOfBirth = "1990-01-01",
         gender = Gender.valueOf("1"),
       )
     }

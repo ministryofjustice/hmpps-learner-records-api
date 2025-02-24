@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 
 import com.google.gson.annotations.SerializedName
-import jakarta.validation.constraints.Past
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.LearnersLRSRequest
@@ -16,9 +15,9 @@ data class LearnersRequest(
   @SerializedName("familyName")
   val familyName: String,
 
-  @field:Past
+  @field:Pattern(regexp = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
   @SerializedName("dateOfBirth")
-  val dateOfBirth: LocalDate,
+  val dateOfBirth: String? = null,
 
   val gender: Gender,
 
@@ -45,7 +44,7 @@ data class LearnersRequest(
   fun extractFromRequest(): LearnersLRSRequest = LearnersLRSRequest(
     givenName = givenName,
     familyName = familyName,
-    dateOfBirth = dateOfBirth,
+    dateOfBirth = dateOfBirth?.let { LocalDate.parse(it) },
     gender = gender.code,
     lastKnownPostCode = lastKnownPostCode,
     previousFamilyName = previousFamilyName,
