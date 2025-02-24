@@ -21,15 +21,13 @@ class ConfirmMatchRequest(
   val gender: String? = null,
 
 ) {
-  fun asMatchEntity(nomisId: String): MatchEntity {
-    return MatchEntity(
-      null,
-      nomisId,
-      matchingUln,
-      givenName,
-      familyName,
-      dateOfBirth,
-      gender
-    )
-  }
+  fun asMatchEntity(nomisId: String): MatchEntity = MatchEntity(
+    null,
+    nomisId,
+    matchingUln,
+    givenName,
+    familyName,
+    dateOfBirth,
+    gender,
+  )
 }
