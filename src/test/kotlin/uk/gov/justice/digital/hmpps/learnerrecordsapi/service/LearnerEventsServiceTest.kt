@@ -27,7 +27,6 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSRespons
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
-import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
 class LearnerEventsServiceTest {
@@ -59,7 +58,7 @@ class LearnerEventsServiceTest {
       givenName = "test",
       familyName = "test",
       uln = "test",
-      dateOfBirth = LocalDate.of(1980, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
     )
     val expectedResult = LearnerEventsResponse(
@@ -88,7 +87,7 @@ class LearnerEventsServiceTest {
       givenName = "test",
       familyName = "test",
       uln = "test",
-      dateOfBirth = LocalDate.of(1980, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
     )
 

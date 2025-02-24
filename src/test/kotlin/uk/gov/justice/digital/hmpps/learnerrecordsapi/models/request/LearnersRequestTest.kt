@@ -4,6 +4,7 @@ import jakarta.validation.Validation
 import jakarta.validation.ValidatorFactory
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.utils.toISOFormat
 import java.time.LocalDate
 
 class LearnersRequestTest {
@@ -16,7 +17,7 @@ class LearnersRequestTest {
     val request = LearnersRequest(
       givenName = "Firstname",
       familyName = "Lastname",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.valueOf("MALE"),
       lastKnownPostCode = "NE2 2AS",
       emailAddress = "test@example.com",
@@ -31,7 +32,7 @@ class LearnersRequestTest {
       givenName = "Firstname!",
       familyName = "L@stname",
       previousFamilyName = "Previ0us",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
       lastKnownPostCode = "NE2 2AS",
     )
@@ -40,7 +41,7 @@ class LearnersRequestTest {
       givenName = "Fi",
       familyName = "La",
       previousFamilyName = "Pr",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
       lastKnownPostCode = "NE2 2AS",
     )
@@ -49,7 +50,7 @@ class LearnersRequestTest {
       givenName = "F" + "i".repeat(35),
       familyName = "L" + "i".repeat(35),
       previousFamilyName = "P" + "r".repeat(35),
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
       lastKnownPostCode = "NE2 2AS",
     )
@@ -64,7 +65,7 @@ class LearnersRequestTest {
     val requestWithInvalidPostCode = LearnersRequest(
       givenName = "Firstname",
       familyName = "Lastname",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
       lastKnownPostCode = "INVALID123",
     )
@@ -77,7 +78,7 @@ class LearnersRequestTest {
     val requestWithInvalidEmail = LearnersRequest(
       givenName = "Firstname",
       familyName = "Lastname",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
       lastKnownPostCode = "NE2 2AS",
       emailAddress = "invalid-email",
@@ -91,7 +92,7 @@ class LearnersRequestTest {
     val requestWithDateInFuture = LearnersRequest(
       givenName = "Firstname",
       familyName = "Lastname",
-      dateOfBirth = LocalDate.now().plusDays(1),
+      dateOfBirth = LocalDate.now().plusDays(1).toISOFormat(),
       gender = Gender.MALE,
       lastKnownPostCode = "NE2 2AS",
     )
@@ -103,7 +104,7 @@ class LearnersRequestTest {
     val requestWithLongSchool = LearnersRequest(
       givenName = "Firstname",
       familyName = "Lastname",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
       lastKnownPostCode = "NE2 2AS",
       emailAddress = "test@example.com",
@@ -118,7 +119,7 @@ class LearnersRequestTest {
     val requestWithLongSchool = LearnersRequest(
       givenName = "Firstname",
       familyName = "Lastname",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
       lastKnownPostCode = "NE2 2AS",
       emailAddress = "test@example.com",

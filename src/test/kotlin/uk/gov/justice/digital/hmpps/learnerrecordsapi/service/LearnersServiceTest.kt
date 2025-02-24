@@ -62,7 +62,7 @@ class LearnersServiceTest {
     val requestBody = LearnersRequest(
       givenName = "Some",
       familyName = "Person",
-      dateOfBirth = LocalDate.of(1980, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
       previousFamilyName = "Test",
@@ -109,7 +109,7 @@ class LearnersServiceTest {
     val requestBody = LearnersRequest(
       givenName = "Some",
       familyName = "Person",
-      dateOfBirth = LocalDate.of(1980, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
       previousFamilyName = "Test",
@@ -156,7 +156,7 @@ class LearnersServiceTest {
     val requestBody = LearnersRequest(
       givenName = "Some",
       familyName = "Person",
-      dateOfBirth = LocalDate.of(1980, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
       previousFamilyName = "TeSt",
@@ -191,7 +191,7 @@ class LearnersServiceTest {
     val requestBody = LearnersRequest(
       givenName = "Some",
       familyName = "Person",
-      dateOfBirth = LocalDate.of(1980, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
       lastKnownPostCode = "ABCDEF",
       previousFamilyName = "Test",

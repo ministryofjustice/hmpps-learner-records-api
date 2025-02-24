@@ -21,8 +21,6 @@ import uk.gov.justice.hmpps.sqs.HmppsQueueService
 import uk.gov.justice.hmpps.sqs.MissingQueueException
 import uk.gov.justice.hmpps.sqs.audit.HmppsAuditEvent
 import java.time.Instant
-import java.time.LocalDate
-import java.util.*
 
 class LearnersResourceIntTest : IntegrationTestBase() {
   @Autowired
@@ -54,7 +52,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
       LearnersRequest(
         "Some",
         "Person",
-        LocalDate.parse("2024-01-01"),
+        "2024-01-01",
         Gender.MALE,
         "CV49EE",
         "Test",
@@ -158,7 +156,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         givenName = "Anna",
         familyName = "Cheng",
         lastKnownPostCode = "NE26 3ND",
-        dateOfBirth = LocalDate.parse("1995-06-27"),
+        dateOfBirth = "1995-06-27",
         gender = Gender.FEMALE,
         schoolAtAge16 = "Ellern Mede School ",
         placeOfBirth = "Chard ",
