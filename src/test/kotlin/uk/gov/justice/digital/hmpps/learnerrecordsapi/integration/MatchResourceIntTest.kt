@@ -59,6 +59,8 @@ class MatchResourceIntTest : IntegrationTestBase() {
     expectedResponseStatus: Int,
     expectedStatus: CheckMatchStatus,
     expectedUln: String? = null,
+    expectedGivenName: String? = null,
+    expectedFamilyName: String? = null,
   ) {
     val executedRequest = webTestClient.get()
       .uri("/match/$nomisId")
@@ -79,6 +81,8 @@ class MatchResourceIntTest : IntegrationTestBase() {
     assertThat(checkMatchResponse.status).isEqualTo(expectedStatus)
     if (expectedUln != null) {
       assertThat(checkMatchResponse.matchedUln).isEqualTo(expectedUln)
+      assertThat(checkMatchResponse.givenName).isEqualTo(expectedGivenName)
+      assertThat(checkMatchResponse.familyName).isEqualTo(expectedFamilyName)
     }
   }
 
@@ -100,12 +104,14 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `GET match should find a match by id`() {
-    matchRepository.save(MatchEntity(null, nomisId, matchedUln, "John", "Smith"))
+    matchRepository.save(MatchEntity(null, nomisId, matchedUln, givenName, familyName))
     checkGetWebCall(
       nomisId,
       200,
       CheckMatchStatus.Found,
       matchedUln,
+      givenName,
+      familyName,
     )
   }
 

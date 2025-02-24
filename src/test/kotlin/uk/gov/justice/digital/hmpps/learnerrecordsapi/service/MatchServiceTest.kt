@@ -15,6 +15,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 class MatchServiceTest {
   private val nomisId = "A1234BC"
   private val matchedUln = "a1234"
+  private val givenName = "John"
+  private val familyName = "Smith"
 
   private lateinit var mockMatchRepository: MatchRepository
   private lateinit var matchService: MatchService
@@ -43,6 +45,8 @@ class MatchServiceTest {
       MatchEntity(
         nomisId = nomisId,
         matchedUln = matchedUln,
+        givenName = givenName,
+        familyName = familyName,
       ),
     )
 
@@ -53,6 +57,8 @@ class MatchServiceTest {
     )
     assertThat(actual).isNotEqualTo(null)
     assertThat(actual?.matchedUln).isEqualTo(matchedUln)
+    assertThat(actual?.givenName).isEqualTo(givenName)
+    assertThat(actual?.familyName).isEqualTo(familyName)
   }
 
   @Test

@@ -35,6 +35,8 @@ Example response body:
 ```json
 {
   "matchedUln": "1234567890",
+  "givenName": "Charlie",
+  "familyName": "Brown",
   "status": "Found"
 }
 ```
