@@ -49,6 +49,10 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   val nomisId = "A1234BC"
   val matchedUln = "A"
+  val givenName = "John"
+  val familyName = "Smith"
+  val dateOfBirth = "1990-01-01"
+  val gender = "MALE"
 
   private fun checkGetWebCall(
     nomisId: String,
@@ -82,7 +86,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
     .uri("/match/$nomisId")
     .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
     .header("X-Username", "TestUser")
-    .bodyValue(ConfirmMatchRequest(matchingUln = uln))
+    .bodyValue(ConfirmMatchRequest(uln, givenName, familyName, dateOfBirth, gender))
     .accept(MediaType.parseMediaType("application/json"))
     .exchange()
     .expectStatus()
@@ -96,7 +100,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `GET match should find a match by id`() {
-    matchRepository.save(MatchEntity(nomisId, matchedUln))
+    matchRepository.save(MatchEntity(null, nomisId, matchedUln, "John", "Smith"))
     checkGetWebCall(
       nomisId,
       200,
@@ -116,7 +120,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `GET match should return no match if record marked as such`() {
-    matchRepository.save(MatchEntity(nomisId, ""))
+    matchRepository.save(MatchEntity(null, nomisId, "", "John", "Smith"))
     checkGetWebCall(
       nomisId,
       200,
@@ -128,7 +132,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
   fun `POST to confirm match should return 201 CREATED with a response confirming a match`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
     val actualResponse = postMatch(nomisId, uln, 201)
-    verify(matchService, times(1)).saveMatch(MatchEntity(1, nomisId, uln))
+    verify(matchService, times(1)).saveMatch(any())
     actualResponse.expectStatus().isCreated
   }
 

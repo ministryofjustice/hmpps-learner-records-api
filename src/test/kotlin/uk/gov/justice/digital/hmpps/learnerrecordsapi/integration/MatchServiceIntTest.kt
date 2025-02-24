@@ -28,16 +28,24 @@ class MatchServiceIntTest : IntegrationTestBase() {
     entityManager.createNativeQuery("DELETE FROM matches").executeUpdate()
   }
 
+  val matchWithUln = MatchEntity(
+    nomisId = "ABCDEFGH",
+    matchedUln = "123456789",
+    givenName = "John",
+    familyName = "Smith",
+    dateOfBirth = "1990-01-01",
+    gender = "MALE",
+  )
+
   @Test
   fun `can save a MatchEntity with a uln`() {
-    val matchWithUln = MatchEntity("ABCDEFGH", "123456789")
     val savedMatchWithUln = matchService.saveMatch(matchWithUln)
     assertEquals(matchWithUln, savedMatchWithUln)
   }
 
   @Test
   fun `can retrieve a MatchEntity without providing its uln property`() {
-    val matchWithoutUln = MatchEntity(nomisId = "ABCDEFGH")
+    val matchWithoutUln = matchWithUln.copy(matchedUln = null)
     val expectedMatchWithUln = matchWithoutUln.copy(matchedUln = "0987654321")
     matchRepository.save(expectedMatchWithUln)
     val foundMatchWithUln = matchService.findMatch(matchWithoutUln)
@@ -46,7 +54,7 @@ class MatchServiceIntTest : IntegrationTestBase() {
 
   @Test
   fun `only the latest MatchEntity is retrieved`() {
-    val matchWithoutUln = MatchEntity(nomisId = "ABCDEFGH")
+    val matchWithoutUln = matchWithUln.copy(matchedUln = null)
 
     for (i in 0..9) {
       val matchToSaveWithUln = matchWithoutUln.copy(matchedUln = "112233445$i")

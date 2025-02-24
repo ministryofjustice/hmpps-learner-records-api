@@ -11,20 +11,28 @@ class ConfirmMatchRequestTest {
   private val validator = factory.validator
 
   @Test
-  fun `valid uln should pass validation`() {
+  fun `valid data should pass validation`() {
     val request = ConfirmMatchRequest(
       matchingUln = "1234567890",
+      givenName = "John",
+      familyName = "Smith",
+      dateOfBirth = "1990-01-01",
+      gender = "MALE",
     )
 
     assertTrue(validator.validate(request).isEmpty())
   }
 
   @Test
-  fun `invalid uln should fail validation`() {
+  fun `invalid data should fail validation`() {
     val request = ConfirmMatchRequest(
       matchingUln = "1234567890abcdedf",
+      givenName = "John123",
+      familyName = "Smith321",
+      dateOfBirth = "1990-01-023131",
+      gender = "MALE123",
     )
 
-    assertTrue(validator.validate(request).size == 1)
+    assertTrue(validator.validate(request).size == 5)
   }
 }
