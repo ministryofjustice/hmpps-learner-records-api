@@ -2,7 +2,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 
 import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -108,10 +108,8 @@ class LearnerEventsServiceTest {
     `when`(lrsApiInterfaceMock.getLearnerLearningEvents(any())).thenReturn(
       Response.error(
         500,
-        ResponseBody.create(
-          "text/xml".toMediaTypeOrNull(),
-          InputStreamReader(inputStream, StandardCharsets.UTF_8).readText(),
-        ),
+        InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()
+          .toResponseBody("text/xml".toMediaTypeOrNull()),
       ),
     )
 
