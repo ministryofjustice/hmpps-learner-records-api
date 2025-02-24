@@ -14,6 +14,10 @@ class ConfirmMatchRequestTest {
   fun `valid uln should pass validation`() {
     val request = ConfirmMatchRequest(
       matchingUln = "1234567890",
+      givenName = "John",
+      familyName = "Smith",
+      dateOfBirth = "1990-01-01",
+      gender = "MALE",
     )
 
     assertTrue(validator.validate(request).isEmpty())
@@ -23,6 +27,10 @@ class ConfirmMatchRequestTest {
   fun `invalid uln should fail validation`() {
     val request = ConfirmMatchRequest(
       matchingUln = "1234567890abcdedf",
+      givenName = "John",
+      familyName = "Smith",
+      dateOfBirth = "1990-01-01",
+      gender = "MALE",
     )
 
     assertTrue(validator.validate(request).size == 1)

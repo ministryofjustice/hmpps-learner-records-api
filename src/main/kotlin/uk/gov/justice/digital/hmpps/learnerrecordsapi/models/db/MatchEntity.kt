@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import jakarta.validation.constraints.Pattern
 
 @Entity
 @Table(name = "matches")
@@ -15,16 +16,21 @@ data class MatchEntity(
   val id: Long? = null,
 
   @Column(nullable = false)
-  val nomisId: String,
+  val nomisId: String? = null,
 
   @Column(nullable = false)
   val matchedUln: String? = null,
 
-) {
-  constructor(
-    nomisId: String,
-    matchedUln: String?,
-  ) : this(null, nomisId, matchedUln)
+  @Column(nullable = false)
+  val givenName: String? = null,
 
-  constructor() : this("", "")
-}
+  @Column(nullable = false)
+  val familyName: String? = null,
+
+  @Column(nullable = true)
+  val dateOfBirth: String? = null,
+
+  @Column(nullable = true)
+  val gender: String? = null,
+
+)

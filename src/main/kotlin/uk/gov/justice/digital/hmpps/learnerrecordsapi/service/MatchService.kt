@@ -10,7 +10,7 @@ class MatchService(
 ) {
 
   fun findMatch(matchEntity: MatchEntity): MatchEntity? = matchRepository.findFirstByNomisIdOrderByIdDesc(
-    matchEntity.nomisId,
+    matchEntity.nomisId.orEmpty(),
   )
 
   fun saveMatch(matchEntity: MatchEntity): MatchEntity = matchRepository.save(matchEntity)
