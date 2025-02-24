@@ -8,13 +8,10 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.LRSConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.debugLog
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResponse
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
-import java.io.StringReader
-import javax.xml.bind.JAXBContext
 
 @Service
 class LearnerEventsService(
@@ -22,17 +19,8 @@ class LearnerEventsService(
   private val httpClientConfiguration: HttpClientConfiguration,
   @Autowired
   private val lrsConfiguration: LRSConfiguration,
-) {
+) : BaseService() {
   private val logger: Logger = LoggerUtil.getLogger<LearnerEventsService>()
-
-  private fun parseError(xmlString: String): MIAPAPIException? {
-    val regex = Regex("<ns10:MIAPAPIException[\\s\\S]*?</ns10:MIAPAPIException>")
-    val match = regex.find(xmlString)
-    val relevantXml = match?.value ?: throw IllegalArgumentException("Unparsable LRS Error")
-    val jaxbContext = JAXBContext.newInstance(MIAPAPIException::class.java)
-    val unmarshaller = jaxbContext.createUnmarshaller()
-    return unmarshaller.unmarshal(StringReader(relevantXml)) as MIAPAPIException
-  }
 
   suspend fun getLearningEvents(learnerEventsRequest: LearnerEventsRequest, userName: String): LearnerEventsResponse {
     logger.debugLog("Transforming inbound request object to LRS request object")

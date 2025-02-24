@@ -2,7 +2,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 
 import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -27,7 +27,6 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSRespons
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
-import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
 class LearnerEventsServiceTest {
@@ -59,7 +58,7 @@ class LearnerEventsServiceTest {
       givenName = "test",
       familyName = "test",
       uln = "test",
-      dateOfBirth = LocalDate.of(1980, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
     )
     val expectedResult = LearnerEventsResponse(
@@ -88,7 +87,7 @@ class LearnerEventsServiceTest {
       givenName = "test",
       familyName = "test",
       uln = "test",
-      dateOfBirth = LocalDate.of(1980, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
     )
 
@@ -108,10 +107,8 @@ class LearnerEventsServiceTest {
     `when`(lrsApiInterfaceMock.getLearnerLearningEvents(any())).thenReturn(
       Response.error(
         500,
-        ResponseBody.create(
-          "text/xml".toMediaTypeOrNull(),
-          InputStreamReader(inputStream, StandardCharsets.UTF_8).readText(),
-        ),
+        InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()
+          .toResponseBody("text/xml".toMediaTypeOrNull()),
       ),
     )
 

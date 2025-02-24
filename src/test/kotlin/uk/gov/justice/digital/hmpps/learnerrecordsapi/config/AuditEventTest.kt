@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import java.time.Instant
-import java.time.LocalDate
 
 class AuditEventTest {
 
@@ -16,7 +15,7 @@ class AuditEventTest {
     val request = LearnersRequest(
       givenName = "Firstname",
       familyName = "Lastname",
-      dateOfBirth = LocalDate.of(1990, 1, 1),
+      dateOfBirth = "1990-01-01",
       gender = Gender.valueOf("MALE"),
       lastKnownPostCode = "NE2 2AS",
       emailAddress = "test@example.com",
