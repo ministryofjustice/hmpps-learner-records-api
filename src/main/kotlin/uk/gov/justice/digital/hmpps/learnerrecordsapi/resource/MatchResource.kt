@@ -56,6 +56,10 @@ class MatchResource(
     return ResponseEntity.status(HttpStatus.OK).body(
       CheckMatchResponse(
         matchedUln = matchedUln,
+        givenName = entity.givenName,
+        familyName = entity.familyName,
+        dateOfBirth = entity.dateOfBirth,
+        gender = entity.gender,
         status = if (matchedUln.isNotBlank()) {
           CheckMatchStatus.Found
         } else {
