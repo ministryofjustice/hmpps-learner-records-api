@@ -17,5 +17,7 @@ class MatchService(
 
   fun count(): Long = matchRepository.count()
 
-  fun getDataForSubjectAccessRequest(nomisId: String) = matchRepository
+  fun getDataForSubjectAccessRequest(nomisId: String, fromDate: String?, toDate: String?): List<MatchEntity> {
+    return matchRepository.findAllByNomisId(nomisId);
+  }
 }
