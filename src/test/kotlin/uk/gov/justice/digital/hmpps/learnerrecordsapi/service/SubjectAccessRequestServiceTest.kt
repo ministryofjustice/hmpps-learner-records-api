@@ -8,7 +8,7 @@ import org.mockito.Mockito.reset
 import org.mockito.Mockito.`when`
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 
-class SubjectAccessRequestServiceSampleTest {
+class SubjectAccessRequestServiceTest {
   private val mockMatchService = mock(MatchService::class.java)
   private val service = SubjectAccessRequestService(mockMatchService)
 
