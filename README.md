@@ -35,6 +35,10 @@ Example response body:
 ```json
 {
   "matchedUln": "1234567890",
+  "givenName": "Charlie",
+  "familyName": "Brown",
+  "dateOfBirth": "2022-01-01",
+  "gender": "MALE",
   "status": "Found"
 }
 ```
@@ -59,7 +63,12 @@ The match will be saved as a `MatchEntity` in the database.
 Example request body:
 ```json
 {
-  "matchingUln": "1234567890"
+  "matchingUln": "1234567890",
+  "givenName": "John",
+  "familyName": "Smith",
+  // the below are optional
+  "dateOfBirth": "1990-01-01",
+  "gender": "MALE"
 }
 ```
 

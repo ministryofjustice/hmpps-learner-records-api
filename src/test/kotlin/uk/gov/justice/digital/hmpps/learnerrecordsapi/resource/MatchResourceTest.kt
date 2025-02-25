@@ -9,7 +9,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.springframework.http.HttpStatus
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 
@@ -39,8 +39,7 @@ class MatchResourceTest {
   @Test
   fun `should return entity if record found`() {
     `when`(mockMatchService.findMatch(any())).thenReturn(
-      MatchEntity(
-        nomisId = nomisId,
+      CheckMatchResponse(
         matchedUln = matchedUln,
       ),
     )
@@ -54,8 +53,7 @@ class MatchResourceTest {
   @Test
   fun `should return NO_MATCH if id cannot be matched`() {
     `when`(mockMatchService.findMatch(any())).thenReturn(
-      MatchEntity(
-        nomisId = nomisId,
+      CheckMatchResponse(
         matchedUln = "",
       ),
     )

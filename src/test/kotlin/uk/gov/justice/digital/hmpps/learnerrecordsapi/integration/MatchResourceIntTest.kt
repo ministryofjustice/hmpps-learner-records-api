@@ -59,6 +59,10 @@ class MatchResourceIntTest : IntegrationTestBase() {
     expectedResponseStatus: Int,
     expectedStatus: CheckMatchStatus,
     expectedUln: String? = null,
+    expectedGivenName: String? = null,
+    expectedFamilyName: String? = null,
+    expectedDateOfBirth: String? = null,
+    expectedGender: String? = null,
   ) {
     val executedRequest = webTestClient.get()
       .uri("/match/$nomisId")
@@ -79,6 +83,10 @@ class MatchResourceIntTest : IntegrationTestBase() {
     assertThat(checkMatchResponse.status).isEqualTo(expectedStatus)
     if (expectedUln != null) {
       assertThat(checkMatchResponse.matchedUln).isEqualTo(expectedUln)
+      assertThat(checkMatchResponse.givenName).isEqualTo(expectedGivenName)
+      assertThat(checkMatchResponse.familyName).isEqualTo(expectedFamilyName)
+      assertThat(checkMatchResponse.dateOfBirth).isEqualTo(expectedDateOfBirth)
+      assertThat(checkMatchResponse.gender).isEqualTo(expectedGender)
     }
   }
 
@@ -100,12 +108,27 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `GET match should find a match by id`() {
-    matchRepository.save(MatchEntity(null, nomisId, matchedUln, "John", "Smith"))
+    matchRepository.save(
+      MatchEntity(
+        null,
+        nomisId,
+        matchedUln,
+        givenName,
+        familyName,
+        dateOfBirth,
+        gender,
+      ),
+    )
+
     checkGetWebCall(
       nomisId,
       200,
       CheckMatchStatus.Found,
       matchedUln,
+      givenName,
+      familyName,
+      dateOfBirth,
+      gender,
     )
   }
 
@@ -132,7 +155,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
   fun `POST to confirm match should return 201 CREATED with a response confirming a match`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
     val actualResponse = postMatch(nomisId, uln, 201)
-    verify(matchService, times(1)).saveMatch(any())
+    verify(matchService, times(1)).saveMatch(any(), any())
     actualResponse.expectStatus().isCreated
   }
 
@@ -152,14 +175,14 @@ class MatchResourceIntTest : IntegrationTestBase() {
       moreInfo = "Validation(s) failed for [matchingUln] with reason(s): [must match \"^[0-9]{1,10}\$\"]",
     )
 
-    verify(matchService, never()).saveMatch(any())
+    verify(matchService, never()).saveMatch(any(), any())
     assertThat(actualResponse).isEqualTo(expectedError)
   }
 
   @Test
   fun `POST to confirm match should return 500 if match service fails to save`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
-    doThrow(RuntimeException("Database error")).`when`(matchService).saveMatch(any())
+    doThrow(RuntimeException("Database error")).`when`(matchService).saveMatch(any(), any())
     val actualResponse = objectMapper.readValue(
       postMatch(nomisId, uln, 500).expectBody().returnResult().responseBody,
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
@@ -173,7 +196,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
       moreInfo = "Unexpected error",
     )
 
-    verify(matchService, times(1)).saveMatch(any())
+    verify(matchService, times(1)).saveMatch(any(), any())
     assertThat(actualResponse).isEqualTo(expectedError)
   }
 }

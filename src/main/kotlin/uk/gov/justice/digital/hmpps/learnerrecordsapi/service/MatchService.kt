@@ -1,6 +1,8 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 
 import org.springframework.stereotype.Service
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 
@@ -9,13 +11,23 @@ class MatchService(
   private val matchRepository: MatchRepository,
 ) {
 
-  fun findMatch(matchEntity: MatchEntity): MatchEntity? = matchRepository.findFirstByNomisIdOrderByIdDesc(
-    matchEntity.nomisId.orEmpty(),
-  )
+  fun findMatch(nomisId: String): CheckMatchResponse? {
+    val entity = matchRepository.findFirstByNomisIdOrderByIdDesc(nomisId)
+    return entity?.let {
+      CheckMatchResponse(
+        matchedUln = it.matchedUln,
+        givenName = it.givenName,
+        familyName = it.familyName,
+        dateOfBirth = it.dateOfBirth,
+        gender = it.gender,
+      )
+    }
+  }
 
-  fun saveMatch(matchEntity: MatchEntity): MatchEntity = matchRepository.save(matchEntity)
-
-  fun count(): Long = matchRepository.count()
+  fun saveMatch(nomisId: String, confirmMatchRequest: ConfirmMatchRequest): Long? {
+    val entity = confirmMatchRequest.asMatchEntity(nomisId)
+    return matchRepository.save(entity).id
+  }
 
   fun getDataForSubjectAccessRequest(nomisId: String, fromDate: String?, toDate: String?): List<MatchEntity> {
     return matchRepository.findAllByNomisId(nomisId);
