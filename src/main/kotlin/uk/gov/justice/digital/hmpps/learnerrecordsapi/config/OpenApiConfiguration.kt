@@ -29,9 +29,13 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
       Components().addSecuritySchemes(
         "learner-records-search-read-only-role",
         SecurityScheme().addBearerJwtRequirement("ROLE_LEARNER_RECORDS_SEARCH__RO"),
+      ).addSecuritySchemes(
+        "learner-records-search-write-role",
+        SecurityScheme().addBearerJwtRequirement("ROLE_LEARNER_RECORDS_SEARCH__WR"),
       ),
     )
     .addSecurityItem(SecurityRequirement().addList("learner-records-search-read-only-role", listOf("read")))
+    .addSecurityItem(SecurityRequirement().addList("learner-records-search-write-role", listOf("write")))
 }
 
 private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme = type(SecurityScheme.Type.HTTP)

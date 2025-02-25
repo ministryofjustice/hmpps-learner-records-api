@@ -22,8 +22,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchConfirmApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 import java.net.URI
 
-@RestController
 @PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__RO')")
+@RestController
 @RequestMapping(value = ["/match"], produces = ["application/json"])
 class MatchResource(
   private val matchService: MatchService,
@@ -50,6 +50,7 @@ class MatchResource(
     )
   }
 
+  @PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__WR')")
   @PostMapping(value = ["/{nomisId}"])
   @Tag(name = "Match")
   @MatchConfirmApi

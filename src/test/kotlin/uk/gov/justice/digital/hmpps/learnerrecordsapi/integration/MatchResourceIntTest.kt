@@ -92,7 +92,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   private fun postMatch(nomisId: String, uln: String, expectedStatus: Int): WebTestClient.ResponseSpec = webTestClient.post()
     .uri("/match/$nomisId")
-    .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+    .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO", "ROLE_LEARNER_RECORDS_SEARCH__WR")))
     .header("X-Username", "TestUser")
     .bodyValue(ConfirmMatchRequest(uln, givenName, familyName, dateOfBirth, gender))
     .accept(MediaType.parseMediaType("application/json"))
