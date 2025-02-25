@@ -9,6 +9,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.utils.toISOFormat
@@ -36,11 +37,7 @@ class MatchServiceTest {
   fun `findMatch should return null if no record found`() {
     `when`(mockMatchRepository.findFirstByNomisIdOrderByIdDesc(any())).thenReturn(null)
 
-    val actual = matchService.findMatch(
-      MatchEntity(
-        nomisId = nomisId,
-      ),
-    )
+    val actual = matchService.findMatch(nomisId)
     assertThat(actual).isEqualTo(null)
   }
 
@@ -57,11 +54,7 @@ class MatchServiceTest {
       ),
     )
 
-    val actual = matchService.findMatch(
-      MatchEntity(
-        nomisId = nomisId,
-      ),
-    )
+    val actual = matchService.findMatch(nomisId)
     assertThat(actual).isNotEqualTo(null)
     assertThat(actual?.matchedUln).isEqualTo(matchedUln)
     assertThat(actual?.givenName).isEqualTo(givenName)
@@ -71,22 +64,31 @@ class MatchServiceTest {
   }
 
   @Test
-  fun `saveMatch should return the entity the it saves via the repository`() {
+  fun `saveMatch should return id of the saved entity`() {
+    val id = 1L
+
     `when`(mockMatchRepository.save(any())).thenReturn(
       MatchEntity(
+        id = id,
         nomisId = nomisId,
         matchedUln = matchedUln,
+        givenName = givenName,
+        familyName = familyName,
+        dateOfBirth = dateOfBirth,
+        gender = gender,
       ),
     )
 
-    val saved = matchService.saveMatch(
-      MatchEntity(
-        nomisId = nomisId,
-        matchedUln = matchedUln,
+    val savedId = matchService.saveMatch(
+      nomisId,
+      ConfirmMatchRequest(
+        matchingUln = matchedUln,
+        givenName = givenName,
+        familyName = familyName,
+        dateOfBirth = dateOfBirth,
+        gender = gender,
       ),
     )
-    assertThat(saved).isNotEqualTo(null)
-    assertThat(saved.nomisId).isEqualTo(nomisId)
-    assertThat(saved.matchedUln).isEqualTo(matchedUln)
+    assertThat(savedId).isEqualTo(id)
   }
 }
