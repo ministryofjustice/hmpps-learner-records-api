@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
@@ -40,31 +39,13 @@ class MatchResource(
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<CheckMatchResponse> {
     logger.log("Received a get request to match endpoint", nomisId)
-    val entity = matchService.findMatch(
-      MatchEntity(
-        nomisId = nomisId,
-      ),
-    )
-    if (entity == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-        CheckMatchResponse(
-          status = CheckMatchStatus.NotFound,
-        ),
+    return matchService.findMatch(nomisId)?.let {
+      ResponseEntity.status(HttpStatus.OK).body(
+        it.setStatus(),
       )
-    }
-    val matchedUln = entity.matchedUln ?: ""
-    return ResponseEntity.status(HttpStatus.OK).body(
+    } ?: ResponseEntity.status(HttpStatus.NOT_FOUND).body(
       CheckMatchResponse(
-        matchedUln = matchedUln,
-        givenName = entity.givenName,
-        familyName = entity.familyName,
-        dateOfBirth = entity.dateOfBirth,
-        gender = entity.gender,
-        status = if (matchedUln.isNotBlank()) {
-          CheckMatchStatus.Found
-        } else {
-          CheckMatchStatus.NoMatch
-        },
+        status = CheckMatchStatus.NotFound,
       ),
     )
   }

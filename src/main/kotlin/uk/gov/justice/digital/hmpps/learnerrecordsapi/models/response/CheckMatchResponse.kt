@@ -8,7 +8,15 @@ data class CheckMatchResponse(
   val dateOfBirth: String? = null,
   val gender: String? = null,
   val status: CheckMatchStatus = CheckMatchStatus.Found,
-)
+) {
+  fun setStatus(): CheckMatchResponse = this.copy(
+    status = if (this.matchedUln.isNullOrEmpty() || this.matchedUln.isBlank()) {
+      CheckMatchStatus.NoMatch
+    } else {
+      CheckMatchStatus.Found
+    },
+  )
+}
 
 enum class CheckMatchStatus {
   Found,
