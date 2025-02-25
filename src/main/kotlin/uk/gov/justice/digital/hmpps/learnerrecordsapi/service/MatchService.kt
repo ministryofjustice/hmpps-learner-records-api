@@ -1,10 +1,11 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 
 import org.springframework.stereotype.Service
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
+import java.time.LocalDate
 
 @Service
 class MatchService(
@@ -29,7 +30,14 @@ class MatchService(
     return matchRepository.save(entity).id
   }
 
-  fun getDataForSubjectAccessRequest(nomisId: String, fromDate: String?, toDate: String?): List<MatchEntity> {
-    return matchRepository.findAllByNomisId(nomisId);
+  fun getDataForSubjectAccessRequest(nomisId: String, fromDate: LocalDate?, toDate: LocalDate?): List<MatchEntity> {
+    val timeOfStart = fromDate?.atStartOfDay()
+    val timeOfEnd = toDate?.plusDays(1L)?.atStartOfDay()?.minusNanos(1L)
+
+    if (timeOfStart != null && timeOfEnd != null) {
+      return matchRepository.findByNomisIdAndDateCreatedBetween(nomisId, timeOfStart, timeOfEnd)
+    }
+
+    return matchRepository.findAllByNomisId(nomisId)
   }
 }
