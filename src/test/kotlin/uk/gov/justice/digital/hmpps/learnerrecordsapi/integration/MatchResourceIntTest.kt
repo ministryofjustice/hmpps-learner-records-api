@@ -155,7 +155,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
   fun `POST to confirm match should return 201 CREATED with a response confirming a match`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
     val actualResponse = postMatch(nomisId, uln, 201)
-    verify(matchService, times(1)).saveMatch(any())
+    verify(matchService, times(1)).saveMatch(any(), any())
     actualResponse.expectStatus().isCreated
   }
 
@@ -175,14 +175,14 @@ class MatchResourceIntTest : IntegrationTestBase() {
       moreInfo = "Validation(s) failed for [matchingUln] with reason(s): [must match \"^[0-9]{1,10}\$\"]",
     )
 
-    verify(matchService, never()).saveMatch(any())
+    verify(matchService, never()).saveMatch(any(), any())
     assertThat(actualResponse).isEqualTo(expectedError)
   }
 
   @Test
   fun `POST to confirm match should return 500 if match service fails to save`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
-    doThrow(RuntimeException("Database error")).`when`(matchService).saveMatch(any())
+    doThrow(RuntimeException("Database error")).`when`(matchService).saveMatch(any(), any())
     val actualResponse = objectMapper.readValue(
       postMatch(nomisId, uln, 500).expectBody().returnResult().responseBody,
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
@@ -196,7 +196,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
       moreInfo = "Unexpected error",
     )
 
-    verify(matchService, times(1)).saveMatch(any())
+    verify(matchService, times(1)).saveMatch(any(), any())
     assertThat(actualResponse).isEqualTo(expectedError)
   }
 }

@@ -59,7 +59,7 @@ class MatchResource(
     @RequestBody @Valid confirmMatchRequest: ConfirmMatchRequest,
   ): ResponseEntity<Void> {
     logger.log("Received a post request to confirm match endpoint", confirmMatchRequest)
-    matchService.saveMatch(confirmMatchRequest.asMatchEntity(nomisId))
+    matchService.saveMatch(nomisId, confirmMatchRequest)
     return ResponseEntity.created(URI.create("/match/$nomisId")).build()
   }
 }
