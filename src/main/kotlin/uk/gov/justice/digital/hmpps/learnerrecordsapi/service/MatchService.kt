@@ -30,11 +30,13 @@ class MatchService(
     return matchRepository.save(entity).id
   }
 
-  fun getDataForSubjectAccessRequest(nomisId: String, fromDate: LocalDate?, toDate: LocalDate?): List<MatchEntity> {
-    return matchRepository.findForSubjectAccessRequest(
-      nomisId,
-      fromDate?.atStartOfDay(),
-      toDate?.plusDays(1)?.atStartOfDay()?.minusNanos(1L)
-    )
-  }
+  fun getDataForSubjectAccessRequest(
+    nomisId: String,
+    fromDate: LocalDate?,
+    toDate: LocalDate?,
+  ): List<MatchEntity> = matchRepository.findForSubjectAccessRequest(
+    nomisId,
+    fromDate?.atStartOfDay(),
+    toDate?.plusDays(1)?.atStartOfDay()?.minusNanos(1L),
+  )
 }
