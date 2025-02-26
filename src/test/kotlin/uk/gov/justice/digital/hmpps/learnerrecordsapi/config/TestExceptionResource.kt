@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.MethodParameter
 import org.springframework.http.HttpInputMessage
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.security.authorization.AuthorizationDeniedException
 import org.springframework.validation.BindException
 import org.springframework.validation.FieldError
 import org.springframework.web.HttpRequestMethodNotSupportedException
@@ -50,6 +51,9 @@ class TestExceptionResource(
 
   @PostMapping("/test/forbidden")
   fun triggerForbiddenException(): Nothing = throw AccessDeniedException(file = File(""))
+
+  @PostMapping("/test/authorization-forbidden")
+  fun triggerAuthorizationException(): Nothing = throw AuthorizationDeniedException("")
 
   @PostMapping("/test/generic-exception")
   fun triggerGenericException(): Nothing = throw Exception()

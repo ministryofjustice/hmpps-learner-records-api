@@ -28,6 +28,7 @@ class HmppsBoldLrsExceptionHandler {
   val unExpectedError = "Unexpected error"
   val unReadableHttpMessage = "Unreadable HTTP message"
   val forbiddenAccessDenied = "Forbidden - Access Denied"
+  val forbiddenAuthorizationDenied = "Forbidden - Authorization Denied"
   val dFEApiFailedToRespond = "DfE API failed to Respond"
   val dfeApiDependencyFailed = "LRS API Dependency Failed - DfE API is under maintenance"
 
@@ -75,9 +76,9 @@ class HmppsBoldLrsExceptionHandler {
     return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
   }
 
-  @ExceptionHandler(AccessDeniedException::class, AuthorizationDeniedException::class)
-  fun handleDeniedException(
-    ex: RuntimeException,
+  @ExceptionHandler(AccessDeniedException::class)
+  fun handleAccessDeniedException(
+    ex: AccessDeniedException,
     request: WebRequest,
   ): ResponseEntity<ErrorResponse> {
     val errorResponse = ErrorResponse(
@@ -86,6 +87,22 @@ class HmppsBoldLrsExceptionHandler {
       userMessage = "Forbidden: ${ex.message}",
       developerMessage = forbiddenAccessDenied,
       moreInfo = forbiddenAccessDenied,
+    )
+    logger.errorLog("Forbidden (403) returned", ex)
+    return ResponseEntity(errorResponse, HttpStatus.FORBIDDEN)
+  }
+
+  @ExceptionHandler(AuthorizationDeniedException::class)
+  fun handleAuthorizationDeniedException(
+    ex: AuthorizationDeniedException,
+    request: WebRequest,
+  ): ResponseEntity<ErrorResponse> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.FORBIDDEN,
+      errorCode = forbiddenAuthorizationDenied,
+      userMessage = "Forbidden: ${ex.message}",
+      developerMessage = forbiddenAuthorizationDenied,
+      moreInfo = forbiddenAuthorizationDenied,
     )
     logger.errorLog("Forbidden (403) returned", ex)
     return ResponseEntity(errorResponse, HttpStatus.FORBIDDEN)
