@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_MATCHING
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
@@ -22,7 +23,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchConfirmApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 import java.net.URI
 
-@PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__RO')")
+@PreAuthorize("hasRole('$ROLE_MATCHING')")
 @RestController
 @RequestMapping(value = ["/match"], produces = ["application/json"])
 class MatchResource(
@@ -50,7 +51,6 @@ class MatchResource(
     )
   }
 
-  @PreAuthorize("hasRole('ROLE_LEARNER_RECORDS_SEARCH__WR')")
   @PostMapping(value = ["/{nomisId}"])
   @Tag(name = "Match")
   @MatchConfirmApi

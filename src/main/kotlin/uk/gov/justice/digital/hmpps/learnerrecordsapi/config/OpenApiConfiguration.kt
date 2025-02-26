@@ -8,10 +8,14 @@ import io.swagger.v3.oas.models.servers.Server
 import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_MATCHING
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.PERMISSIONS
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_MATCHING
 
 @Configuration
 class OpenApiConfiguration(buildProperties: BuildProperties) {
-  private val version: String = buildProperties.version
 
   @Bean
   fun customOpenAPI(): OpenAPI = OpenAPI()
@@ -27,15 +31,15 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
     )
     .components(
       Components().addSecuritySchemes(
-        "learner-records-search-read-only-role",
-        SecurityScheme().addBearerJwtRequirement("ROLE_LEARNER_RECORDS_SEARCH__RO"),
+        KEY_LEARNERS,
+        SecurityScheme().addBearerJwtRequirement(ROLE_LEARNERS),
       ).addSecuritySchemes(
-        "learner-records-search-write-role",
-        SecurityScheme().addBearerJwtRequirement("ROLE_LEARNER_RECORDS_SEARCH__WR"),
+        KEY_MATCHING,
+        SecurityScheme().addBearerJwtRequirement(ROLE_MATCHING),
       ),
     )
-    .addSecurityItem(SecurityRequirement().addList("learner-records-search-read-only-role", listOf("read")))
-    .addSecurityItem(SecurityRequirement().addList("learner-records-search-write-role", listOf("write")))
+    .addSecurityItem(SecurityRequirement().addList(KEY_LEARNERS, PERMISSIONS[ROLE_LEARNERS]))
+    .addSecurityItem(SecurityRequirement().addList(KEY_MATCHING, PERMISSIONS[ROLE_MATCHING]))
 }
 
 private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme = type(SecurityScheme.Type.HTTP)
