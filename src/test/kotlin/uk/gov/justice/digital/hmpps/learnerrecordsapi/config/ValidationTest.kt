@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_SEARCH__RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 
@@ -42,7 +43,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -84,7 +85,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -122,7 +123,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .bodyValue(learnerEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -163,7 +164,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -204,7 +205,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -245,7 +246,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -282,7 +283,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .bodyValue(learnerEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -319,7 +320,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .bodyValue(learnerEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -356,7 +357,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(findLearnerByDemographicsRequest)
@@ -393,7 +394,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser").contentType(MediaType.APPLICATION_JSON)
         .bodyValue(findLearnerByDemographicsRequest)
         .exchange()
@@ -433,7 +434,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(requestJsonWithoutGivenName)
@@ -475,7 +476,7 @@ class ValidationTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(requestJsonWithoutGivenName)
