@@ -31,13 +31,22 @@ class MatchService(
   }
 
   fun getDataForSubjectAccessRequest(nomisId: String, fromDate: LocalDate?, toDate: LocalDate?): List<MatchEntity> {
-    val timeOfStart = fromDate?.atStartOfDay()
-    val timeOfEnd = toDate?.plusDays(1L)?.atStartOfDay()?.minusNanos(1L)
+    var subjectData = matchRepository.findAllByNomisId(nomisId)
 
-    if (timeOfStart != null && timeOfEnd != null) {
-      return matchRepository.findByNomisIdAndDateCreatedBetween(nomisId, timeOfStart, timeOfEnd)
+    if (fromDate != null) {
+      val timeOfStart = fromDate.atStartOfDay()
+      subjectData = subjectData.filter { matchEntity ->
+        matchEntity.dateCreated?.isAfter(timeOfStart) == true || matchEntity.dateCreated?.isEqual(timeOfStart) == true
+      }
     }
 
-    return matchRepository.findAllByNomisId(nomisId)
+    if (toDate != null) {
+      val timeOfEnd = toDate.plusDays(1L)?.atStartOfDay()?.minusNanos(1L)
+      subjectData = subjectData.filter { matchEntity ->
+        matchEntity.dateCreated?.isBefore(timeOfEnd) == true || matchEntity.dateCreated?.isEqual(timeOfEnd) == true
+      }
+    }
+
+    return subjectData
   }
 }

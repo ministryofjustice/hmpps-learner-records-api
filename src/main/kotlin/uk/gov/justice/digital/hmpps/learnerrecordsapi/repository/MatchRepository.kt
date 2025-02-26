@@ -3,7 +3,6 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.repository
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
-import java.time.LocalDateTime
 
 @Repository
 interface MatchRepository : JpaRepository<MatchEntity, Long> {
@@ -13,6 +12,4 @@ interface MatchRepository : JpaRepository<MatchEntity, Long> {
   ): MatchEntity?
 
   fun findAllByNomisId(nomisId: String): List<MatchEntity>
-
-  fun findByNomisIdAndDateCreatedBetween(nomisId: String, startDate: LocalDateTime, endDate: LocalDateTime): List<MatchEntity>
 }
