@@ -7,8 +7,10 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfigura
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.LRSConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.debugLog
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
@@ -19,6 +21,8 @@ class LearnerEventsService(
   private val httpClientConfiguration: HttpClientConfiguration,
   @Autowired
   private val lrsConfiguration: LRSConfiguration,
+  @Autowired
+  private val matchService: MatchService,
 ) : BaseService() {
   private val logger: Logger = LoggerUtil.getLogger<LearnerEventsService>()
 
@@ -52,4 +56,14 @@ class LearnerEventsService(
       learnerRecord = learningEventsResult.learnerRecord,
     )
   }
+
+  fun getMatchEntityForNomisId(nomisId: String): MatchEntity? = matchService.findMatch(MatchEntity(nomisId = nomisId))
+
+  fun formLearningEventRequestFromMatchEntity(matchEntity: MatchEntity): LearnerEventsRequest = LearnerEventsRequest(
+    matchEntity.givenName.orEmpty(),
+    matchEntity.familyName.orEmpty(),
+    matchEntity.matchedUln.orEmpty(),
+    matchEntity.dateOfBirth,
+    Gender.valueOf(matchEntity.gender.orEmpty()),
+  )
 }
