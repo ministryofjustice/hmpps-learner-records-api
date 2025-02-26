@@ -4,12 +4,13 @@ import io.swagger.v3.parser.OpenAPIV3Parser
 import net.minidev.json.JSONArray
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_MATCHING
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLES
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_MATCHING
 
 class OpenApiDocsTest : IntegrationTestBase() {
   @LocalServerPort
@@ -82,22 +83,33 @@ class OpenApiDocsTest : IntegrationTestBase() {
     }
   }
 
-  @ParameterizedTest
-  @CsvSource(value = ["$KEY_LEARNERS, $ROLE_LEARNERS"])
-  fun `the security scheme is setup for bearer tokens`(key: String, role: String) {
-    webTestClient.get()
+  @Test
+  fun `the security scheme is setup for bearer tokens`() {
+    val body = webTestClient.get()
       .uri("/v3/api-docs")
       .accept(MediaType.APPLICATION_JSON)
       .exchange()
       .expectStatus().isOk
       .expectBody()
-      .jsonPath("$.components.securitySchemes.$key.type").isEqualTo("http")
-      .jsonPath("$.components.securitySchemes.$key.scheme").isEqualTo("bearer")
-      .jsonPath("$.components.securitySchemes.$key.description").value<String> {
-        assertThat(it).contains(role)
-      }
-      .jsonPath("$.components.securitySchemes.$key.bearerFormat").isEqualTo("JWT")
-      .jsonPath("$.security[0].$key").isEqualTo(JSONArray().apply { this.add("read") })
+
+    val keys = mapOf(
+      KEY_LEARNERS to ROLE_LEARNERS,
+      KEY_MATCHING to ROLE_MATCHING,
+    )
+
+    var index = 0
+    keys.forEach { entry ->
+      val key = entry.key
+      val role = entry.value
+      body
+        .jsonPath("$.components.securitySchemes.$key.type").isEqualTo("http")
+        .jsonPath("$.components.securitySchemes.$key.scheme").isEqualTo("bearer")
+        .jsonPath("$.components.securitySchemes.$key.description").value<String> {
+          assertThat(it).contains(role)
+        }
+        .jsonPath("$.components.securitySchemes.$key.bearerFormat").isEqualTo("JWT")
+        .jsonPath("$.security[${index++}].$key").isEqualTo(JSONArray().apply { this.addAll(ROLES.get(role) ?: listOf()) })
+    }
   }
 
   @Test

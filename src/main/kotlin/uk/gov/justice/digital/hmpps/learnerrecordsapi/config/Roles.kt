@@ -14,7 +14,7 @@ object Roles {
   private const val READ = "read"
   private const val WRITE = "write"
 
-  val PERMISSIONS = mapOf(
+  val ROLES = mapOf(
     ROLE_LEARNERS to listOf(READ),
     ROLE_MATCHING to listOf(READ, WRITE),
   )

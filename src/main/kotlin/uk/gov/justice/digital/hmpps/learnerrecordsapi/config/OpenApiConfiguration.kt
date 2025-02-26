@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_MATCHING
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.PERMISSIONS
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLES
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_MATCHING
 
@@ -38,8 +38,8 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
         SecurityScheme().addBearerJwtRequirement(ROLE_MATCHING),
       ),
     )
-    .addSecurityItem(SecurityRequirement().addList(KEY_LEARNERS, PERMISSIONS[ROLE_LEARNERS]))
-    .addSecurityItem(SecurityRequirement().addList(KEY_MATCHING, PERMISSIONS[ROLE_MATCHING]))
+    .addSecurityItem(SecurityRequirement().addList(KEY_LEARNERS, ROLES[ROLE_LEARNERS]))
+    .addSecurityItem(SecurityRequirement().addList(KEY_MATCHING, ROLES[ROLE_MATCHING]))
 }
 
 private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme = type(SecurityScheme.Type.HTTP)
