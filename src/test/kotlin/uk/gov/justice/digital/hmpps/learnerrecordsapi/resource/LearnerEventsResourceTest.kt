@@ -12,8 +12,9 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.springframework.http.HttpStatus
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotFoundException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnerEventsService
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 import uk.gov.justice.hmpps.sqs.audit.HmppsAuditService
@@ -55,13 +56,13 @@ class LearnerEventsResourceTest {
   @Test
   fun `should return entity if record found`(): Unit = runTest {
     `when`(mockLearnerEventsService.getMatchEntityForNomisId(any())).thenReturn(
-      MatchEntity(
-        nomisId = nomisId,
+      CheckMatchResponse(
         matchedUln = matchedUln,
         familyName = familyName,
         givenName = givenName,
         dateOfBirth = dateOfBirth,
         gender = gender,
+        status = CheckMatchStatus.Found,
       ),
     )
     val requestJson = JSONObject()

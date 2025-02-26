@@ -14,9 +14,9 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AuditEvent.createAu
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_SEARCH__RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotFoundException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.LearnerEventsApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.LearnerEventsByNomisIdApi
@@ -57,11 +57,11 @@ class LearnerEventsResource(
     val nomisId = nomisId.getAsString("nomisId")
     auditService.publishEvent(createAuditEvent(searchLearnerEventsByNomisId, userName, nomisId))
     logger.log("Received a post request to learner events by Nomis ID endpoint", nomisId)
-    val matchEntity: MatchEntity? = learnerEventsService.getMatchEntityForNomisId(nomisId)
-    if (matchEntity == null) {
+    val checkMatchResponse: CheckMatchResponse? = learnerEventsService.getMatchEntityForNomisId(nomisId)
+    if (checkMatchResponse == null) {
       throw MatchNotFoundException(nomisId)
     } else {
-      val learnerEventsRequest = learnerEventsService.formLearningEventRequestFromMatchEntity(matchEntity)
+      val learnerEventsRequest = learnerEventsService.formLearningEventRequestFromMatchEntity(checkMatchResponse)
       val learnerEventsResponse = learnerEventsService.getLearningEvents(learnerEventsRequest, userName)
       return ResponseEntity.status(HttpStatus.OK).body(learnerEventsResponse)
     }

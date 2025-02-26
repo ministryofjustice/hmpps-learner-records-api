@@ -382,7 +382,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learner-events/nomisId")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .bodyValue(requestJson)
         .accept(MediaType.parseMediaType("application/json"))
@@ -414,7 +414,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learner-events/nomisId")
-        .headers(setAuthorisation(roles = listOf("ROLE_LEARNER_RECORDS_SEARCH__RO")))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
         .header("X-Username", "TestUser")
         .bodyValue(requestJson)
         .accept(MediaType.parseMediaType("application/json"))
