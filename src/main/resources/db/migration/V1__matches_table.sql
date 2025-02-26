@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS matches (
     given_name VARCHAR(255) NOT NULL,
     family_name VARCHAR(255) NOT NULL,
     date_of_birth VARCHAR(255),
-    gender VARCHAR(255)
+    gender VARCHAR(255),
+    date_created TIMESTAMP NOT NULL DEFAULT NOW()
 );
