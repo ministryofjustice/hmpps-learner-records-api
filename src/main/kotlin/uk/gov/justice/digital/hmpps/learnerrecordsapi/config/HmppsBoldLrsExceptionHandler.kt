@@ -6,6 +6,7 @@ import org.slf4j.Logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.security.authorization.AuthorizationDeniedException
 import org.springframework.validation.BindingResult
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -74,9 +75,9 @@ class HmppsBoldLrsExceptionHandler {
     return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
   }
 
-  @ExceptionHandler(AccessDeniedException::class)
-  fun handleAccessDeniedException(
-    ex: AccessDeniedException,
+  @ExceptionHandler(AccessDeniedException::class, AuthorizationDeniedException::class)
+  fun handleDeniedException(
+    ex: RuntimeException,
     request: WebRequest,
   ): ResponseEntity<ErrorResponse> {
     val errorResponse = ErrorResponse(
