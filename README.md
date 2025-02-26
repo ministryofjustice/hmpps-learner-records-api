@@ -174,7 +174,8 @@ Example request body:
   "uln": "1174112637",
   // below are optional fields
   "dateOfBirth": "1980-11-01",
-  "gender": "MALE"
+  "gender": "MALE",
+  "keywords": ["english"]
 }
 ```
 
@@ -186,7 +187,8 @@ Example response body:
     "familyName": "Findlay",
     "uln": "1174112637",
     "dateOfBirth": "1980-11-01",
-    "gender": "MALE"
+    "gender": "MALE",
+    "keywords": ["english"]
   },
   "responseType": "Exact Match",
   "foundUln": "1174112637",

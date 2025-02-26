@@ -49,7 +49,9 @@ class LearnerEventsService(
       responseType = responseType,
       incomingUln = learningEventsResult.incomingUln,
       foundUln = learningEventsResult.foundUln,
-      learnerRecord = learningEventsResult.learnerRecord,
+      learnerRecord = learningEventsResult.learnerRecord.filter {
+        it.isSubjectOneOf(request.keywords)
+      },
     )
   }
 }

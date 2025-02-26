@@ -71,4 +71,14 @@ data class LearningEvent(
 
   @get:XmlElement(name = "LanguageForAssessment", namespace = "http://api.lrs.qcf.gov.uk/model")
   var languageForAssessment: String? = null,
-)
+) {
+  fun isSubjectOneOf(keywords: List<String>): Boolean {
+    val subject = this.subject ?: ""
+    if (subject.isBlank()) {
+      return false
+    } else if (keywords.isEmpty()) {
+      return true
+    }
+    return keywords.any { keyword -> subject.contains(keyword, ignoreCase = true) }
+  }
+}

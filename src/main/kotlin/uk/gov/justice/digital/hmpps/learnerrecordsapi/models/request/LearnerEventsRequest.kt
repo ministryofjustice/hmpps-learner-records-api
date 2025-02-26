@@ -24,6 +24,9 @@ class LearnerEventsRequest(
 
   @SerializedName("gender")
   val gender: Gender? = null,
+
+  @SerializedName("keywords")
+  val keywords: List<String> = listOf(),
 ) {
   fun extractFromRequest(): LearnerEventsLRSRequest = LearnerEventsLRSRequest(
     givenName = givenName,

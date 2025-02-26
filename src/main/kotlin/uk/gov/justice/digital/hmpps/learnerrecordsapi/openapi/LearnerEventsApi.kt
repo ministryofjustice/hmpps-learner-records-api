@@ -9,13 +9,14 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 @Operation(
-  summary = "Get learning events by learner ULN",
+  summary = "Get learning events by learner ULN and filter by keyword if provided",
   description = "Get personal learning records and events by a ULN",
   parameters = [Parameter(name = "X-Username", `in` = ParameterIn.HEADER, required = true)],
   requestBody = RequestBody(
@@ -24,7 +25,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
     content = [
       Content(
         mediaType = "application/json",
-        schema = Schema(implementation = uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest::class),
+        schema = Schema(implementation = LearnerEventsRequest::class),
         examples = [
           ExampleObject(
             name = "Exact Match",
@@ -34,7 +35,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                 "familyName": "Findlay",
                 "uln": "1174112637",
                 "dateOfBirth": "1980-11-01",
-                "gender": "MALE"
+                "gender": "MALE",
+                "keywords": []
               }
             """,
           ),
@@ -97,7 +99,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                       "familyName": "Findlay",
                       "uln": "1174112637",
                       "dateOfBirth": "1980-11-01",
-                      "gender": "MALE"
+                      "gender": "MALE",
+                      "keywords": ["english"]
                   },
                   "responseType": "Exact Match",
                   "foundUln": "1174112637",

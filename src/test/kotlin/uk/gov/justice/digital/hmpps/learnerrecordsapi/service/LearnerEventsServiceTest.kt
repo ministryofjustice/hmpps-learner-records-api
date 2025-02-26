@@ -60,13 +60,16 @@ class LearnerEventsServiceTest {
       uln = "test",
       dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
+      keywords = listOf("english"),
     )
     val expectedResult = LearnerEventsResponse(
       searchParameters = body,
       responseType = LRSResponseType.UNKNOWN_RESPONSE_TYPE,
       foundUln = env.body.learningEventsResponse.learningEventsResult.foundUln,
       incomingUln = env.body.learningEventsResponse.learningEventsResult.incomingUln,
-      learnerRecord = env.body.learningEventsResponse.learningEventsResult.learnerRecord,
+      learnerRecord = env.body.learningEventsResponse.learningEventsResult.learnerRecord.filter {
+        it.isSubjectOneOf(body.keywords)
+      },
     )
 
     `when`(lrsApiInterfaceMock.getLearnerLearningEvents(any())).thenReturn(
