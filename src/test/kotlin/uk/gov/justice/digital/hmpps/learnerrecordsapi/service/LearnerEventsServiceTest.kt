@@ -18,7 +18,11 @@ import retrofit2.Retrofit
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.LRSConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsBody
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsEnvelope
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResult
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
@@ -60,16 +64,13 @@ class LearnerEventsServiceTest {
       uln = "test",
       dateOfBirth = "1990-01-01",
       gender = Gender.MALE,
-      keywords = listOf("english"),
     )
     val expectedResult = LearnerEventsResponse(
       searchParameters = body,
       responseType = LRSResponseType.UNKNOWN_RESPONSE_TYPE,
       foundUln = env.body.learningEventsResponse.learningEventsResult.foundUln,
       incomingUln = env.body.learningEventsResponse.learningEventsResult.incomingUln,
-      learnerRecord = env.body.learningEventsResponse.learningEventsResult.learnerRecord.filter {
-        it.isSubjectOneOf(body.keywords)
-      },
+      learnerRecord = env.body.learningEventsResponse.learningEventsResult.learnerRecord,
     )
 
     `when`(lrsApiInterfaceMock.getLearnerLearningEvents(any())).thenReturn(
@@ -121,5 +122,66 @@ class LearnerEventsServiceTest {
 
     verify(lrsApiInterfaceMock).getLearnerLearningEvents(any())
     assertEquals(expectedException.toString(), actualException.toString())
+  }
+
+  private fun checkLearnerEvents(keyword: String?, shouldInclude: Boolean): Unit = runTest {
+    val env = LearningEventsEnvelope(
+      body = LearningEventsBody(
+        learningEventsResponse = LearningEventsResponse(
+          learningEventsResult = LearningEventsResult(
+            learnerRecord = listOf(
+              LearningEvent(
+                subject = "GSCE in Mathematics",
+              ),
+            ),
+          ),
+        ),
+      ),
+    )
+    val body = LearnerEventsRequest(
+      givenName = "test",
+      familyName = "test",
+      uln = "test",
+      dateOfBirth = "1990-01-01",
+      gender = Gender.MALE,
+      keywords = keyword?.let { listOf(it) } ?: emptyList(),
+    )
+    val expectedResult = LearnerEventsResponse(
+      searchParameters = body,
+      responseType = LRSResponseType.UNKNOWN_RESPONSE_TYPE,
+      foundUln = env.body.learningEventsResponse.learningEventsResult.foundUln,
+      incomingUln = env.body.learningEventsResponse.learningEventsResult.incomingUln,
+      learnerRecord = if (shouldInclude) {
+        env.body.learningEventsResponse.learningEventsResult.learnerRecord
+      } else {
+        emptyList()
+      },
+    )
+
+    `when`(lrsApiInterfaceMock.getLearnerLearningEvents(any())).thenReturn(
+      Response.success(
+        env,
+      ),
+    )
+
+    val result = learnerEventsService.getLearningEvents(body, "TestTest")
+
+    assertEquals(expectedResult, result)
+    verify(lrsApiInterfaceMock).getLearnerLearningEvents(any())
+  }
+
+  @Test
+  fun `should return learner event as keyword match`() {
+    checkLearnerEvents("mathematics", true)
+  }
+
+  @Test
+  fun `should return no learner events as keyword does not match`() {
+    checkLearnerEvents("english", false)
+  }
+
+  @Test
+  fun `should return learner event as no keyword specified`() {
+    checkLearnerEvents(null, true)
   }
 }
