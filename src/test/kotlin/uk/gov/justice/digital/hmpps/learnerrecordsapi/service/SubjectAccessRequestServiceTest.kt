@@ -7,6 +7,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.reset
 import org.mockito.Mockito.`when`
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
+import uk.gov.justice.hmpps.kotlin.sar.HmppsSubjectAccessRequestContent
 
 class SubjectAccessRequestServiceTest {
   private val mockMatchService = mock(MatchService::class.java)
@@ -19,7 +20,7 @@ class SubjectAccessRequestServiceTest {
 
   @Test
   fun `returns null for not found`() {
-    `when`(mockMatchService.getDataForSubjectAccessRequest("B12345", null, null)).thenReturn(listOf())
+    `when`(mockMatchService.getDataForSubjectAccessRequest("B12345", null, null)).thenReturn(null)
     assertThat(service.getPrisonContentFor("B12345", null, null)).isNull()
   }
 
@@ -30,7 +31,7 @@ class SubjectAccessRequestServiceTest {
       MatchEntity(1, "A12345", "def"),
       MatchEntity(1, "A12345", "ghi"),
     )
-    `when`(mockMatchService.getDataForSubjectAccessRequest("A12345", null, null)).thenReturn(expectedData)
+    `when`(mockMatchService.getDataForSubjectAccessRequest("A12345", null, null)).thenReturn(HmppsSubjectAccessRequestContent(expectedData))
     val actualData = service.getPrisonContentFor("A12345", null, null)?.content
     assertThat(actualData).isEqualTo(expectedData)
   }

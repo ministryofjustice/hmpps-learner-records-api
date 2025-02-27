@@ -13,11 +13,5 @@ class SubjectAccessRequestService(
     prn: String,
     fromDate: LocalDate?,
     toDate: LocalDate?,
-  ): HmppsSubjectAccessRequestContent? {
-    val foundData = matchService.getDataForSubjectAccessRequest(prn, fromDate, toDate)
-    return when (foundData.size) {
-      0 -> null
-      else -> HmppsSubjectAccessRequestContent(content = foundData)
-    }
-  }
+  ): HmppsSubjectAccessRequestContent? = matchService.getDataForSubjectAccessRequest(prn, fromDate, toDate)
 }

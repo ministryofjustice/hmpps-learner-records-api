@@ -1,10 +1,10 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
+import uk.gov.justice.hmpps.kotlin.sar.HmppsSubjectAccessRequestContent
 import java.time.LocalDate
 
 @Service
@@ -34,9 +34,15 @@ class MatchService(
     nomisId: String,
     fromDate: LocalDate?,
     toDate: LocalDate?,
-  ): List<MatchEntity> = matchRepository.findForSubjectAccessRequest(
-    nomisId,
-    fromDate?.atStartOfDay(),
-    toDate?.plusDays(1)?.atStartOfDay()?.minusNanos(1L),
-  )
+  ): HmppsSubjectAccessRequestContent? {
+    val foundData = matchRepository.findForSubjectAccessRequest(
+      nomisId,
+      fromDate?.atStartOfDay(),
+      toDate?.plusDays(1)?.atStartOfDay()?.minusNanos(1L),
+    )
+    return when (foundData.size) {
+      0 -> null
+      else -> HmppsSubjectAccessRequestContent(content = foundData)
+    }
+  }
 }
