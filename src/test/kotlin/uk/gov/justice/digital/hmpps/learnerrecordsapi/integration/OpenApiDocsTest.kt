@@ -6,11 +6,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_MATCHING
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS_RD
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLES
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_MATCH__RW
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_SEARCH__RO
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI
 
 class OpenApiDocsTest : IntegrationTestBase() {
   @LocalServerPort
@@ -93,8 +93,8 @@ class OpenApiDocsTest : IntegrationTestBase() {
       .expectBody()
 
     val keys = mapOf(
-      KEY_LEARNERS to ROLE_LEARNER_RECORDS_SEARCH__RO,
-      KEY_MATCHING to ROLE_LEARNER_RECORDS_MATCH__RW,
+      KEY_LEARNERS_RD to ROLE_LEARNER_RECORDS_SEARCH__RO,
+      KEY_LEARNERS_UI to ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI,
     )
 
     var index = 0

@@ -8,11 +8,11 @@ import io.swagger.v3.oas.models.servers.Server
 import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_MATCHING
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS_RD
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLES
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_MATCH__RW
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_SEARCH__RO
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI
 
 @Configuration
 class OpenApiConfiguration(buildProperties: BuildProperties) {
@@ -31,15 +31,15 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
     )
     .components(
       Components().addSecuritySchemes(
-        KEY_LEARNERS,
+        KEY_LEARNERS_RD,
         SecurityScheme().addBearerJwtRequirement(ROLE_LEARNER_RECORDS_SEARCH__RO),
       ).addSecuritySchemes(
-        KEY_MATCHING,
-        SecurityScheme().addBearerJwtRequirement(ROLE_LEARNER_RECORDS_MATCH__RW),
+        KEY_LEARNERS_UI,
+        SecurityScheme().addBearerJwtRequirement(ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI),
       ),
     )
-    .addSecurityItem(SecurityRequirement().addList(KEY_LEARNERS, ROLES[ROLE_LEARNER_RECORDS_SEARCH__RO]))
-    .addSecurityItem(SecurityRequirement().addList(KEY_MATCHING, ROLES[ROLE_LEARNER_RECORDS_MATCH__RW]))
+    .addSecurityItem(SecurityRequirement().addList(KEY_LEARNERS_RD, ROLES[ROLE_LEARNER_RECORDS_SEARCH__RO]))
+    .addSecurityItem(SecurityRequirement().addList(KEY_LEARNERS_UI, ROLES[ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI]))
 }
 
 private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme = type(SecurityScheme.Type.HTTP)

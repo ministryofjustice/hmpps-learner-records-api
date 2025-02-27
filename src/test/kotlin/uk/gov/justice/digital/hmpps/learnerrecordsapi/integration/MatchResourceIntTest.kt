@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_MATCH__RW
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
@@ -67,7 +67,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
   ) {
     val executedRequest = webTestClient.get()
       .uri("/match/$nomisId")
-      .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_MATCH__RW)))
+      .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI)))
       .header("X-Username", "TestUser")
       .accept(MediaType.parseMediaType("application/json"))
       .exchange()
@@ -93,7 +93,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   private fun postMatch(nomisId: String, uln: String, expectedStatus: Int): WebTestClient.ResponseSpec = webTestClient.post()
     .uri("/match/$nomisId")
-    .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_MATCH__RW)))
+    .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI)))
     .header("X-Username", "TestUser")
     .bodyValue(ConfirmMatchRequest(uln, givenName, familyName, dateOfBirth, gender))
     .accept(MediaType.parseMediaType("application/json"))
