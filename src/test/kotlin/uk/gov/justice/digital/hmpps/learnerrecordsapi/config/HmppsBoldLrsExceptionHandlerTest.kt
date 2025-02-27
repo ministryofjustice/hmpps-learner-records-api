@@ -112,6 +112,19 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
   }
 
   @Test
+  fun `should catch forbidden exceptions (AuthorizationDeniedException) and return FORBIDDEN`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      HttpStatus.FORBIDDEN,
+      "Forbidden - Authorization Denied",
+      "Forbidden: ",
+      "Forbidden - Authorization Denied",
+      "Forbidden - Authorization Denied",
+    )
+
+    testExceptionHandling("/test/authorization-forbidden", expectedResponse, expectedStatus = HttpStatus.FORBIDDEN)
+  }
+
+  @Test
   fun `should catch timeout exceptions (SocketTimeoutException) and return Request Timeout`() {
     val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
       status = HttpStatus.REQUEST_TIMEOUT,

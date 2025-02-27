@@ -6,6 +6,7 @@ import org.slf4j.Logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.security.authorization.AuthorizationDeniedException
 import org.springframework.validation.BindingResult
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -27,6 +28,7 @@ class HmppsBoldLrsExceptionHandler {
   val unExpectedError = "Unexpected error"
   val unReadableHttpMessage = "Unreadable HTTP message"
   val forbiddenAccessDenied = "Forbidden - Access Denied"
+  val forbiddenAuthorizationDenied = "Forbidden - Authorization Denied"
   val dFEApiFailedToRespond = "DfE API failed to Respond"
   val dfeApiDependencyFailed = "LRS API Dependency Failed - DfE API is under maintenance"
 
@@ -85,6 +87,22 @@ class HmppsBoldLrsExceptionHandler {
       userMessage = "Forbidden: ${ex.message}",
       developerMessage = forbiddenAccessDenied,
       moreInfo = forbiddenAccessDenied,
+    )
+    logger.errorLog("Forbidden (403) returned", ex)
+    return ResponseEntity(errorResponse, HttpStatus.FORBIDDEN)
+  }
+
+  @ExceptionHandler(AuthorizationDeniedException::class)
+  fun handleAuthorizationDeniedException(
+    ex: AuthorizationDeniedException,
+    request: WebRequest,
+  ): ResponseEntity<ErrorResponse> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.FORBIDDEN,
+      errorCode = forbiddenAuthorizationDenied,
+      userMessage = "Forbidden: ${ex.message}",
+      developerMessage = forbiddenAuthorizationDenied,
+      moreInfo = forbiddenAuthorizationDenied,
     )
     logger.errorLog("Forbidden (403) returned", ex)
     return ResponseEntity(errorResponse, HttpStatus.FORBIDDEN)
