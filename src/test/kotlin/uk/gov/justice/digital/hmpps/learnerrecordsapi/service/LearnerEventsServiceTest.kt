@@ -131,7 +131,7 @@ class LearnerEventsServiceTest {
           learningEventsResult = LearningEventsResult(
             learnerRecord = listOf(
               LearningEvent(
-                subject = "GSCE in Mathematics",
+                subject = "GCSE in Mathematics",
               ),
             ),
           ),
@@ -183,5 +183,20 @@ class LearnerEventsServiceTest {
   @Test
   fun `should return learner event as no keyword specified`() {
     checkLearnerEvents(null, true)
+  }
+
+  @Test
+  fun `should return learner event as keyword synonym match`() {
+    checkLearnerEvents("maths", true)
+  }
+
+  @Test
+  fun `should return learner event as keyword at start`() {
+    checkLearnerEvents("gcse", true)
+  }
+
+  @Test
+  fun `should return no learner events as keyword not whole word`() {
+    checkLearnerEvents("gc", false)
   }
 }

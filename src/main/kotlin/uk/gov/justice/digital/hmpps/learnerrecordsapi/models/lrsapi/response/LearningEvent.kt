@@ -79,6 +79,8 @@ data class LearningEvent(
     } else if (keywords.isEmpty()) {
       return true
     }
-    return keywords.any { keyword -> subject.contains(keyword, ignoreCase = true) }
+    return keywords.any { keyword -> subject.containsWholeWord(keyword) }
   }
 }
+
+fun String.containsWholeWord(word: String): Boolean = (" $this ").contains(" $word ", ignoreCase = true)

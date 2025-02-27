@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HttpClientConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.LRSConfiguration
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Synonyms.getSynonyms
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.debugLog
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResponse
@@ -50,7 +51,7 @@ class LearnerEventsService(
       incomingUln = learningEventsResult.incomingUln,
       foundUln = learningEventsResult.foundUln,
       learnerRecord = learningEventsResult.learnerRecord.filter {
-        it.isSubjectOneOf(request.keywords)
+        it.isSubjectOneOf(getSynonyms(request.keywords))
       },
     )
   }
