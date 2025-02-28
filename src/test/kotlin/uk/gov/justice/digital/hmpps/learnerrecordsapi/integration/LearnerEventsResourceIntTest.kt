@@ -12,7 +12,7 @@ import org.springframework.http.MediaType
 import software.amazon.awssdk.services.sqs.model.PurgeQueueRequest
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_SEARCH__RO
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
@@ -54,7 +54,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       val actualResponse = objectMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
-          .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
           .header("X-Username", "TestUser")
           .bodyValue(getLearningEventsRequest)
           .accept(MediaType.parseMediaType("application/json"))
@@ -104,7 +104,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       val actualResponse = objectMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
-          .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
           .header("X-Username", "TestUser")
           .bodyValue(getLearningEventsRequest)
           .accept(MediaType.parseMediaType("application/json"))
@@ -158,7 +158,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       val actualResponse = objectMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
-          .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
           .header("X-Username", "TestUser")
           .bodyValue(getLearningEventsRequest)
           .accept(MediaType.parseMediaType("application/json"))
@@ -189,7 +189,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       val actualResponse = objectMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
-          .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
           .header("X-Username", "TestUser")
           .bodyValue(getLearningEventsRequest)
           .accept(MediaType.parseMediaType("application/json"))
@@ -220,7 +220,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       val actualResponse = objectMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
-          .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
           .header("X-Username", "TestUser")
           .bodyValue(getLearningEventsRequest)
           .accept(MediaType.parseMediaType("application/json"))
@@ -243,7 +243,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       val actualResponse = objectMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
-          .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
           .bodyValue(getLearningEventsRequest)
           .accept(MediaType.parseMediaType("application/json"))
           .exchange()
@@ -271,7 +271,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       val actualResponse = objectMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
-          .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
           .header("X-Username", "TestUser")
           .bodyValue(extendedRequestBody)
           .accept(MediaType.parseMediaType("application/json"))
@@ -309,7 +309,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
 
     webTestClient.post()
       .uri("/learner-events")
-      .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+      .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
       .header("X-Username", "TestUser")
       .bodyValue(getLearningEventsRequest)
       .accept(MediaType.parseMediaType("application/json"))
@@ -382,7 +382,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learner-events/nomisId")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(requestJson)
         .accept(MediaType.parseMediaType("application/json"))
@@ -414,7 +414,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/learner-events/nomisId")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(requestJson)
         .accept(MediaType.parseMediaType("application/json"))

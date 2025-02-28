@@ -11,7 +11,7 @@ import org.springframework.http.MediaType
 import software.amazon.awssdk.services.sqs.model.PurgeQueueRequest
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_SEARCH__RO
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
@@ -64,7 +64,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
     ): Any? {
       val executedRequest = webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(request)
         .accept(MediaType.parseMediaType("application/json"))
@@ -303,7 +303,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
       val executedRequest = webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
@@ -334,7 +334,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
       val executedRequest = webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(extendedRequestBody)
         .accept(MediaType.parseMediaType("application/json"))
@@ -361,7 +361,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -412,7 +412,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
       webTestClient.post()
         .uri("/learner-events/nomisId")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(requestJson)
         .accept(MediaType.parseMediaType("application/json"))

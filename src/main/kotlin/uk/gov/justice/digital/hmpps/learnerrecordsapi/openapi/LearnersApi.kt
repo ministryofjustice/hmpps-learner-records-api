@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
 import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
@@ -87,7 +88,7 @@ fun readResourceFile(fileName: String): String {
       ),
     ],
   ),
-  security = [SecurityRequirement(name = "learner-records-search-read-only-role")],
+  security = [SecurityRequirement(name = ROLE_LEARNERS_RO)],
   responses = [
     ApiResponse(
       responseCode = "200",

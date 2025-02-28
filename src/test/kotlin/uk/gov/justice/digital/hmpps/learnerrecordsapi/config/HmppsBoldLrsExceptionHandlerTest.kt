@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_SEARCH__RO
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase
 import java.time.Duration
 
@@ -33,7 +33,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri(uri)
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
         .exchange()
         .expectStatus()
         .isEqualTo(expectedStatus)
@@ -137,7 +137,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     val actualResponse = objectMapper.readValue(
       webTestClient.post()
         .uri("/test/okhttp-timeout")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNER_RECORDS_SEARCH__RO)))
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.REQUEST_TIMEOUT)

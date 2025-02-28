@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
 
@@ -22,7 +23,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
     Parameter(name = "X-Username", `in` = ParameterIn.HEADER, required = true),
     Parameter(name = "nomisId", `in` = ParameterIn.PATH, required = true),
   ],
-  security = [SecurityRequirement(name = "learner-records-search-read-only-role")],
+  security = [SecurityRequirement(name = ROLE_LEARNERS_RO)],
   responses = [
     ApiResponse(
       responseCode = "200",
