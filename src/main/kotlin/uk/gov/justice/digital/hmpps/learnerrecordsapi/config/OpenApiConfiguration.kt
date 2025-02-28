@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS_RD
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLES
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_SEARCH__RO
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 
 @Configuration
 class OpenApiConfiguration(buildProperties: BuildProperties) {
@@ -32,14 +32,14 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
     .components(
       Components().addSecuritySchemes(
         KEY_LEARNERS_RD,
-        SecurityScheme().addBearerJwtRequirement(ROLE_LEARNER_RECORDS_SEARCH__RO),
+        SecurityScheme().addBearerJwtRequirement(ROLE_LEARNERS_RO),
       ).addSecuritySchemes(
         KEY_LEARNERS_UI,
-        SecurityScheme().addBearerJwtRequirement(ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI),
+        SecurityScheme().addBearerJwtRequirement(ROLE_LEARNERS_UI),
       ),
     )
-    .addSecurityItem(SecurityRequirement().addList(KEY_LEARNERS_RD, ROLES[ROLE_LEARNER_RECORDS_SEARCH__RO]))
-    .addSecurityItem(SecurityRequirement().addList(KEY_LEARNERS_UI, ROLES[ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI]))
+    .addSecurityItem(SecurityRequirement().addList(KEY_LEARNERS_RD, ROLES[ROLE_LEARNERS_RO]))
+    .addSecurityItem(SecurityRequirement().addList(KEY_LEARNERS_UI, ROLES[ROLE_LEARNERS_UI]))
 }
 
 private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme = type(SecurityScheme.Type.HTTP)

@@ -9,8 +9,8 @@ import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS_RD
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLES
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_SEARCH__RO
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 
 class OpenApiDocsTest : IntegrationTestBase() {
   @LocalServerPort
@@ -93,8 +93,8 @@ class OpenApiDocsTest : IntegrationTestBase() {
       .expectBody()
 
     val keys = mapOf(
-      KEY_LEARNERS_RD to ROLE_LEARNER_RECORDS_SEARCH__RO,
-      KEY_LEARNERS_UI to ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI,
+      KEY_LEARNERS_RD to ROLE_LEARNERS_RO,
+      KEY_LEARNERS_UI to ROLE_LEARNERS_UI,
     )
 
     var index = 0
