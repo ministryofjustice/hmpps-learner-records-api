@@ -36,6 +36,7 @@ class LearnerEventsServiceTest {
   private lateinit var lrsApiInterfaceMock: LRSApiInterface
   private lateinit var lrsConfiguration: LRSConfiguration
   private lateinit var learnerEventsService: LearnerEventsService
+  private lateinit var mockMatchService: MatchService
 
   @BeforeEach
   fun setup() {
@@ -45,7 +46,8 @@ class LearnerEventsServiceTest {
       mock(LRSApiInterface::class.java)
     `when`(httpClientConfigurationMock.lrsClient()).thenReturn(lrsApiInterfaceMock)
     lrsConfiguration = mock(LRSConfiguration::class.java)
-    learnerEventsService = LearnerEventsService(httpClientConfigurationMock, lrsConfiguration)
+    mockMatchService = mock(MatchService::class.java)
+    learnerEventsService = LearnerEventsService(httpClientConfigurationMock, lrsConfiguration, mockMatchService)
     `when`(lrsConfiguration.ukprn).thenReturn("test")
     `when`(lrsConfiguration.orgPassword).thenReturn("pass")
     `when`(lrsConfiguration.vendorId).thenReturn("01")

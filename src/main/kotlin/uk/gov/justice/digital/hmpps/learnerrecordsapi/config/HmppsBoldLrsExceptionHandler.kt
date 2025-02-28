@@ -19,6 +19,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.errorLog
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.DFEApiDownException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotFoundException
 import java.net.SocketTimeoutException
 
 @RestControllerAdvice
@@ -31,6 +32,7 @@ class HmppsBoldLrsExceptionHandler {
   val forbiddenAuthorizationDenied = "Forbidden - Authorization Denied"
   val dFEApiFailedToRespond = "DfE API failed to Respond"
   val dfeApiDependencyFailed = "LRS API Dependency Failed - DfE API is under maintenance"
+  val individualNotMatched = "Individual with this NomisId has not been matched to a ULN yet"
 
   data class ErrorResponse(
     val status: HttpStatus,
@@ -235,10 +237,26 @@ class HmppsBoldLrsExceptionHandler {
       status = HttpStatus.FAILED_DEPENDENCY,
       errorCode = dFEApiFailedToRespond,
       userMessage = dfeApiDependencyFailed,
-      developerMessage = "LRS API Dependency Failed - DfE API is under maintenance, please check DfE API maintenance window for more details",
-      moreInfo = "LRS API Dependency Failed - DfE API is under maintenance",
+      developerMessage = "$dfeApiDependencyFailed, please check DfE API maintenance window for more details",
+      moreInfo = dfeApiDependencyFailed,
     )
-    logger.errorLog("LRS API Dependency Failed - DfE API is under maintenance")
+    logger.errorLog(dfeApiDependencyFailed)
     return ResponseEntity(errorResponse, HttpStatus.FAILED_DEPENDENCY)
+  }
+
+  @ExceptionHandler(MatchNotFoundException::class)
+  fun handleMatchNotFoundException(
+    ex: MatchNotFoundException,
+    request: WebRequest,
+  ): ResponseEntity<ErrorResponse> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.NOT_FOUND,
+      errorCode = "Match not found",
+      userMessage = "No Match found for given NomisId ${ex.message}",
+      developerMessage = individualNotMatched,
+      moreInfo = individualNotMatched,
+    )
+    logger.errorLog(individualNotMatched)
+    return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
   }
 }

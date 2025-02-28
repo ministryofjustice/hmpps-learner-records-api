@@ -2,8 +2,8 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 
 object Keys {
 
-  const val KEY_LEARNERS = "role-learners"
-  const val KEY_MATCHING = "role-matching"
+  const val KEY_LEARNERS = "learner-records-search-read-only-role"
+  const val KEY_MATCHING = "learner-records-search-read-write-role"
 }
 
 object Roles {
