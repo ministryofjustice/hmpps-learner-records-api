@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.minidev.json.JSONObject
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -338,9 +337,6 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
   fun `should return Found if the Given Nomis ID does match or exists and return Learning Events`() {
     lrsApiMock.stubLearningEventsExactMatchFull()
 
-    val requestJson = JSONObject()
-    requestJson.put("nomisId", "123456")
-
     matchRepository.save(
       MatchEntity(
         null,
@@ -381,12 +377,10 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     )
 
     val actualResponse = objectMapper.readValue(
-      webTestClient.post()
-        .uri("/learner-events/nomisId")
+      webTestClient.get()
+        .uri("/match/{nomisId}/learner-events", "123456")
         .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
-        .bodyValue(requestJson)
-        .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()
         .isOk
@@ -401,9 +395,6 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `should return Not Found if the Given Nomis ID does not match or exists`() {
-    val requestJson = JSONObject()
-    requestJson.put("nomisId", "123456")
-
     val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
       status = HttpStatus.NOT_FOUND,
       errorCode = "Match not found",
@@ -413,11 +404,10 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     )
 
     val actualResponse = objectMapper.readValue(
-      webTestClient.post()
-        .uri("/learner-events/nomisId")
+      webTestClient.get()
+        .uri("/match/{nomisId}/learner-events", "123456")
         .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
-        .bodyValue(requestJson)
         .accept(MediaType.parseMediaType("application/json"))
         .exchange()
         .expectStatus()

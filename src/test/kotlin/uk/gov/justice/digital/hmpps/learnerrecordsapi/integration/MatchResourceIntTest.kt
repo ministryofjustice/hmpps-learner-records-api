@@ -18,15 +18,23 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
+import software.amazon.awssdk.services.sqs.model.PurgeQueueRequest
+import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
+import uk.gov.justice.hmpps.sqs.HmppsQueueService
+import uk.gov.justice.hmpps.sqs.MissingQueueException
+import uk.gov.justice.hmpps.sqs.audit.HmppsAuditEvent
+import java.time.Instant
 
 @TestConfiguration
 class MockitoSpyConfig {
@@ -48,6 +56,15 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Autowired
   protected lateinit var matchService: MatchService
+
+  @Autowired
+  protected lateinit var hmppsQueueService: HmppsQueueService
+
+  private val auditQueue by lazy {
+    hmppsQueueService.findByQueueId("audit") ?: throw MissingQueueException("HmppsQueue audit not found")
+  }
+  protected val auditSqsClient by lazy { auditQueue.sqsClient }
+  protected val auditQueueUrl by lazy { auditQueue.queueUrl }
 
   val nomisId = "A1234BC"
   val matchedUln = "A"
@@ -202,5 +219,52 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
     verify(matchService, times(1)).saveMatch(any(), any())
     assertThat(actualResponse).isEqualTo(expectedError)
+  }
+
+  @Test
+  fun `should emit an event that request is received for find Learning Events by Nomis ID `() {
+    lrsApiMock.stubLearningEventsLinkedMatchFull()
+
+    auditSqsClient.purgeQueue(
+      PurgeQueueRequest.builder()
+        .queueUrl(auditQueueUrl)
+        .build(),
+    )
+
+    matchRepository.save(
+      MatchEntity(
+        null,
+        "123456",
+        "1234567890",
+        "Some Given Name",
+        "Some Family Name",
+        null,
+        Gender.MALE.toString(),
+      ),
+    )
+
+    webTestClient.get()
+      .uri("/match/{nomisId}/learner-events", "123456")
+      .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+      .header("X-Username", "TestUser")
+      .accept(MediaType.parseMediaType("application/json"))
+      .exchange()
+      .expectStatus()
+      .is2xxSuccessful
+      .expectBody()
+      .returnResult()
+      .responseBody
+
+    val receivedEvent = objectMapper.readValue(
+      auditSqsClient.receiveMessage(
+        ReceiveMessageRequest.builder().queueUrl(auditQueueUrl).build(),
+      ).get().messages()[0].body(),
+      HmppsAuditEvent::class.java,
+    )
+
+    assertThat(receivedEvent.what).isEqualTo("SEARCH_LEARNER_EVENTS_BY_NOMISID")
+    assertThat(receivedEvent.who).isEqualTo("TestUser")
+    assertThat(receivedEvent.service).isEqualTo("hmpps-learner-records-api")
+    assertThat(receivedEvent.`when`).isBeforeOrEqualTo(Instant.now())
   }
 }
