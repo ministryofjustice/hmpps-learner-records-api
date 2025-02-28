@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
@@ -65,29 +66,31 @@ class MatchResourceIntTest : IntegrationTestBase() {
     expectedDateOfBirth: String? = null,
     expectedGender: String? = null,
   ) {
-    val executedRequest = webTestClient.get()
-      .uri("/match/$nomisId")
-      .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
-      .header("X-Username", "TestUser")
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
+    listOf(ROLE_LEARNERS_RO, ROLE_LEARNERS_UI).forEach { role ->
+      val executedRequest = webTestClient.get()
+        .uri("/match/$nomisId")
+        .headers(setAuthorisation(roles = listOf(role)))
+        .header("X-Username", "TestUser")
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
 
-    val checkMatchResponse = objectMapper.readValue(
-      executedRequest
-        .isEqualTo(expectedResponseStatus)
-        .expectBody()
-        .returnResult()
-        .responseBody?.toString(Charsets.UTF_8),
-      CheckMatchResponse::class.java,
-    )
-    assertThat(checkMatchResponse.status).isEqualTo(expectedStatus)
-    if (expectedUln != null) {
-      assertThat(checkMatchResponse.matchedUln).isEqualTo(expectedUln)
-      assertThat(checkMatchResponse.givenName).isEqualTo(expectedGivenName)
-      assertThat(checkMatchResponse.familyName).isEqualTo(expectedFamilyName)
-      assertThat(checkMatchResponse.dateOfBirth).isEqualTo(expectedDateOfBirth)
-      assertThat(checkMatchResponse.gender).isEqualTo(expectedGender)
+      val checkMatchResponse = objectMapper.readValue(
+        executedRequest
+          .isEqualTo(expectedResponseStatus)
+          .expectBody()
+          .returnResult()
+          .responseBody?.toString(Charsets.UTF_8),
+        CheckMatchResponse::class.java,
+      )
+      assertThat(checkMatchResponse.status).isEqualTo(expectedStatus)
+      if (expectedUln != null) {
+        assertThat(checkMatchResponse.matchedUln).isEqualTo(expectedUln)
+        assertThat(checkMatchResponse.givenName).isEqualTo(expectedGivenName)
+        assertThat(checkMatchResponse.familyName).isEqualTo(expectedFamilyName)
+        assertThat(checkMatchResponse.dateOfBirth).isEqualTo(expectedDateOfBirth)
+        assertThat(checkMatchResponse.gender).isEqualTo(expectedGender)
+      }
     }
   }
 

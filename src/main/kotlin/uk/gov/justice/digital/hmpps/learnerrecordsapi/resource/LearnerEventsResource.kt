@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AuditEvent.createAuditEvent
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotFoundException
@@ -24,7 +25,6 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnerEventsServi
 import uk.gov.justice.hmpps.sqs.audit.HmppsAuditService
 
 @RestController
-@PreAuthorize("hasRole('$ROLE_LEARNERS_RO')")
 class LearnerEventsResource(
   private val learnerEventsService: LearnerEventsService,
   private val auditService: HmppsAuditService,
@@ -34,6 +34,7 @@ class LearnerEventsResource(
   val searchLearnerEventsByULN = "SEARCH_LEARNER_EVENTS_BY_ULN"
   val searchLearnerEventsByNomisId = "SEARCH_LEARNER_EVENTS_BY_NOMISID"
 
+  @PreAuthorize("hasRole('$ROLE_LEARNERS_UI')")
   @RequestMapping(value = ["/learner-events"], produces = ["application/json"])
   @Tag(name = "Learning Events")
   @LearnerEventsApi
@@ -47,6 +48,7 @@ class LearnerEventsResource(
     return ResponseEntity.status(HttpStatus.OK).body(learnerEventsResponse)
   }
 
+  @PreAuthorize("hasRole('$ROLE_LEARNERS_RO')")
   @RequestMapping(value = ["/learner-events/nomisId"], produces = ["application/json"])
   @Tag(name = "Learning Events By Nomis ID")
   @LearnerEventsByNomisIdApi

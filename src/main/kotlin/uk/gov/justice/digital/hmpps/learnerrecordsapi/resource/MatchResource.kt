@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
@@ -23,7 +24,6 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchConfirmApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 import java.net.URI
 
-@PreAuthorize("hasRole('$ROLE_LEARNERS_UI')")
 @RestController
 @RequestMapping(value = ["/match"], produces = ["application/json"])
 class MatchResource(
@@ -32,6 +32,7 @@ class MatchResource(
 
   val logger = LoggerUtil.getLogger<MatchResource>()
 
+  @PreAuthorize("hasAnyRole('$ROLE_LEARNERS_UI', '$ROLE_LEARNERS_RO')")
   @GetMapping("/{nomisId}")
   @Tag(name = "Match")
   @MatchCheckApi
@@ -51,6 +52,7 @@ class MatchResource(
     )
   }
 
+  @PreAuthorize("hasRole('$ROLE_LEARNERS_UI')")
   @PostMapping(value = ["/{nomisId}"])
   @Tag(name = "Match")
   @MatchConfirmApi
