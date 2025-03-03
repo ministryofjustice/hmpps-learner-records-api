@@ -11,8 +11,6 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.springframework.http.HttpStatus
-import org.testcontainers.shaded.org.bouncycastle.asn1.isismtt.x509.DeclarationOfMajority.dateOfBirth
-import org.testcontainers.shaded.org.bouncycastle.asn1.x500.style.RFC4519Style.givenName
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotFoundException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
@@ -42,7 +40,7 @@ class MatchResourceTest {
     mockLearnerEventsService = mock(LearnerEventsService::class.java)
     mockAuditService = mock(HmppsAuditService::class.java)
     matchResource = MatchResource(mockMatchService, mockLearnerEventsService, mockAuditService)
-    learnerEventsResource = LearnerEventsResource(mockLearnerEventsService, mockAuditService)
+    learnerEventsResource = LearnerEventsResource(mockLearnerEventsService)
   }
 
   @Test

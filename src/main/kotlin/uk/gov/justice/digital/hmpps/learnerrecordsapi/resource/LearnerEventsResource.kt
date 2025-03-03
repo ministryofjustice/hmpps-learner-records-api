@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AuditEvent.createAuditEvent
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
@@ -17,17 +16,14 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEven
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.LearnerEventsApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnerEventsService
-import uk.gov.justice.hmpps.sqs.audit.HmppsAuditService
 
 @RestController
 @PreAuthorize("hasRole('$ROLE_LEARNERS_UI')")
 class LearnerEventsResource(
   private val learnerEventsService: LearnerEventsService,
-  private val auditService: HmppsAuditService,
 ) {
 
   val logger = LoggerUtil.getLogger<LearnerEventsResource>()
-  val searchLearnerEventsByULN = "SEARCH_LEARNER_EVENTS_BY_ULN"
 
   @RequestMapping(value = ["/learner-events"], produces = ["application/json"])
   @Tag(name = "Learning Events")
@@ -36,7 +32,6 @@ class LearnerEventsResource(
     @RequestBody @Valid learnerEventsRequest: LearnerEventsRequest,
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<LearnerEventsResponse> {
-    auditService.publishEvent(createAuditEvent(searchLearnerEventsByULN, userName, learnerEventsRequest.toString()))
     logger.log("Received a post request to learner events endpoint", learnerEventsRequest)
     val learnerEventsResponse = learnerEventsService.getLearningEvents(learnerEventsRequest, userName)
     return ResponseEntity.status(HttpStatus.OK).body(learnerEventsResponse)

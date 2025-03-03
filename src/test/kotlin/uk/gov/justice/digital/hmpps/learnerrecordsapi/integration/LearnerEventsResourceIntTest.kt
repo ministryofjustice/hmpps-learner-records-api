@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import software.amazon.awssdk.services.sqs.model.PurgeQueueRequest
-import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
@@ -23,8 +21,6 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEve
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import uk.gov.justice.hmpps.sqs.HmppsQueueService
 import uk.gov.justice.hmpps.sqs.MissingQueueException
-import uk.gov.justice.hmpps.sqs.audit.HmppsAuditEvent
-import java.time.Instant
 
 class LearnerEventsResourceIntTest : IntegrationTestBase() {
 
@@ -296,42 +292,6 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     null,
     Gender.MALE,
   )
-
-  @Test
-  fun `should emit an event that request is received for findByUln `() {
-    lrsApiMock.stubLearningEventsExactMatchFull()
-
-    auditSqsClient.purgeQueue(
-      PurgeQueueRequest.builder()
-        .queueUrl(auditQueueUrl)
-        .build(),
-    )
-
-    webTestClient.post()
-      .uri("/learner-events")
-      .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
-      .header("X-Username", "TestUser")
-      .bodyValue(getLearningEventsRequest)
-      .accept(MediaType.parseMediaType("application/json"))
-      .exchange()
-      .expectStatus()
-      .isOk
-      .expectBody()
-      .returnResult()
-      .responseBody
-
-    val receivedEvent = objectMapper.readValue(
-      auditSqsClient.receiveMessage(
-        ReceiveMessageRequest.builder().queueUrl(auditQueueUrl).build(),
-      ).get().messages()[0].body(),
-      HmppsAuditEvent::class.java,
-    )
-
-    assertThat(receivedEvent.what).isEqualTo("SEARCH_LEARNER_EVENTS_BY_ULN")
-    assertThat(receivedEvent.who).isEqualTo("TestUser")
-    assertThat(receivedEvent.service).isEqualTo("hmpps-learner-records-api")
-    assertThat(receivedEvent.`when`).isBeforeOrEqualTo(Instant.now())
-  }
 
   @Test
   fun `should return Found if the Given Nomis ID does match or exists and return Learning Events`() {
