@@ -8,11 +8,9 @@ import io.swagger.v3.oas.models.servers.Server
 import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_LEARNERS
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Keys.KEY_MATCHING
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLES
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_MATCH__RW
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNER_RECORDS_SEARCH__RO
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 
 @Configuration
 class OpenApiConfiguration(buildProperties: BuildProperties) {
@@ -31,15 +29,15 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
     )
     .components(
       Components().addSecuritySchemes(
-        KEY_LEARNERS,
-        SecurityScheme().addBearerJwtRequirement(ROLE_LEARNER_RECORDS_SEARCH__RO),
+        ROLE_LEARNERS_RO,
+        SecurityScheme().addBearerJwtRequirement(ROLE_LEARNERS_RO),
       ).addSecuritySchemes(
-        KEY_MATCHING,
-        SecurityScheme().addBearerJwtRequirement(ROLE_LEARNER_RECORDS_MATCH__RW),
+        ROLE_LEARNERS_UI,
+        SecurityScheme().addBearerJwtRequirement(ROLE_LEARNERS_UI),
       ),
     )
-    .addSecurityItem(SecurityRequirement().addList(KEY_LEARNERS, ROLES[ROLE_LEARNER_RECORDS_SEARCH__RO]))
-    .addSecurityItem(SecurityRequirement().addList(KEY_MATCHING, ROLES[ROLE_LEARNER_RECORDS_MATCH__RW]))
+    .addSecurityItem(SecurityRequirement().addList(ROLE_LEARNERS_RO, ROLES[ROLE_LEARNERS_RO]))
+    .addSecurityItem(SecurityRequirement().addList(ROLE_LEARNERS_UI, ROLES[ROLE_LEARNERS_UI]))
 }
 
 private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme = type(SecurityScheme.Type.HTTP)

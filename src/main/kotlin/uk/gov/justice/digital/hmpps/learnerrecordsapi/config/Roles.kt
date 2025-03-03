@@ -1,24 +1,18 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
 
-object Keys {
-
-  const val KEY_LEARNERS = "learner-records-search-read-only-role"
-  const val KEY_MATCHING = "learner-records-search-read-write-role"
-}
-
 object Roles {
 
-  const val ROLE_LEARNER_RECORDS_SEARCH__RO =
+  const val ROLE_LEARNERS_RO =
     "ROLE_LEARNER_RECORDS_SEARCH__RO"
 
-  const val ROLE_LEARNER_RECORDS_MATCH__RW =
-    "ROLE_LEARNER_RECORDS_MATCH__RW"
+  const val ROLE_LEARNERS_UI =
+    "ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI"
 
   private const val READ = "read"
   private const val WRITE = "write"
 
   val ROLES = mapOf(
-    ROLE_LEARNER_RECORDS_SEARCH__RO to listOf(READ),
-    ROLE_LEARNER_RECORDS_MATCH__RW to listOf(READ, WRITE),
+    ROLE_LEARNERS_RO to listOf(READ),
+    ROLE_LEARNERS_UI to listOf(READ, WRITE),
   )
 }
