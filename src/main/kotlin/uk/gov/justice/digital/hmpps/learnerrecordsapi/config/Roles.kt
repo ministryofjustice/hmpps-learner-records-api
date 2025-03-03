@@ -8,6 +8,9 @@ object Roles {
   const val ROLE_LEARNERS_UI =
     "ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI"
 
+  const val ROLE_LEARNERS_SA =
+    "ROLE_SAR_DATA_ACCESS"
+
   private const val READ = "read"
   private const val WRITE = "write"
 

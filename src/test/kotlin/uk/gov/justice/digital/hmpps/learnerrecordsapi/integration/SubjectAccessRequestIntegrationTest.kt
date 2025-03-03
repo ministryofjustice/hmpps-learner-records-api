@@ -5,11 +5,16 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_SA
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import java.time.LocalDate
 
 class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
+
+  @Autowired
+  lateinit var matchRepository: MatchRepository
+
   @Nested
   @DisplayName("/subject-access-request")
   inner class SubjectAccessRequestEndpoint {
@@ -43,9 +48,6 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
     @Nested
     inner class HappyPath {
 
-      @Autowired
-      lateinit var matchRepository: MatchRepository
-
       @BeforeEach
       fun clearRepository() {
         matchRepository.deleteAll()
@@ -62,7 +64,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
         matchRepository.saveAll(entitiesToSave)
 
         webTestClient.get().uri("/subject-access-request?prn=A12345")
-          .headers(setAuthorisation(roles = listOf("ROLE_SAR_DATA_ACCESS")))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_SA)))
           .exchange()
           .expectStatus().isOk
           .expectBody()
@@ -92,7 +94,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
         matchRepository.saveAll(entitiesToSave)
 
         webTestClient.get().uri("/subject-access-request?prn=A12345&fromDate=$fromDate&toDate=$toDate")
-          .headers(setAuthorisation(roles = listOf("ROLE_SAR_DATA_ACCESS")))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_SA)))
           .exchange()
           .expectStatus().isOk
           .expectBody()
@@ -119,7 +121,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
         matchRepository.saveAll(entitiesToSave)
 
         webTestClient.get().uri("/subject-access-request?prn=A12345&fromDate=$fromDate&toDate=$toDate")
-          .headers(setAuthorisation(roles = listOf("ROLE_SAR_DATA_ACCESS")))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_SA)))
           .exchange()
           .expectStatus().isOk
           .expectBody()
@@ -147,7 +149,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
         matchRepository.saveAll(entitiesToSave)
 
         webTestClient.get().uri("/subject-access-request?prn=A12345&fromDate=$fromDate&toDate=$toDate")
-          .headers(setAuthorisation(roles = listOf("ROLE_SAR_DATA_ACCESS")))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_SA)))
           .exchange()
           .expectStatus().isOk
           .expectBody()
@@ -161,9 +163,6 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
     @Nested
     inner class SadPath {
 
-      @Autowired
-      lateinit var matchRepository: MatchRepository
-
       @BeforeEach
       fun clearRepository() {
         matchRepository.deleteAll()
@@ -172,7 +171,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
       @Test
       fun `should return no content if no data exists`() {
         webTestClient.get().uri("/subject-access-request?prn=A12345")
-          .headers(setAuthorisation(roles = listOf("ROLE_SAR_DATA_ACCESS")))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_SA)))
           .exchange()
           .expectStatus().isNoContent
       }
@@ -180,7 +179,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
       @Test
       fun `should return 209 status if wrong identifier is supplied`() {
         webTestClient.get().uri("/subject-access-request?crn=123456")
-          .headers(setAuthorisation(roles = listOf("ROLE_SAR_DATA_ACCESS")))
+          .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_SA)))
           .exchange()
           .expectStatus()
           .isEqualTo(209)
