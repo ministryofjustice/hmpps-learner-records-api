@@ -18,15 +18,27 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
+import software.amazon.awssdk.services.sqs.model.PurgeQueueRequest
+import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
+import uk.gov.justice.hmpps.sqs.HmppsQueueService
+import uk.gov.justice.hmpps.sqs.MissingQueueException
+import uk.gov.justice.hmpps.sqs.audit.HmppsAuditEvent
+import java.time.Instant
 
 @TestConfiguration
 class MockitoSpyConfig {
@@ -48,6 +60,15 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Autowired
   protected lateinit var matchService: MatchService
+
+  @Autowired
+  protected lateinit var hmppsQueueService: HmppsQueueService
+
+  private val auditQueue by lazy {
+    hmppsQueueService.findByQueueId("audit") ?: throw MissingQueueException("HmppsQueue audit not found")
+  }
+  protected val auditSqsClient by lazy { auditQueue.sqsClient }
+  protected val auditQueueUrl by lazy { auditQueue.queueUrl }
 
   val nomisId = "A1234BC"
   val matchedUln = "A"
@@ -202,5 +223,147 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
     verify(matchService, times(1)).saveMatch(any(), any())
     assertThat(actualResponse).isEqualTo(expectedError)
+  }
+
+  @Test
+  fun `should emit an event that request is received for find Learning Events by Nomis ID `() {
+    lrsApiMock.stubLearningEventsLinkedMatchFull()
+
+    auditSqsClient.purgeQueue(
+      PurgeQueueRequest.builder()
+        .queueUrl(auditQueueUrl)
+        .build(),
+    )
+
+    matchRepository.save(
+      MatchEntity(
+        null,
+        "123456",
+        "1234567890",
+        "Some Given Name",
+        "Some Family Name",
+        null,
+        Gender.MALE.toString(),
+      ),
+    )
+
+    webTestClient.get()
+      .uri("/match/{nomisId}/learner-events", "123456")
+      .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+      .header("X-Username", "TestUser")
+      .accept(MediaType.parseMediaType("application/json"))
+      .exchange()
+      .expectStatus()
+      .is2xxSuccessful
+      .expectBody()
+      .returnResult()
+      .responseBody
+
+    val receivedEvent = objectMapper.readValue(
+      auditSqsClient.receiveMessage(
+        ReceiveMessageRequest.builder().queueUrl(auditQueueUrl).build(),
+      ).get().messages()[0].body(),
+      HmppsAuditEvent::class.java,
+    )
+
+    assertThat(receivedEvent.what).isEqualTo("SEARCH_LEARNER_EVENTS_BY_NOMISID")
+    assertThat(receivedEvent.who).isEqualTo("TestUser")
+    assertThat(receivedEvent.service).isEqualTo("hmpps-learner-records-api")
+    assertThat(receivedEvent.`when`).isBeforeOrEqualTo(Instant.now())
+  }
+
+  @Test
+  fun `should return Found if the Given Nomis ID does match or exists and return Learning Events`() {
+    lrsApiMock.stubLearningEventsExactMatchFull()
+
+    matchRepository.save(
+      MatchEntity(
+        null,
+        "123456",
+        "1234567890",
+        "Some Given Name",
+        "Some Family Name",
+        null,
+        Gender.MALE.toString(),
+      ),
+    )
+
+    val learningEventRequest = LearnerEventsRequest(
+      "Some Given Name",
+      "Some Family Name",
+      "1234567890",
+      null,
+      Gender.MALE,
+    )
+
+    val expectedResponse = LearnerEventsResponse(
+      learningEventRequest,
+      LRSResponseType.EXACT_MATCH,
+      "1234567890",
+      "1234567890",
+      listOf(
+        LearningEvent(
+          id = "28538264",
+          achievementProviderUkprn = "90000051",
+          achievementProviderName = "TEST90000051",
+          awardingOrganisationName = "Pearson Education Ltd",
+          qualificationType = "",
+          subjectCode = "K/501/5773",
+          achievementAwardDate = "2010-01-01",
+          credits = "2",
+          source = "QCFU",
+          dateLoaded = "2014-05-21 14:49:01",
+          underDataChallenge = "N",
+          level = "Entry Level",
+          status = "F",
+          subject = "Introduction to Construction Work: Entry 3",
+          grade = "Pass",
+          awardingOrganisationUkprn = "90000051",
+        ),
+      ),
+    )
+
+    val actualResponse = objectMapper.readValue(
+      webTestClient.get()
+        .uri("/match/{nomisId}/learner-events", "123456")
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .header("X-Username", "TestUser")
+        .exchange()
+        .expectStatus()
+        .isOk
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      LearnerEventsResponse::class.java,
+    )
+
+    assertThat(actualResponse).usingRecursiveComparison().isEqualTo(expectedResponse)
+  }
+
+  @Test
+  fun `should return Not Found if the Given Nomis ID does not match or exists`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      status = HttpStatus.NOT_FOUND,
+      errorCode = "Match not found",
+      userMessage = "No Match found for given NomisId 123456",
+      developerMessage = "Individual with this NomisId has not been matched to a ULN yet",
+      moreInfo = "Individual with this NomisId has not been matched to a ULN yet",
+    )
+
+    val actualResponse = objectMapper.readValue(
+      webTestClient.get()
+        .uri("/match/{nomisId}/learner-events", "123456")
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .header("X-Username", "TestUser")
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isNotFound
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
+    assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 }

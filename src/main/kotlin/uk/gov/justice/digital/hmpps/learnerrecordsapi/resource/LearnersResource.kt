@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AuditEvent.createAuditEvent
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.log
@@ -18,18 +17,15 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersReq
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.FindByDemographicApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnersService
-import uk.gov.justice.hmpps.sqs.audit.HmppsAuditService
 
 @RestController
 @PreAuthorize("hasRole('$ROLE_LEARNERS_UI')")
 @RequestMapping(value = ["/learners"], produces = ["application/json"])
 class LearnersResource(
   private val learnersService: LearnersService,
-  private val auditService: HmppsAuditService,
 ) {
 
   val logger = LoggerUtil.getLogger<LearnersResource>()
-  val searchLearnersByDemographics = "SEARCH_LEARNER_BY_DEMOGRAPHICS"
 
   @PostMapping
   @Tag(name = "Learners")
@@ -39,13 +35,6 @@ class LearnersResource(
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<LearnersResponse> {
     logger.log("Received a post request to learners endpoint", findLearnerByDemographicsRequest)
-    auditService.publishEvent(
-      createAuditEvent(
-        searchLearnersByDemographics,
-        userName,
-        findLearnerByDemographicsRequest.toString(),
-      ),
-    )
     val learnersResponse = learnersService.getLearners(findLearnerByDemographicsRequest, userName)
     return ResponseEntity.status(HttpStatus.OK).body(learnersResponse)
   }
