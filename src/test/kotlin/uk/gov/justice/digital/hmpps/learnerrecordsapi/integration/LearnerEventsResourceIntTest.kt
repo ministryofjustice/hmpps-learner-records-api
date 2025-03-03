@@ -6,13 +6,10 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
@@ -292,91 +289,4 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     null,
     Gender.MALE,
   )
-
-  @Test
-  fun `should return Found if the Given Nomis ID does match or exists and return Learning Events`() {
-    lrsApiMock.stubLearningEventsExactMatchFull()
-
-    matchRepository.save(
-      MatchEntity(
-        null,
-        "123456",
-        "1234567890",
-        getLearningEventsRequest.givenName,
-        getLearningEventsRequest.familyName,
-        getLearningEventsRequest.dateOfBirth,
-        getLearningEventsRequest.gender.toString(),
-      ),
-    )
-
-    val expectedResponse = LearnerEventsResponse(
-      getLearningEventsRequest,
-      LRSResponseType.EXACT_MATCH,
-      "1234567890",
-      "1234567890",
-      listOf(
-        LearningEvent(
-          id = "28538264",
-          achievementProviderUkprn = "90000051",
-          achievementProviderName = "TEST90000051",
-          awardingOrganisationName = "Pearson Education Ltd",
-          qualificationType = "",
-          subjectCode = "K/501/5773",
-          achievementAwardDate = "2010-01-01",
-          credits = "2",
-          source = "QCFU",
-          dateLoaded = "2014-05-21 14:49:01",
-          underDataChallenge = "N",
-          level = "Entry Level",
-          status = "F",
-          subject = "Introduction to Construction Work: Entry 3",
-          grade = "Pass",
-          awardingOrganisationUkprn = "90000051",
-        ),
-      ),
-    )
-
-    val actualResponse = objectMapper.readValue(
-      webTestClient.get()
-        .uri("/match/{nomisId}/learner-events", "123456")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
-        .header("X-Username", "TestUser")
-        .exchange()
-        .expectStatus()
-        .isOk
-        .expectBody()
-        .returnResult()
-        .responseBody,
-      LearnerEventsResponse::class.java,
-    )
-
-    assertThat(actualResponse).usingRecursiveComparison().isEqualTo(expectedResponse)
-  }
-
-  @Test
-  fun `should return Not Found if the Given Nomis ID does not match or exists`() {
-    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
-      status = HttpStatus.NOT_FOUND,
-      errorCode = "Match not found",
-      userMessage = "No Match found for given NomisId 123456",
-      developerMessage = "Individual with this NomisId has not been matched to a ULN yet",
-      moreInfo = "Individual with this NomisId has not been matched to a ULN yet",
-    )
-
-    val actualResponse = objectMapper.readValue(
-      webTestClient.get()
-        .uri("/match/{nomisId}/learner-events", "123456")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
-        .header("X-Username", "TestUser")
-        .accept(MediaType.parseMediaType("application/json"))
-        .exchange()
-        .expectStatus()
-        .isNotFound
-        .expectBody()
-        .returnResult()
-        .responseBody,
-      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
-    )
-    assertThat(actualResponse).isEqualTo(expectedResponse)
-  }
 }

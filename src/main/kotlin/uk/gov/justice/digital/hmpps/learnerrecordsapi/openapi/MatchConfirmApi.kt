@@ -89,9 +89,7 @@ annotation class MatchConfirmApi
                   "searchParameters": {
                       "givenName": "Sean",
                       "familyName": "Findlay",
-                      "uln": "1174112637",
-                      "dateOfBirth": "1980-11-01",
-                      "gender": "MALE"
+                      "uln": "1174112637"
                   },
                   "responseType": "Exact Match",
                   "foundUln": "1174112637",
