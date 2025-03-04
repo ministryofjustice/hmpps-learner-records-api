@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AuditEvent.createAuditEvent
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AuditHelper
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
@@ -27,6 +27,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchCheckApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchConfirmApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnerEventsService
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
+import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
 import uk.gov.justice.hmpps.sqs.audit.HmppsAuditService
 import java.net.URI
 
@@ -35,20 +36,25 @@ import java.net.URI
 class MatchResource(
   private val matchService: MatchService,
   private val learnerEventsService: LearnerEventsService,
-  private val auditService: HmppsAuditService,
+  auditService: HmppsAuditService,
+  private val authHolder: HmppsAuthenticationHolder,
 ) {
 
   val logger = LoggerUtil.getLogger<MatchResource>()
-  val searchLearnerEventsByNomisId = "SEARCH_LEARNER_EVENTS_BY_NOMISID"
+  private val auditHelper = AuditHelper(auditService)
 
   @PreAuthorize("hasAnyRole('$ROLE_LEARNERS_UI', '$ROLE_LEARNERS_RO')")
   @GetMapping("/{nomisId}")
   @Tag(name = "Match")
   @MatchCheckApi
-  fun findMatch(
+  suspend fun findMatch(
     @PathVariable(name = "nomisId", required = true) nomisId: String,
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<CheckMatchResponse> {
+    val roles = authHolder.roles.map { it?.authority ?: "" }
+    if (roles.contains(ROLE_LEARNERS_RO)) {
+      auditHelper.publishMatchAuditEvent(userName, nomisId)
+    }
     logger.log("Received a get request to match endpoint", nomisId)
     return matchService.findMatch(nomisId)?.let {
       ResponseEntity.status(HttpStatus.OK).body(
@@ -83,7 +89,7 @@ class MatchResource(
     @PathVariable(name = "nomisId", required = true) nomisId: String,
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<LearnerEventsResponse> {
-    auditService.publishEvent(createAuditEvent(searchLearnerEventsByNomisId, userName, nomisId))
+    auditHelper.publishLearnerEventsAuditEvent(userName, nomisId)
     logger.log("Received a post request to learner events by Nomis ID endpoint", nomisId)
     val checkMatchResponse: CheckMatchResponse? = learnerEventsService.getMatchEntityForNomisId(nomisId)
     if (checkMatchResponse == null) {

@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AuditEvent.createAuditEvent
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 import java.time.Instant
@@ -20,7 +21,7 @@ class AuditEventTest {
       lastKnownPostCode = "NE2 2AS",
       emailAddress = "test@example.com",
     )
-    val hmppsAuditEvent = AuditEvent.createAuditEvent("searchLearnersByDemographics", "User", request.toString())
+    val hmppsAuditEvent = createAuditEvent("searchLearnersByDemographics", "User", request.toString())
     assertEquals("hmpps-learner-records-api", hmppsAuditEvent.service)
     assertEquals("searchLearnersByDemographics", hmppsAuditEvent.what)
     assertEquals("User", hmppsAuditEvent.who)

@@ -20,6 +20,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import software.amazon.awssdk.services.sqs.model.PurgeQueueRequest
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AuditEvent.MATCH_LE
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
@@ -266,7 +267,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
       HmppsAuditEvent::class.java,
     )
 
-    assertThat(receivedEvent.what).isEqualTo("SEARCH_LEARNER_EVENTS_BY_NOMISID")
+    assertThat(receivedEvent.what).isEqualTo(MATCH_LE)
     assertThat(receivedEvent.who).isEqualTo("TestUser")
     assertThat(receivedEvent.service).isEqualTo("hmpps-learner-records-api")
     assertThat(receivedEvent.`when`).isBeforeOrEqualTo(Instant.now())
