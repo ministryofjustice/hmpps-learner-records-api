@@ -391,7 +391,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
         "",
         "",
         "",
-        null,
+        "NO_MATCH_RETURNED_FROM_LRS",
         Gender.MALE.toString(),
       ),
     )
