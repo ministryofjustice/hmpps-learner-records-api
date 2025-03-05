@@ -17,28 +17,28 @@ data class MatchEntity(
   val id: Long? = null,
 
   @Column(nullable = false)
-  val nomisId: String = "",
+  val nomisId: String? = null,
 
   @Column(nullable = false)
-  val matchedUln: String = "",
+  val matchedUln: String? = null,
 
   @Column(nullable = false)
-  val givenName: String = "",
+  val givenName: String? = null,
 
   @Column(nullable = false)
-  val familyName: String = "",
+  val familyName: String? = null,
 
   @Column(nullable = false)
-  val matchType: String = "",
+  val matchType: String? = null,
 
   @Column(nullable = false)
-  val countOfReturnedUlns: String = "",
+  val countOfMatchedUlns: String? = null,
 
   @Column(nullable = true)
-  val dateOfBirth: String = "",
+  val dateOfBirth: String? = null,
 
   @Column(nullable = true)
-  val gender: String = "",
+  val gender: String? = null,
 
   @Column(nullable = false, updatable = false)
   var dateCreated: LocalDateTime? = null,
