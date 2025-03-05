@@ -30,6 +30,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Lea
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
@@ -118,7 +119,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
     .uri("/match/$nomisId")
     .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
     .header("X-Username", "TestUser")
-    .bodyValue(ConfirmMatchRequest(uln, givenName, familyName, dateOfBirth, gender))
+    .bodyValue(ConfirmMatchRequest(uln, givenName, familyName, dateOfBirth, gender, MatchType.EXACT_MATCH, "1"))
     .accept(MediaType.parseMediaType("application/json"))
     .exchange()
     .expectStatus()
