@@ -98,8 +98,7 @@ class MatchResource(
     } else if (checkMatchResponse.setStatus().status == CheckMatchStatus.NoMatch) {
       throw MatchNotPossibleException(nomisId)
     } else {
-      val learnerEventsRequest = learnerEventsService.formLearningEventRequestFromMatchEntity(checkMatchResponse)
-      val learnerEventsResponse = learnerEventsService.getLearningEvents(learnerEventsRequest, userName)
+      val learnerEventsResponse = learnerEventsService.getLearningEvents(checkMatchResponse.toLearnerEventsRequest(), userName)
       return ResponseEntity.status(HttpStatus.OK).body(learnerEventsResponse)
     }
   }

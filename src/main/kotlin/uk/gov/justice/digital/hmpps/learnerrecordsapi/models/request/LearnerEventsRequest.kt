@@ -3,7 +3,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 import com.google.gson.annotations.SerializedName
 import jakarta.validation.constraints.Pattern
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.LearnerEventsLRSRequest
-import java.time.LocalDate
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.utils.toLocalDate
 
 class LearnerEventsRequest(
   @field:Pattern(regexp = "^[A-Za-z' ,.-]{3,35}$")
@@ -29,7 +29,7 @@ class LearnerEventsRequest(
     givenName = givenName,
     familyName = familyName,
     uln = uln,
-    dateOfBirth = dateOfBirth?.let { LocalDate.parse(it) },
+    dateOfBirth = dateOfBirth?.toLocalDate(),
     gender = gender?.code,
   )
 }

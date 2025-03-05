@@ -15,10 +15,10 @@ class ConfirmMatchRequest(
   val familyName: String,
 
   @field:Pattern(regexp = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
-  val dateOfBirth: String? = null,
+  val dateOfBirth: String = "",
 
   @field:Pattern(regexp = "^(MALE|FEMALE|NOT_KNOWN|NOT_SPECIFIED)\$")
-  val gender: String? = null,
+  val gender: String = "",
 
 ) {
   fun asMatchEntity(nomisId: String): MatchEntity = MatchEntity(

@@ -9,9 +9,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.debugLog
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEventsResponse
 
@@ -54,12 +52,4 @@ class LearnerEventsService(
       learnerRecord = learningEventsResult.learnerRecord,
     )
   }
-
-  fun formLearningEventRequestFromMatchEntity(checkMatchResponse: CheckMatchResponse): LearnerEventsRequest = LearnerEventsRequest(
-    checkMatchResponse.givenName.orEmpty(),
-    checkMatchResponse.familyName.orEmpty(),
-    checkMatchResponse.matchedUln.orEmpty(),
-    checkMatchResponse.dateOfBirth,
-    Gender.valueOf(checkMatchResponse.gender.orEmpty()),
-  )
 }
