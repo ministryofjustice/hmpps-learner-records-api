@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_SA
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import java.time.LocalDate
 
@@ -56,9 +57,9 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
       @Test
       fun `should return all data if prisoner exists and no timeframe is specified`() {
         val entitiesToSave = listOf(
-          MatchEntity(null, "A12345", "765", "Jon", "Test"),
-          MatchEntity(null, "A12345", "3213", "John", "Test"),
-          MatchEntity(null, "B54321", "3213", "Someone", "Else"),
+          MatchEntity(null, "A12345", "765", "Jon", "Test", "EXACT_MATCH", "1", null, Gender.MALE.toString()),
+          MatchEntity(null, "A12345", "3213", "John", "Test", "EXACT_MATCH", "1", null, Gender.MALE.toString()),
+          MatchEntity(null, "B54321", "3213", "Someone", "Else", "EXACT_MATCH", "1", null, Gender.MALE.toString()),
         )
 
         matchRepository.saveAll(entitiesToSave)
@@ -85,10 +86,34 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
         val invalidAfter = toDate.plusDays(1).atStartOfDay()
 
         val entitiesToSave = listOf(
-          MatchEntity(null, "A12345", "765", "Jon", "Test", dateCreated = invalidBefore),
-          MatchEntity(null, "A12345", "3213", "Jonathan", "Test", dateCreated = validExact),
-          MatchEntity(null, "A12345", "3213", "John", "Test", dateCreated = invalidAfter),
-          MatchEntity(null, "B54321", "3213", "Someone", "Else", dateCreated = validExact),
+          MatchEntity(
+            null, "A12345", "765", "Jon", "Test", "EXACT_MATCH",
+            "1",
+            null,
+            Gender.MALE.toString(),
+            invalidBefore,
+          ),
+          MatchEntity(
+            null, "A12345", "3213", "Jonathan", "Test", "EXACT_MATCH",
+            "1",
+            null,
+            Gender.MALE.toString(),
+            validExact,
+          ),
+          MatchEntity(
+            null, "A12345", "3213", "John", "Test", "EXACT_MATCH",
+            "1",
+            null,
+            Gender.MALE.toString(),
+            invalidAfter,
+          ),
+          MatchEntity(
+            null, "B54321", "3213", "Someone", "Else", "EXACT_MATCH",
+            "1",
+            null,
+            Gender.MALE.toString(),
+            validExact,
+          ),
         )
 
         matchRepository.saveAll(entitiesToSave)
@@ -113,9 +138,27 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
         val invalidBefore = fromDate.minusDays(1).atStartOfDay()
 
         val entitiesToSave = listOf(
-          MatchEntity(null, "A12345", "765", "Jon", "Test", dateCreated = invalidBefore),
-          MatchEntity(null, "A12345", "3213", "Jonathan", "Test", dateCreated = validExact),
-          MatchEntity(null, "A12345", "3213", "John", "Test", dateCreated = validExact.plusDays(5)),
+          MatchEntity(
+            null, "A12345", "765", "Jon", "Test", "EXACT_MATCH",
+            "1",
+            null,
+            Gender.MALE.toString(),
+            invalidBefore,
+          ),
+          MatchEntity(
+            null, "A12345", "3213", "Jonathan", "Test", "EXACT_MATCH",
+            "1",
+            null,
+            Gender.MALE.toString(),
+            validExact,
+          ),
+          MatchEntity(
+            null, "A12345", "3213", "John", "Test", "EXACT_MATCH",
+            "1",
+            null,
+            Gender.MALE.toString(),
+            validExact.plusDays(5),
+          ),
         )
 
         matchRepository.saveAll(entitiesToSave)
@@ -141,9 +184,42 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
         val invalidAfter = toDate.plusDays(1).atStartOfDay()
 
         val entitiesToSave = listOf(
-          MatchEntity(null, "A12345", "3213", "Jonathan", "Test", dateCreated = validExact.minusDays(5)),
-          MatchEntity(null, "A12345", "3213", "John", "Test", dateCreated = validExact),
-          MatchEntity(null, "A12345", "765", "Jon", "Test", dateCreated = invalidAfter),
+          MatchEntity(
+            null,
+            "A12345",
+            "3213",
+            "Jonathan",
+            "Test",
+            "EXACT_MATCH",
+            "1",
+            null,
+            Gender.MALE.toString(),
+            validExact.minusDays(5),
+          ),
+          MatchEntity(
+            null,
+            "A12345",
+            "3213",
+            "John",
+            "Test",
+            "EXACT_MATCH",
+            "1",
+            null,
+            Gender.MALE.toString(),
+            validExact,
+          ),
+          MatchEntity(
+            null,
+            "A12345",
+            "765",
+            "Jon",
+            "Test",
+            "EXACT_MATCH",
+            "1",
+            null,
+            Gender.MALE.toString(),
+            invalidAfter,
+          ),
         )
 
         matchRepository.saveAll(entitiesToSave)
