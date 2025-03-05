@@ -49,8 +49,6 @@ class MatchServiceTest {
         matchedUln = matchedUln,
         givenName = givenName,
         familyName = familyName,
-        dateOfBirth = dateOfBirth,
-        gender = gender,
       ),
     )
 
@@ -59,8 +57,6 @@ class MatchServiceTest {
     assertThat(actual?.matchedUln).isEqualTo(matchedUln)
     assertThat(actual?.givenName).isEqualTo(givenName)
     assertThat(actual?.familyName).isEqualTo(familyName)
-    assertThat(actual?.dateOfBirth).isEqualTo(dateOfBirth)
-    assertThat(actual?.gender).isEqualTo(gender)
   }
 
   @Test
@@ -74,8 +70,6 @@ class MatchServiceTest {
         matchedUln = matchedUln,
         givenName = givenName,
         familyName = familyName,
-        dateOfBirth = dateOfBirth,
-        gender = gender,
       ),
     )
 

@@ -34,12 +34,6 @@ data class MatchEntity(
   @Column(nullable = false)
   val countOfMatchedUlns: String? = null,
 
-  @Column(nullable = true)
-  val dateOfBirth: String? = null,
-
-  @Column(nullable = true)
-  val gender: String? = null,
-
   @Column(nullable = false, updatable = false)
   var dateCreated: LocalDateTime? = null,
 ) {

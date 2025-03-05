@@ -110,8 +110,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
         assertThat(checkMatchResponse.matchedUln).isEqualTo(expectedUln)
         assertThat(checkMatchResponse.givenName).isEqualTo(expectedGivenName)
         assertThat(checkMatchResponse.familyName).isEqualTo(expectedFamilyName)
-        assertThat(checkMatchResponse.dateOfBirth).isEqualTo(expectedDateOfBirth)
-        assertThat(checkMatchResponse.gender).isEqualTo(expectedGender)
       }
     }
   }
@@ -143,8 +141,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
         familyName,
         "EXACT_MATCH",
         "1",
-        dateOfBirth,
-        gender,
       ),
     )
 
@@ -248,7 +244,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
         "EXACT_MATCH",
         "1",
         null,
-        Gender.MALE.toString(),
       ),
     )
 
@@ -291,7 +286,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
         "EXACT_MATCH",
         "1",
         null,
-        Gender.MALE.toString(),
       ),
     )
 
@@ -299,8 +293,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
       "Some Given Name",
       "Some Family Name",
       "1234567890",
-      null,
-      Gender.MALE,
     )
 
     val expectedResponse = LearnerEventsResponse(

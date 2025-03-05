@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_SA
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import java.time.LocalDate
 
@@ -57,9 +56,9 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
       @Test
       fun `should return all data if prisoner exists and no timeframe is specified`() {
         val entitiesToSave = listOf(
-          MatchEntity(null, "A12345", "765", "Jon", "Test", "EXACT_MATCH", "1", null, Gender.MALE.toString()),
-          MatchEntity(null, "A12345", "3213", "John", "Test", "EXACT_MATCH", "1", null, Gender.MALE.toString()),
-          MatchEntity(null, "B54321", "3213", "Someone", "Else", "EXACT_MATCH", "1", null, Gender.MALE.toString()),
+          MatchEntity(null, "A12345", "765", "Jon", "Test", "EXACT_MATCH", "1", null),
+          MatchEntity(null, "A12345", "3213", "John", "Test", "EXACT_MATCH", "1", null),
+          MatchEntity(null, "B54321", "3213", "Someone", "Else", "EXACT_MATCH", "1", null),
         )
 
         matchRepository.saveAll(entitiesToSave)
@@ -87,31 +86,43 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
 
         val entitiesToSave = listOf(
           MatchEntity(
-            null, "A12345", "765", "Jon", "Test", "EXACT_MATCH",
-            "1",
             null,
-            Gender.MALE.toString(),
+            "A12345",
+            "765",
+            "Jon",
+            "Test",
+            "EXACT_MATCH",
+            "1",
             invalidBefore,
           ),
           MatchEntity(
-            null, "A12345", "3213", "Jonathan", "Test", "EXACT_MATCH",
-            "1",
             null,
-            Gender.MALE.toString(),
+            "A12345",
+            "3213",
+            "Jonathan",
+            "Test",
+            "EXACT_MATCH",
+            "1",
             validExact,
           ),
           MatchEntity(
-            null, "A12345", "3213", "John", "Test", "EXACT_MATCH",
-            "1",
             null,
-            Gender.MALE.toString(),
+            "A12345",
+            "3213",
+            "John",
+            "Test",
+            "EXACT_MATCH",
+            "1",
             invalidAfter,
           ),
           MatchEntity(
-            null, "B54321", "3213", "Someone", "Else", "EXACT_MATCH",
-            "1",
             null,
-            Gender.MALE.toString(),
+            "B54321",
+            "3213",
+            "Someone",
+            "Else",
+            "EXACT_MATCH",
+            "1",
             validExact,
           ),
         )
@@ -139,24 +150,33 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
 
         val entitiesToSave = listOf(
           MatchEntity(
-            null, "A12345", "765", "Jon", "Test", "EXACT_MATCH",
-            "1",
             null,
-            Gender.MALE.toString(),
+            "A12345",
+            "765",
+            "Jon",
+            "Test",
+            "EXACT_MATCH",
+            "1",
             invalidBefore,
           ),
           MatchEntity(
-            null, "A12345", "3213", "Jonathan", "Test", "EXACT_MATCH",
-            "1",
             null,
-            Gender.MALE.toString(),
+            "A12345",
+            "3213",
+            "Jonathan",
+            "Test",
+            "EXACT_MATCH",
+            "1",
             validExact,
           ),
           MatchEntity(
-            null, "A12345", "3213", "John", "Test", "EXACT_MATCH",
-            "1",
             null,
-            Gender.MALE.toString(),
+            "A12345",
+            "3213",
+            "John",
+            "Test",
+            "EXACT_MATCH",
+            "1",
             validExact.plusDays(5),
           ),
         )
@@ -192,8 +212,6 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
-            null,
-            Gender.MALE.toString(),
             validExact.minusDays(5),
           ),
           MatchEntity(
@@ -204,8 +222,6 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
-            null,
-            Gender.MALE.toString(),
             validExact,
           ),
           MatchEntity(
@@ -216,8 +232,6 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
-            null,
-            Gender.MALE.toString(),
             invalidAfter,
           ),
         )

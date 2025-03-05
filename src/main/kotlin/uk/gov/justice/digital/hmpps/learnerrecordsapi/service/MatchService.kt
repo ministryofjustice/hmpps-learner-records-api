@@ -19,8 +19,6 @@ class MatchService(
         matchedUln = it.matchedUln,
         givenName = it.givenName,
         familyName = it.familyName,
-        dateOfBirth = it.dateOfBirth,
-        gender = it.gender,
       )
     }
   }
