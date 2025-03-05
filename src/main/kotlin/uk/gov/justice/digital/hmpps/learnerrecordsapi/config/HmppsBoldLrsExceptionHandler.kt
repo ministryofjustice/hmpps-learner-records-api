@@ -20,6 +20,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.errorLo
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.DFEApiDownException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotFoundException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotPossibleException
 import java.net.SocketTimeoutException
 
 @RestControllerAdvice
@@ -33,6 +34,7 @@ class HmppsBoldLrsExceptionHandler {
   val dFEApiFailedToRespond = "DfE API failed to Respond"
   val dfeApiDependencyFailed = "LRS API Dependency Failed - DfE API is under maintenance"
   val individualNotMatched = "Individual with this NomisId has not been matched to a ULN yet"
+  val noMatchForIndividual = "Individual with this NomisId has not does not have a ULN"
 
   data class ErrorResponse(
     val status: HttpStatus,
@@ -252,11 +254,27 @@ class HmppsBoldLrsExceptionHandler {
     val errorResponse = ErrorResponse(
       status = HttpStatus.NOT_FOUND,
       errorCode = "Match not found",
-      userMessage = "No Match found for given NomisId ${ex.message}",
+      userMessage = "No Match found for given NomisId ${ex.nomisId}",
       developerMessage = individualNotMatched,
       moreInfo = individualNotMatched,
     )
     logger.errorLog(individualNotMatched)
     return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
+  }
+
+  @ExceptionHandler(MatchNotPossibleException::class)
+  fun handleMatchNotPossibleException(
+    ex: MatchNotPossibleException,
+    request: WebRequest,
+  ): ResponseEntity<ErrorResponse> {
+    val errorResponse = ErrorResponse(
+      status = HttpStatus.BAD_REQUEST,
+      errorCode = "Match not possible",
+      userMessage = "Not possible to match given NomisId ${ex.nomisId}",
+      developerMessage = noMatchForIndividual,
+      moreInfo = noMatchForIndividual,
+    )
+    logger.errorLog(individualNotMatched)
+    return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
   }
 }
