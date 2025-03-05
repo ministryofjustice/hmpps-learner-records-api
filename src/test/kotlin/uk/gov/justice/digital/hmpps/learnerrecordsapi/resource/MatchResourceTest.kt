@@ -17,6 +17,7 @@ import org.springframework.security.core.GrantedAuthority
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotFoundException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotPossibleException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnerEventsService
@@ -97,17 +98,33 @@ class MatchResourceTest {
 
   @Test
   fun `should throw MatchNotFound Exception if no match found`(): Unit = runTest {
-    `when`(mockLearnerEventsService.getMatchEntityForNomisId(any())).thenReturn(null)
+    `when`(mockMatchService.findMatch(any())).thenReturn(null)
     val exception = assertThrows<MatchNotFoundException> {
       matchResource.findLearnerEventsByNomisId(nomisId, "")
     }
-    assertThat(exception.message).isEqualTo(nomisId)
+    assertThat(exception.nomisId).isEqualTo(nomisId)
+    assertThat(exception.status).isEqualTo(CheckMatchStatus.NotFound)
+    verify(mockAuditService, times(1)).publishEvent(any())
+  }
+
+  @Test
+  fun `should throw MatchNotPossible Exception if match not possible`(): Unit = runTest {
+    `when`(mockMatchService.findMatch(any())).thenReturn(
+      CheckMatchResponse(
+        status = CheckMatchStatus.NoMatch,
+      ),
+    )
+    val exception = assertThrows<MatchNotPossibleException> {
+      matchResource.findLearnerEventsByNomisId(nomisId, "")
+    }
+    assertThat(exception.nomisId).isEqualTo(nomisId)
+    assertThat(exception.status).isEqualTo(CheckMatchStatus.NoMatch)
     verify(mockAuditService, times(1)).publishEvent(any())
   }
 
   @Test
   fun `should return Match entity if record found`(): Unit = runTest {
-    `when`(mockLearnerEventsService.getMatchEntityForNomisId(any())).thenReturn(
+    `when`(mockMatchService.findMatch(any())).thenReturn(
       CheckMatchResponse(
         matchedUln = matchedUln,
         familyName = familyName,

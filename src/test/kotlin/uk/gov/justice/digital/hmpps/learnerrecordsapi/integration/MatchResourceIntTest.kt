@@ -348,7 +348,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
   }
 
   @Test
-  fun `should return Not Found if the Given Nomis ID does not match or exists`() {
+  fun `should return Not Found if the Given Nomis ID does not exist`() {
     val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
       status = HttpStatus.NOT_FOUND,
       errorCode = "Match not found",
@@ -366,6 +366,45 @@ class MatchResourceIntTest : IntegrationTestBase() {
         .exchange()
         .expectStatus()
         .isNotFound
+        .expectBody()
+        .returnResult()
+        .responseBody,
+      HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
+    )
+    assertThat(actualResponse).isEqualTo(expectedResponse)
+  }
+
+  @Test
+  fun `should return No Content if the Given Nomis ID can't be matched`() {
+    val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
+      status = HttpStatus.BAD_REQUEST,
+      errorCode = "Match not possible",
+      userMessage = "Not possible to match given NomisId 456789",
+      developerMessage = "Individual with this NomisId does not have a ULN",
+      moreInfo = "Individual with this NomisId does not have a ULN",
+    )
+
+    matchRepository.save(
+      MatchEntity(
+        null,
+        "456789",
+        "",
+        "",
+        "",
+        null,
+        Gender.MALE.toString(),
+      ),
+    )
+
+    val actualResponse = objectMapper.readValue(
+      webTestClient.get()
+        .uri("/match/{nomisId}/learner-events", "456789")
+        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .header("X-Username", "TestUser")
+        .accept(MediaType.parseMediaType("application/json"))
+        .exchange()
+        .expectStatus()
+        .isBadRequest
         .expectBody()
         .returnResult()
         .responseBody,

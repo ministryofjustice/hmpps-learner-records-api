@@ -21,8 +21,6 @@ class LearnerEventsService(
   private val httpClientConfiguration: HttpClientConfiguration,
   @Autowired
   private val lrsConfiguration: LRSConfiguration,
-  @Autowired
-  private val matchService: MatchService,
 ) : BaseService() {
   private val logger: Logger = LoggerUtil.getLogger<LearnerEventsService>()
 
@@ -56,8 +54,6 @@ class LearnerEventsService(
       learnerRecord = learningEventsResult.learnerRecord,
     )
   }
-
-  fun getMatchEntityForNomisId(nomisId: String): CheckMatchResponse? = matchService.findMatch(nomisId = nomisId)
 
   fun formLearningEventRequestFromMatchEntity(checkMatchResponse: CheckMatchResponse): LearnerEventsRequest = LearnerEventsRequest(
     checkMatchResponse.givenName.orEmpty(),
