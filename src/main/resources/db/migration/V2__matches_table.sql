@@ -1,0 +1,3 @@
+
+ALTER TABLE matches ADD COLUMN matchType VARCHAR(255);
+ALTER TABLE matches ADD COLUMN countOfMatchedUlns VARCHAR(255);

@@ -28,6 +28,12 @@ data class MatchEntity(
   @Column(nullable = false)
   val familyName: String? = null,
 
+  @Column(nullable = false)
+  val matchType: String? = null,
+
+  @Column(nullable = false)
+  val countOfReturnedUlns: String? = null,
+
   @Column(nullable = true)
   val dateOfBirth: String? = null,
 

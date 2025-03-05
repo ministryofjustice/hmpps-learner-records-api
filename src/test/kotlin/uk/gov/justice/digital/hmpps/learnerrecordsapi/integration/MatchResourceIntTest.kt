@@ -141,6 +141,8 @@ class MatchResourceIntTest : IntegrationTestBase() {
         matchedUln,
         givenName,
         familyName,
+        "EXACT_MATCH",
+        "1",
         dateOfBirth,
         gender,
       ),
@@ -169,7 +171,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `GET match should return no match if record marked as such`() {
-    matchRepository.save(MatchEntity(null, nomisId, "", "John", "Smith"))
+    matchRepository.save(MatchEntity(null, nomisId, "", "John", "Smith", "EXACT_MATCH", "1"))
     checkGetWebCall(
       nomisId,
       200,
@@ -243,6 +245,8 @@ class MatchResourceIntTest : IntegrationTestBase() {
         "1234567890",
         "Some Given Name",
         "Some Family Name",
+        "EXACT_MATCH",
+        "1",
         null,
         Gender.MALE.toString(),
       ),
@@ -284,6 +288,8 @@ class MatchResourceIntTest : IntegrationTestBase() {
         "1234567890",
         "Some Given Name",
         "Some Family Name",
+        "EXACT_MATCH",
+        "1",
         null,
         Gender.MALE.toString(),
       ),
