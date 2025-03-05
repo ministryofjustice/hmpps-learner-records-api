@@ -374,8 +374,8 @@ class MatchResourceIntTest : IntegrationTestBase() {
       status = HttpStatus.BAD_REQUEST,
       errorCode = "Match not possible",
       userMessage = "Not possible to match given NomisId 456789",
-      developerMessage = "Individual with this NomisId has not does not have a ULN",
-      moreInfo = "Individual with this NomisId has not does not have a ULN",
+      developerMessage = "Individual with this NomisId does not have a ULN",
+      moreInfo = "Individual with this NomisId does not have a ULN",
     )
 
     matchRepository.save(

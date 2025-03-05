@@ -34,7 +34,7 @@ class HmppsBoldLrsExceptionHandler {
   val dFEApiFailedToRespond = "DfE API failed to Respond"
   val dfeApiDependencyFailed = "LRS API Dependency Failed - DfE API is under maintenance"
   val individualNotMatched = "Individual with this NomisId has not been matched to a ULN yet"
-  val noMatchForIndividual = "Individual with this NomisId has not does not have a ULN"
+  val noMatchForIndividual = "Individual with this NomisId does not have a ULN"
 
   data class ErrorResponse(
     val status: HttpStatus,
