@@ -1,5 +1,8 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response
 
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
+
 data class CheckMatchResponse(
 
   val matchedUln: String? = null,
@@ -15,6 +18,14 @@ data class CheckMatchResponse(
     } else {
       CheckMatchStatus.Found
     },
+  )
+
+  fun toLearnerEventsRequest(): LearnerEventsRequest = LearnerEventsRequest(
+    givenName.orEmpty(),
+    familyName.orEmpty(),
+    matchedUln.orEmpty(),
+    dateOfBirth,
+    Gender.valueOf(gender.orEmpty().uppercase()),
   )
 }
 

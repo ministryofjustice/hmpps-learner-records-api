@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.request.LearnersLRSRequest
-import java.time.LocalDate
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.utils.toLocalDate
 
 data class LearnersRequest(
   @field:Pattern(regexp = "^[A-Za-z' ,.-]{3,35}$")
@@ -44,7 +44,7 @@ data class LearnersRequest(
   fun extractFromRequest(): LearnersLRSRequest = LearnersLRSRequest(
     givenName = givenName,
     familyName = familyName,
-    dateOfBirth = dateOfBirth?.let { LocalDate.parse(it) },
+    dateOfBirth = dateOfBirth?.toLocalDate(),
     gender = gender.code,
     lastKnownPostCode = lastKnownPostCode,
     previousFamilyName = previousFamilyName,
