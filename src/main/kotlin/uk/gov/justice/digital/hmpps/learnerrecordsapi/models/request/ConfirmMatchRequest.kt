@@ -20,6 +20,10 @@ class ConfirmMatchRequest(
   @field:Pattern(regexp = "^(MALE|FEMALE|NOT_KNOWN|NOT_SPECIFIED)\$")
   val gender: String? = null,
 
+  val matchType: MatchType? = null,
+
+  val countOfMatchedUlns: String? = null,
+
 ) {
   fun asMatchEntity(nomisId: String): MatchEntity = MatchEntity(
     null,
@@ -27,7 +31,7 @@ class ConfirmMatchRequest(
     matchingUln,
     givenName,
     familyName,
-    dateOfBirth,
-    gender,
+    matchType.toString(),
+    countOfMatchedUlns,
   )
 }

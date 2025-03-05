@@ -129,8 +129,6 @@ class MatchResourceTest {
         matchedUln = matchedUln,
         familyName = familyName,
         givenName = givenName,
-        dateOfBirth = dateOfBirth,
-        gender = gender,
         status = CheckMatchStatus.Found,
       ),
     )

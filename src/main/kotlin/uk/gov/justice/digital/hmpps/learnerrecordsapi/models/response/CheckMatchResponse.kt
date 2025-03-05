@@ -5,8 +5,6 @@ data class CheckMatchResponse(
   val matchedUln: String? = null,
   val givenName: String? = null,
   val familyName: String? = null,
-  val dateOfBirth: String? = null,
-  val gender: String? = null,
   val status: CheckMatchStatus = CheckMatchStatus.Found,
 ) {
   fun setStatus(): CheckMatchResponse = this.copy(
