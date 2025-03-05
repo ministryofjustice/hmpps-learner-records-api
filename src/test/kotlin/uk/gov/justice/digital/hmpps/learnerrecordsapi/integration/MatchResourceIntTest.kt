@@ -247,7 +247,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
         "Some Family Name",
         "EXACT_MATCH",
         "1",
-        null,
+        "",
         Gender.MALE.toString(),
       ),
     )
@@ -290,7 +290,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
         "Some Family Name",
         "EXACT_MATCH",
         "1",
-        null,
+        "",
         Gender.MALE.toString(),
       ),
     )
@@ -299,7 +299,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
       "Some Given Name",
       "Some Family Name",
       "1234567890",
-      null,
+      "",
       Gender.MALE,
     )
 
