@@ -16,8 +16,8 @@ class ConfirmMatchRequestTest {
       matchingUln = "1234567890",
       givenName = "John",
       familyName = "Smith",
-      dateOfBirth = "1990-01-01",
-      gender = "MALE",
+      matchType = MatchType.EXACT_MATCH,
+      countOfMatchedUlns = "1",
     )
 
     assertTrue(validator.validate(request).isEmpty())
@@ -29,10 +29,10 @@ class ConfirmMatchRequestTest {
       matchingUln = "1234567890abcdedf",
       givenName = "John123",
       familyName = "Smith321",
-      dateOfBirth = "1990-01-023131",
-      gender = "MALE123",
+      matchType = MatchType.EXACT_MATCH,
+      countOfMatchedUlns = "1",
     )
 
-    assertTrue(validator.validate(request).size == 5)
+    assertTrue(validator.validate(request).size == 3)
   }
 }

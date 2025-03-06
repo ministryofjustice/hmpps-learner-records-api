@@ -119,7 +119,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
     .uri("/match/$nomisId")
     .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
     .header("X-Username", "TestUser")
-    .bodyValue(ConfirmMatchRequest(uln, givenName, familyName, dateOfBirth, gender, MatchType.EXACT_MATCH, "1"))
+    .bodyValue(ConfirmMatchRequest(uln, givenName, familyName, MatchType.EXACT_MATCH, "1"))
     .accept(MediaType.parseMediaType("application/json"))
     .exchange()
     .expectStatus()

@@ -11,6 +11,7 @@ import org.mockito.kotlin.any
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.utils.toISOFormat
 import java.time.LocalDate
@@ -79,8 +80,8 @@ class MatchServiceTest {
         matchingUln = matchedUln,
         givenName = givenName,
         familyName = familyName,
-        dateOfBirth = dateOfBirth,
-        gender = gender,
+        matchType = MatchType.EXACT_MATCH,
+        countOfMatchedUlns = "1",
       ),
     )
     assertThat(savedId).isEqualTo(id)
