@@ -14,11 +14,9 @@ class ConfirmMatchRequest(
   @field:Pattern(regexp = "^[A-Za-z' ,.-]{3,35}$")
   val familyName: String,
 
-  @field:Pattern(regexp = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
-  val dateOfBirth: String? = null,
+  val matchType: MatchType? = null,
 
-  @field:Pattern(regexp = "^(MALE|FEMALE|NOT_KNOWN|NOT_SPECIFIED)\$")
-  val gender: String? = null,
+  val countOfMatchedUlns: String? = null,
 
 ) {
   fun asMatchEntity(nomisId: String): MatchEntity = MatchEntity(
@@ -27,7 +25,7 @@ class ConfirmMatchRequest(
     matchingUln,
     givenName,
     familyName,
-    dateOfBirth,
-    gender,
+    matchType.toString(),
+    countOfMatchedUlns,
   )
 }

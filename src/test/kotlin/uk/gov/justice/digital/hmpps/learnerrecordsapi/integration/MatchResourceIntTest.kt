@@ -30,6 +30,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Lea
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
@@ -110,8 +111,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
         assertThat(checkMatchResponse.matchedUln).isEqualTo(expectedUln)
         assertThat(checkMatchResponse.givenName).isEqualTo(expectedGivenName)
         assertThat(checkMatchResponse.familyName).isEqualTo(expectedFamilyName)
-        assertThat(checkMatchResponse.dateOfBirth).isEqualTo(expectedDateOfBirth)
-        assertThat(checkMatchResponse.gender).isEqualTo(expectedGender)
       }
     }
   }
@@ -120,7 +119,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
     .uri("/match/$nomisId")
     .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
     .header("X-Username", "TestUser")
-    .bodyValue(ConfirmMatchRequest(uln, givenName, familyName, dateOfBirth, gender))
+    .bodyValue(ConfirmMatchRequest(uln, givenName, familyName, MatchType.EXACT_MATCH, "1"))
     .accept(MediaType.parseMediaType("application/json"))
     .exchange()
     .expectStatus()
@@ -143,8 +142,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
         familyName,
         "EXACT_MATCH",
         "1",
-        dateOfBirth,
-        gender,
       ),
     )
 
@@ -248,7 +245,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
         "EXACT_MATCH",
         "1",
         null,
-        Gender.MALE.toString(),
       ),
     )
 
@@ -291,7 +287,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
         "EXACT_MATCH",
         "1",
         null,
-        Gender.MALE.toString(),
       ),
     )
 
@@ -299,8 +294,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
       "Some Given Name",
       "Some Family Name",
       "1234567890",
-      null,
-      Gender.MALE,
     )
 
     val expectedResponse = LearnerEventsResponse(
