@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
 import uk.gov.justice.hmpps.kotlin.sar.HmppsSubjectAccessRequestContent
 import java.time.LocalDate
@@ -19,6 +20,11 @@ class MatchService(
         matchedUln = it.matchedUln,
         givenName = it.givenName,
         familyName = it.familyName,
+        status = if (it.matchedUln.isEmpty() || it.matchedUln.isBlank()) {
+          CheckMatchStatus.NoMatch
+        } else {
+          CheckMatchStatus.Found
+        },
       )
     }
   }

@@ -1,5 +1,7 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response
 
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
+
 data class CheckMatchResponse(
 
   val matchedUln: String? = null,
@@ -7,12 +9,10 @@ data class CheckMatchResponse(
   val familyName: String? = null,
   val status: CheckMatchStatus = CheckMatchStatus.Found,
 ) {
-  fun setStatus(): CheckMatchResponse = this.copy(
-    status = if (this.matchedUln.isNullOrEmpty() || this.matchedUln.isBlank()) {
-      CheckMatchStatus.NoMatch
-    } else {
-      CheckMatchStatus.Found
-    },
+  fun asLearnerEventsRequest(): LearnerEventsRequest = LearnerEventsRequest(
+    givenName.orEmpty(),
+    familyName.orEmpty(),
+    matchedUln.orEmpty(),
   )
 }
 

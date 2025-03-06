@@ -58,9 +58,7 @@ class MatchResource(
     }
     logger.log("Received a get request to match endpoint", nomisId)
     return matchService.findMatch(nomisId)?.let {
-      ResponseEntity.status(HttpStatus.OK).body(
-        it.setStatus(),
-      )
+      ResponseEntity.status(HttpStatus.OK).body(it)
     } ?: ResponseEntity.status(HttpStatus.NOT_FOUND).body(
       CheckMatchResponse(
         status = CheckMatchStatus.NotFound,
@@ -95,11 +93,13 @@ class MatchResource(
     val checkMatchResponse = matchService.findMatch(nomisId)
     if (checkMatchResponse == null) {
       throw MatchNotFoundException(nomisId)
-    } else if (checkMatchResponse.setStatus().status == CheckMatchStatus.NoMatch) {
+    } else if (checkMatchResponse.status == CheckMatchStatus.NoMatch) {
       throw MatchNotPossibleException(nomisId)
     } else {
-      val learnerEventsRequest = learnerEventsService.formLearningEventRequestFromMatchEntity(checkMatchResponse)
-      val learnerEventsResponse = learnerEventsService.getLearningEvents(learnerEventsRequest, userName)
+      val learnerEventsResponse = learnerEventsService.getLearningEvents(
+        checkMatchResponse.asLearnerEventsRequest(),
+        userName,
+      )
       return ResponseEntity.status(HttpStatus.OK).body(learnerEventsResponse)
     }
   }
