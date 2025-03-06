@@ -26,6 +26,6 @@ class ConfirmMatchRequest(
     givenName,
     familyName,
     matchType.toString(),
-    countOfMatchedUlns,
+    countOfMatchedUlns.orEmpty(),
   )
 }
