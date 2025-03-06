@@ -60,7 +60,7 @@ class MatchResourceTest {
       uln?.let {
         CheckMatchResponse(
           matchedUln = it,
-        )
+        ).setStatus()
       },
     )
   }
@@ -136,3 +136,11 @@ class MatchResourceTest {
     assertThat(actual.statusCode).isEqualTo(HttpStatus.OK)
   }
 }
+
+fun CheckMatchResponse.setStatus() = this.copy(
+  status = if (this.matchedUln.isNullOrEmpty() || this.matchedUln!!.isBlank()) {
+    CheckMatchStatus.NoMatch
+  } else {
+    CheckMatchStatus.Found
+  },
+)
