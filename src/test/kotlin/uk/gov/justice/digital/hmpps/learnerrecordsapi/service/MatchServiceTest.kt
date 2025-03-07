@@ -22,8 +22,6 @@ class MatchServiceTest {
   private val matchedUln = "a1234"
   private val givenName = "John"
   private val familyName = "Smith"
-  private val dateOfBirth = LocalDate.now().toISOFormat()
-  private val gender = Gender.MALE.name
 
   private lateinit var mockMatchRepository: MatchRepository
   private lateinit var matchService: MatchService
