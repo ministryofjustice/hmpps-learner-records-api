@@ -65,7 +65,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                 "countOfReturnedUlns": "0"
               }
               """,
-          )
+          ),
         ],
       ),
     ],
