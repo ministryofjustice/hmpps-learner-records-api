@@ -16,7 +16,7 @@ class ConfirmMatchRequest(
 
   val matchType: MatchType,
 
-  val countOfMatchedUlns: String,
+  val countOfReturnedUlns: String,
 
 ) {
   fun asMatchEntity(nomisId: String): MatchEntity = MatchEntity(
@@ -26,6 +26,6 @@ class ConfirmMatchRequest(
     givenName.orEmpty(),
     familyName.orEmpty(),
     matchType.toString(),
-    countOfMatchedUlns,
+    countOfReturnedUlns,
   )
 }

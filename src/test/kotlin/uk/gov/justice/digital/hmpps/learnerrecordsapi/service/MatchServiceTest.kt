@@ -76,7 +76,7 @@ class MatchServiceTest {
         givenName = givenName,
         familyName = familyName,
         matchType = MatchType.EXACT_MATCH,
-        countOfMatchedUlns = "1",
+        countOfReturnedUlns = "1",
       ),
     )
     assertThat(savedId).isEqualTo(id)

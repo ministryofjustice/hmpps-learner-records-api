@@ -17,7 +17,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
 @Retention(AnnotationRetention.RUNTIME)
 @Operation(
   summary = "Get learning events by learner ULN",
-  description = "Get personal learning records and events by a ULN",
+  description = "Get personal learning record and learning events by ULN",
   parameters = [Parameter(name = "X-Username", `in` = ParameterIn.HEADER, required = true)],
   requestBody = RequestBody(
     description = "ULN and demographic details of the learner",
@@ -90,7 +90,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
           schema = Schema(implementation = LearnerEventsResponse::class),
           examples = [
             ExampleObject(
-              name = "Exact Match Response",
+              name = "Exact match Response",
               value = """
                 {
                   "searchParameters": {
@@ -131,7 +131,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
               """,
             ),
             ExampleObject(
-              name = "Linked Learner Match Response",
+              name = "Linked learner match Response",
               value = """
               {
                 "searchParameters": {

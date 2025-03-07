@@ -17,7 +17,7 @@ data class LearnersRequest(
 
   @field:Pattern(regexp = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
   @SerializedName("dateOfBirth")
-  val dateOfBirth: String? = null,
+  val dateOfBirth: String,
 
   val gender: Gender,
 

@@ -17,7 +17,7 @@ class ConfirmMatchRequestTest {
       givenName = "John",
       familyName = "Smith",
       matchType = MatchType.EXACT_MATCH,
-      countOfMatchedUlns = "1",
+      countOfReturnedUlns = "1",
     )
 
     assertTrue(validator.validate(request).isEmpty())
@@ -30,7 +30,7 @@ class ConfirmMatchRequestTest {
       givenName = "John123",
       familyName = "Smith321",
       matchType = MatchType.EXACT_MATCH,
-      countOfMatchedUlns = "1",
+      countOfReturnedUlns = "1",
     )
 
     assertTrue(validator.validate(request).size == 3)
