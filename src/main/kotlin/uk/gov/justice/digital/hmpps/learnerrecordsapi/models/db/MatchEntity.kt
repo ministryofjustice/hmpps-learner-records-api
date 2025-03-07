@@ -32,7 +32,7 @@ data class MatchEntity(
   val matchType: String = "",
 
   @Column(nullable = false)
-  val countOfMatchedUlns: String = "",
+  val countOfReturnedUlns: String = "",
 
   @Column(nullable = false, updatable = false)
   var dateCreated: LocalDateTime? = null,
