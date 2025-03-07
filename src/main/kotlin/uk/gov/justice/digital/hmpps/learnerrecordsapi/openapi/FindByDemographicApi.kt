@@ -18,7 +18,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
 @Retention(AnnotationRetention.RUNTIME)
 @Operation(
   summary = "Find learners by demographic information",
-  description = "Find possible or exact matches for learners by demographic information",
+  description = "Find learner and ULN by demographic information",
   parameters = [Parameter(name = "X-Username", `in` = ParameterIn.HEADER, required = true)],
   requestBody = RequestBody(
     description = "Demographic details of the learner",
@@ -84,14 +84,14 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
   responses = [
     ApiResponse(
       responseCode = "200",
-      description = "Successful response, response type may vary - e.g Possible Match.",
+      description = "The request was successful and a response was returned.",
       content = [
         Content(
           mediaType = "application/json",
           schema = Schema(implementation = LearnersResponse::class),
           examples = [
             ExampleObject(
-              name = "Exact Match Response",
+              name = "Exact match Response",
               value = """
                 {
                   "searchParameters": {
@@ -136,7 +136,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
             """,
             ),
             ExampleObject(
-              name = "Possible Match Response",
+              name = "Possible match Response",
               value = """
                 {
                     "searchParameters": {
@@ -214,7 +214,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
               """,
             ),
             ExampleObject(
-              name = "Linked Learner Found Response",
+              name = "Linked learner found Response",
               value = """
                 {
                     "searchParameters": {
@@ -259,7 +259,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
               """,
             ),
             ExampleObject(
-              name = "No Match Response",
+              name = "No match Response",
               value = """
                 {
                     "searchParameters": {
@@ -274,7 +274,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
               """,
             ),
             ExampleObject(
-              name = "Too Many Matches Response",
+              name = "Too many matches Response",
               value = """
                 {
                     "searchParameters": {

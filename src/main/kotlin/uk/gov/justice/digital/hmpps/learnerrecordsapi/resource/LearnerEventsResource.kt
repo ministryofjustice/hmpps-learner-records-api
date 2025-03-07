@@ -5,6 +5,7 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
@@ -19,13 +20,14 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnerEventsServi
 
 @RestController
 @PreAuthorize("hasRole('$ROLE_LEARNERS_UI')")
+@RequestMapping(value = ["/learner-events"], produces = ["application/json"])
 class LearnerEventsResource(
   private val learnerEventsService: LearnerEventsService,
 ) {
 
   val logger = LoggerUtil.getLogger<LearnerEventsResource>()
 
-  @RequestMapping(value = ["/learner-events"], produces = ["application/json"])
+  @PostMapping
   @Tag(name = "Learning Events")
   @LearnerEventsApi
   suspend fun findByUln(
