@@ -10,11 +10,9 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmNoMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.utils.toISOFormat
-import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
 class MatchServiceTest {
@@ -22,8 +20,6 @@ class MatchServiceTest {
   private val matchedUln = "a1234"
   private val givenName = "John"
   private val familyName = "Smith"
-  private val dateOfBirth = LocalDate.now().toISOFormat()
-  private val gender = Gender.MALE.name
 
   private lateinit var mockMatchRepository: MatchRepository
   private lateinit var matchService: MatchService
@@ -81,6 +77,28 @@ class MatchServiceTest {
         givenName = givenName,
         familyName = familyName,
         matchType = MatchType.EXACT_MATCH,
+        countOfReturnedUlns = "1",
+      ),
+    )
+    assertThat(savedId).isEqualTo(id)
+  }
+
+  @Test
+  fun `saveNoMatch should return id of the saved entity`() {
+    val id = 1L
+
+    `when`(mockMatchRepository.save(any())).thenReturn(
+      MatchEntity(
+        id = id,
+        nomisId = nomisId,
+        matchedUln = "",
+      ),
+    )
+
+    val savedId = matchService.saveNoMatch(
+      nomisId,
+      ConfirmNoMatchRequest(
+        matchType = MatchType.NO_MATCH_RETURNED_FROM_LRS,
         countOfReturnedUlns = "1",
       ),
     )
