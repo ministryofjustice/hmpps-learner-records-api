@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmNoMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
@@ -31,6 +32,11 @@ class MatchService(
 
   fun saveMatch(nomisId: String, confirmMatchRequest: ConfirmMatchRequest): Long? {
     val entity = confirmMatchRequest.asMatchEntity(nomisId)
+    return matchRepository.save(entity).id
+  }
+
+  fun saveNoMatch(nomisId: String, confirmNoMatchRequest: ConfirmNoMatchRequest): Long? {
+    val entity = confirmNoMatchRequest.asMatchEntity(nomisId)
     return matchRepository.save(entity).id
   }
 

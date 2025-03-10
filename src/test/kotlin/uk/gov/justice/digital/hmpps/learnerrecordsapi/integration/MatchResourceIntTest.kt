@@ -28,6 +28,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSAp
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEvent
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmNoMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchType
@@ -76,8 +77,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
   val matchedUln = "A"
   val givenName = "John"
   val familyName = "Smith"
-  val dateOfBirth = "1990-01-01"
-  val gender = "MALE"
 
   private fun checkGetWebCall(
     nomisId: String,
@@ -86,8 +85,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
     expectedUln: String? = null,
     expectedGivenName: String? = null,
     expectedFamilyName: String? = null,
-    expectedDateOfBirth: String? = null,
-    expectedGender: String? = null,
   ) {
     listOf(ROLE_LEARNERS_RO, ROLE_LEARNERS_UI).forEach { role ->
       val executedRequest = webTestClient.get()
@@ -152,8 +149,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
       matchedUln,
       givenName,
       familyName,
-      dateOfBirth,
-      gender,
     )
   }
 
@@ -182,6 +177,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
     val actualResponse = postMatch(nomisId, uln, 201)
     verify(matchService, times(1)).saveMatch(any(), any())
     actualResponse.expectStatus().isCreated
+    checkSavedUln(nomisId, uln)
   }
 
   @Test
@@ -404,5 +400,29 @@ class MatchResourceIntTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
     assertThat(actualResponse).isEqualTo(expectedResponse)
+  }
+
+  private fun postNoMatch(nomisId: String, expectedStatus: Int): WebTestClient.ResponseSpec = webTestClient.post()
+    .uri("/match/$nomisId/no-match")
+    .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
+    .header("X-Username", "TestUser")
+    .bodyValue(ConfirmNoMatchRequest(MatchType.NO_MATCH_RETURNED_FROM_LRS, "0"))
+    .accept(MediaType.parseMediaType("application/json"))
+    .exchange()
+    .expectStatus()
+    .isEqualTo(expectedStatus)
+
+  private fun checkSavedUln(nomisId: String, expected: String) {
+    val entity = matchRepository.findFirstByNomisIdOrderByIdDesc(nomisId)
+    assertThat(entity?.matchedUln).isEqualTo(expected)
+  }
+
+  @Test
+  fun `POST to confirm no match should return 201 CREATED with a response confirming a match`() {
+    val nomisId = "A1417AE"
+    val actualResponse = postNoMatch(nomisId, 201)
+    verify(matchService, times(1)).saveNoMatch(any(), any())
+    actualResponse.expectStatus().isCreated
+    checkSavedUln(nomisId, "")
   }
 }

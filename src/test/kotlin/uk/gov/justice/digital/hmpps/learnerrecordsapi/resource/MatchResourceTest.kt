@@ -18,6 +18,8 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotFoundException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotPossibleException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmNoMatchRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnerEventsService
@@ -134,6 +136,20 @@ class MatchResourceTest {
     )
     val actual = matchResource.findLearnerEventsByNomisId(nomisId, "")
     assertThat(actual.statusCode).isEqualTo(HttpStatus.OK)
+  }
+
+  @Test
+  fun `should save No Match`(): Unit = runTest {
+    `when`(mockMatchService.saveNoMatch(any(), any())).thenReturn(1L)
+    val actual = matchResource.confirmNoMatch(
+      "",
+      nomisId,
+      ConfirmNoMatchRequest(
+        matchType = MatchType.NO_MATCH_RETURNED_FROM_LRS,
+        countOfReturnedUlns = "1",
+      ),
+    )
+    assertThat(actual.statusCode).isEqualTo(HttpStatus.CREATED)
   }
 }
 
