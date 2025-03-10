@@ -1,11 +1,43 @@
 # hmpps-learner-records-api
 The hmpps-learner-records-api retrieves Unique Learner Number (ULN) and Personal Learning Record (PLR) for matching
 individuals from the Learning Records Service (LRS) data held by the Education and Skills Funding Agency (EFSA) at Department
-for Education (DfE).
+for Education (DfE), and stores match data in a database for downstream use.
 
 This repository has been generated from https://github.com/ministryofjustice/hmpps-template-kotlin.
 
+### Team
+This application is in development by the hmpps-lrs-devs team under the Education Skills & Work Team.
+
+### API external dependencies
+This API is dependent on data from the Department for Education [Learning Records Service API](https://www.gov.uk/government/publications/lrs-maintenance-schedule/lrs-maintenance-schedule-for-2024).
+
+### API consumers
+The following are the known consumers of this API. Any changes to this API - especially breaking or potentially breaking
+changes should consider the use case of these consumers.
+
+* `hmpps-match-learner-record-ui` - Match a learners record UI
+
 ---
+
+## Configuring the project
+
+### JDK
+To develop and build the application locally you will need JDK 21 installed and configured.
+
+### Ktlint formatting
+Ktlint is used to format the source code and a task runs in the GitHub build action to check the formatting.
+
+You should run the following commands to make sure that the source code is formatted locally before it breaks the GitHub build action.
+
+#### Apply ktlint formatting rules to Intellij
+`./gradlew ktlintApplyToIdea`
+
+Or to apply to all Intellij projects:
+
+`./gradlew ktlintApplyToIdeaGlobally`
+
+#### Run ktlint formatter on git commit
+`./gradlew addKtlintFormatGitPreCommitHook`
 
 ## Hosting 
 
@@ -16,83 +48,69 @@ This service is available at:
 * Preprod: tbc
 * Prod: tbc
 
+### Health
+The application has a health endpoint found at `/health` which indicates if the app is running and is healthy.
+The application has a ping endpoint found at `health/ping` which indicates that the app is responding to requests.
+
+---
+
+## Headers
+### Username
+
+The hmpps-learner-records-api requires consumer services to identify their users when connecting to our service.
+
+Where possible when making a request you should identify the user (not the service) in the custom header `X-Username`.
+
+The value should be a unique identifier for the user, either a name or an email address.
+
+Example header:
+```
+"X-Username": "john.doe@justice.gov.uk"
+```
+
+### Authentication
+
+The hmpps-learner-records-api requires bearer authorization.
+
+The tokens for authenticating with this service need to be requested from hmpps-auth via a `basic` authentication, citing your service's client id and client secret. You should ensure your service has the appropriate roles present to access this service.
+
+`curl -X POST "https://<hmpps-auth-url>/auth/oauth/token?grant_type=client_credentials" \ -H 'Content-Type: application/json' -H "Authorization: Basic <base64 encoded clientid:clientsecret>"`
+
+Example header:
+```
+"Authorization": "bearer <token>"
+```
+
 ---
 
 ## Endpoints
 
-The service provides the following endpoints to consumers.
-* `GET /match/:nomisId` - Search for a learner's ULN via their NOMIS ID
-* `POST /match/:nomisId` - Confirm a match between a learner's NOMIS ID and ULN
+The service provides the following endpoints to consumers and requires the role **ROLE_LEARNER_RECORDS_SEARCH__RO**:
+* `GET /match/{nomisId}` - Search for a learner's ULN via their NOMIS ID
+* `GET /match/{nomisId}/learner-events` - Search for a learner's personal learning record (PLR) via their Nomis ID
+
+The following endpoints are used by the [hmpps-match-learner-record-ui](https://github.com/ministryofjustice/hmpps-match-learner-record-ui] only) (uses the role **ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI**):
 * `POST /learners` - Search for a learner's ULN via their demographic data
-* `POST /learner-events` - Request a learner's learning record via their ULN
-
-### `GET:/match/:nomisId`
-This endpoint is to search for a ULN given a NOMIS ID. The response will
-be OK (200) with the ULN if a match exists and NOT_FOUND (404) if there
-is no match.
-
-Example response body:
-```json
-{
-  "matchedUln": "1234567890",
-  "givenName": "Charlie",
-  "familyName": "Brown",
-  "dateOfBirth": "2022-01-01",
-  "gender": "MALE",
-  "status": "Found"
-}
-```
-
-In the response body, the `status` will have one of the following values
-ax explained below.
-* `Found` = A match has been found for `id` and ULN is in `matchedUln`
-* `NotFound` = No match has been found for `id`
-* `NoMatch` = `nomisId` cannot be matched
-
-Response codes:
-* 200 - Success
-* 400 - Bad Request, malformed inputs
-* 401 - Unauthorised
-* 403 - Forbidden
-* 404 - Not found
-
-### `POST:/match/:nomisId`
-This endpoint is to confirm a match between a learner's NOMIS ID and ULN.
-The match will be saved as a `MatchEntity` in the database.
-
-Example request body:
-```json
-{
-  "matchingUln": "1234567890",
-  "givenName": "John",
-  "familyName": "Smith",
-  // the below are optional
-  "dateOfBirth": "1990-01-01",
-  "gender": "MALE"
-}
-```
-
-Response codes:
-* 201 - Created
-* 400 - Bad Request, malformed ULN or json body.
-* 401 - Unauthorised
-* 403 - Forbidden
-* 500 - Likely that database is unreachable
+* `POST /learner-events` - Request a learner's personal learning record (PLR) via their ULN
+* `POST /match/:nomisId` - Confirm a match between a learner's NOMIS ID and ULN
+* `POST /match/:nomisId/no-match` - Confirm a no match for a learner's NOMIS ID
 
 ### `POST:/learners`
-This endpoint is to search for learners by their demographic information.
-The search may yield varied results depending on the accuracy of the demographic information and the DfE data available:
+This endpoint searches for a learner's ULN by their demographic information.
 
+The search may yield varied results depending on the accuracy of the demographic information and the DfE data available:
 * No match
-* Too many matches
-* Possible matches 
+* Too many matches (more than 10 matches)
+* Possible matches (between 1-10 matches)
 * Exact match
 * Linked Learner Found
 
-Assuming a successful search, the response should contain a ULN for each learner found. This ULN may be used on the`/learner-events` endpoint to retrieve their respective PLRs.
+Assuming a successful search, the response should contain a ULN for each learner found. This ULN, Given Name and Family Name may be used on the`/learner-events` endpoint to retrieve their respective PLRs.
 
-Example request body:
-```json
+<details>
+<summary>Example request body:</summary>
+<br>
+<pre>
 {
   "givenName": "Darcie",
   "familyName": "Tucker",
@@ -105,10 +123,13 @@ Example request body:
   "placeOfBirth": "Blean ",
   "emailAddress": "darcie.tucker@aol.compatibilitytest.com"
 }
-```
+</pre>
+</details>
 
-Example response body:
-```json
+<details>
+<summary>Example response body:</summary>
+<br>
+<pre>
 {
     "searchParameters": {
         "givenName": "Darcie",
@@ -149,7 +170,8 @@ Example response body:
         }
     ]
 }
-```
+</pre>
+</details>
 
 Response codes:
 * 200 - Success
@@ -158,16 +180,18 @@ Response codes:
 * 403 - Forbidden
 
 ### `POST:/learner-events`
-This endpoint is used to request a learner's learning events (or Personal Learning Record [PLR]) by their Unique Learner Number (ULN).
+This endpoint request a learner's learning events/personal learning record (PLR) by their Unique Learner Number (ULN), Given Name and Family Name.
 
-Generally when using a valid ULN there should be no issues with this request, but there are a few possible responses.
+Generally when using a valid ULN, Given Name and Family Name there should be no issues with this request, but there are a few possible responses:
 * Exact Match
 * Linked Learner Match
 * Learner opted to not share data
 * Learner could not be verified
 
-Example request body:
-```json
+<details>
+<summary>Example request body:</summary>
+<br>
+<pre>
 {
   "givenName": "Sean",
   "familyName": "Findlay",
@@ -176,10 +200,13 @@ Example request body:
   "dateOfBirth": "1980-11-01",
   "gender": "MALE"
 }
-```
+</pre>
+</details>
 
-Example response body:
-```json
+<details>
+<summary>Example response body:</summary>
+<br>
+<pre>
 {
   "searchParameters": {
     "givenName": "Sean",
@@ -216,14 +243,207 @@ Example response body:
     }
   ]
 }
-```
+</pre>
+</details>
 
 Response codes:
 * 200 - Success
 * 400 - Bad Request, malformed inputs
 * 401 - Unauthorised
 * 403 - Forbidden
+
+### `POST:/match/:nomisId`
+This endpoint is to confirm a match between a learner's NOMIS ID and ULN.
+The givenName and familyName should be as per the LRS data for a match.
+The match will be saved as a `MatchEntity` in the database.
+
+<details>
+<summary>Example request body for a match:</summary>
+<br>
+<pre>
+{
+  "matchingUln": "1234567890",
+  "givenName": "John",
+  "familyName": "Smith",
+  "matchType": "POSSIBLE_MATCH",
+  "countOfReturnedULNs": "2"
+}
+</pre>
+</details>
+
+Response codes:
+* 201 - Created
+* 400 - Bad Request, malformed ULN or json body
+* 401 - Unauthorised
+* 403 - Forbidden
+* 500 - Likely that the database is unreachable
+
+### `POST:/match/:nomisId/no-match`
+This endpoint is to confirm a no match for a learner's NOMIS ID.
+The match will be saved as a `MatchEntity` in the database.
+
+<details>
+<summary>Example request body for a no match:</summary>
+<br>
+<pre>
+{
+  "matchType": "NO_MATCH_RETURNED_FROM_LRS",
+  "countOfReturnedULNs": "0"
+}
+</pre>
+</details>
+
+Response codes:
+* 201 - Created
+* 400 - Bad Request, malformed json body
+* 401 - Unauthorised
+* 403 - Forbidden
+* 500 - Likely that the database is unreachable
+
+### `POST:/match/:nomisId`
+This endpoint is to confirm a match between a learner's NOMIS ID and ULN.
+The givenName and familyName should be as per the LRS data for a match.
+The match will be saved as a `MatchEntity` in the database.
+
+<details>
+<summary>Example request body for a match:</summary>
+<br>
+<pre>
+{
+  "matchingUln": "1234567890",
+  "givenName": "John",
+  "familyName": "Smith",
+  "matchType": "POSSIBLE_MATCH",
+  "countOfReturnedULNs": "2"
+}
+</pre>
+</details>
+
+<details>
+<summary>Example request body for a no match:</summary>
+<br>
+<pre>
+{
+  "matchType": "NO_MATCH_SELECTED",
+  "countOfReturnedULNs": "6"
+}
+</pre>
+</details>
+
+Response codes:
+* 201 - Created
+* 400 - Bad Request, malformed ULN or json body
+* 401 - Unauthorised
+* 403 - Forbidden
+* 500 - Likely that the database is unreachable
+
+### `GET:/match/:nomisId`
+This endpoint is to search the database for a match given a NOMIS ID.
+
+The response will be OK (200) if the NOMIS ID exists and NOT_FOUND (404) if it does not exist in the database. 
+
+In the response body, the `status` will have one of the following values as explained below.
+* `Found` = A match has been found for `nomisId` in the database and a ULN is in `matchedUln`
+* `NoMatch` = A match has been found for `nomisId` in the database but no ULN has been matched in `matchedUln`
+* `NotFound` = No match has been found for `nomisId` in the database and only the status is returned in the response body
+
+<details>
+<summary>Example response body:</summary>
+<br>
+<pre>
+{
+  "matchedUln": "1234567890",
+  "givenName": "Charlie",
+  "familyName": "Brown",
+  "status": "Found"
+}
+</pre>
+</details>
+
+<details>
+<summary>Example response body for NotFound:</summary>
+<br>
+<pre>
+{
+  "status": "NotFound"
+}
+</pre>
+</details>
+
+Response codes:
+* 200 - Success
+* 400 - Bad Request, malformed inputs
+* 401 - Unauthorised
+* 403 - Forbidden
+* 404 - Not Found
+
+### `GET:/match/:nomisId/learner-events`
+This endpoint searches the database for a match given a NOMIS ID and then requests for a learner's personal learning record (PLR) using ULN, Given Name and Family Name. 
+
+The possible responses are:
+* Exact Match
+* Linked Learner Match
+* Learner opted to not share data
+* Learner could not be verified
+* Match not found exception - a match has not been found for `nomisId` in the database
+* Match not possible exception - a match has been found for `nomisId` in the database but no ULN, Given Name, and Family Name has been matched for requesting the learner events
+
+<details>
+<summary>Example response body:</summary>
+<br>
+<pre>
+{
+  "searchParameters": {
+    "givenName": "Sean",
+    "familyName": "Findlay",
+    "uln": "1174112637"
+  },
+  "responseType": "Exact Match",
+  "foundUln": "1174112637",
+  "incomingUln": "1174112637",
+  "learnerRecord": [
+    {
+      "id": "2931",
+      "achievementProviderUkprn": "10030488",
+      "achievementProviderName": "LUTON PENTECOSTAL CHURCH",
+      "awardingOrganisationName": "UNKNOWN",
+      "qualificationType": "GCSE",
+      "subjectCode": "50079116",
+      "achievementAwardDate": "2011-10-24",
+      "credits": "0",
+      "source": "ILR",
+      "dateLoaded": "2012-05-31 16:47:04",
+      "underDataChallenge": "N",
+      "level": "",
+      "status": "F",
+      "subject": "GCSE in English Literature",
+      "grade": "9999999999",
+      "awardingOrganisationUkprn": "UNKNWN",
+      "collectionType": "W",
+      "returnNumber": "02",
+      "participationStartDate": "2011-10-02",
+      "participationEndDate": "2011-10-24"
+    }
+  ]
+}
+</pre>
+</details>
+
+Response codes:
+* 200 - Success
+* 400 - Bad Request
+* 401 - Unauthorised
+* 403 - Forbidden
+* 404 - Not Found
+
 ---
+
+## Database
+
+The service uses a postgres database alongside flyaway migrations to create and populate the database. Any changes made to the [MatchEntity](https://github.com/ministryofjustice/hmpps-learner-records-api/blob/main/src/main/kotlin/uk/gov/justice/digital/hmpps/learnerrecordsapi/models/db/MatchEntity.kt) need to be applied to the database too using a flyway migration script (see the SQL files [here](https://github.com/ministryofjustice/hmpps-learner-records-api/tree/main/src/main/resources/db/migration)).
+
+---
+
 ## API Documentation
 
 OpenAPI documentation is available at:
@@ -232,36 +452,6 @@ OpenAPI documentation is available at:
 * UAT: https://learner-records-api-uat.hmpps.service.justice.gov.uk/swagger-ui/index.html
 * Preprod:  tbc 
 * Prod:  tbc
-
----
-
-## Headers
-
-### Username
-
-The hmpps-learner-records-api requires consumer services to identify their users when connecting to our service.
-
-Where possible when making a request you should identify the user (not the service) in the custom header `X-Username`.
-
-The value should be a unique identifier for the user, either a name or an email address.
-
-Example header
-```
-"X-Username": "john.doe@justice.gov.uk"
-```
-
-### Authentication
-
-The hmpps-learner-records-api requires bearer authorization.
-
-The tokens for authenticating with this service need to be requested from hmpps-auth via a `basic` authentication, citing your service's client id and client secret.
-
-You should ensure your service has the appropriate roles present to access this service.
-
-Example header
-```
-"Authorization": "bearer <token>"
-```
 
 ---
 
@@ -302,7 +492,7 @@ PFX_FILE_PASSWORD=
 SPRING_PROFILES_ACTIVE=
 ```
 
-### LRS Connection Certificate
+### LRS SSL Client Certificate
 
 In order to make a connection to the LRS Development environment (achieved when using the `development` profile) you will require the relevant certificate.
 
