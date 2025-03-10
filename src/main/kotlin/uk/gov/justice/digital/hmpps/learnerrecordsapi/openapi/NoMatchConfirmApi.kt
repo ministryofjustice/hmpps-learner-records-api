@@ -23,7 +23,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
     Parameter(name = "nomisId", `in` = ParameterIn.PATH, required = true),
   ],
   requestBody = RequestBody(
-    description = "ULN, Given Name, Family Name, Match Type, and Count of Returned ULNs to match with the NomisID in the path",
+    description = "Match Type, and Count of Returned ULNs to match with the NomisID in the path",
     required = true,
     content = [
       Content(
