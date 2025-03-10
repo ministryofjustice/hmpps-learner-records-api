@@ -7,7 +7,7 @@ enum class MatchType(val description: String) {
   NO_MATCH_RETURNED_FROM_LRS("No match returned from LRS"),
   EXACT_MATCH("Exact match"),
   POSSIBLE_MATCH("Possible match"),
-  LINKED_LEARNER_MATCH("linked learner match"),
+  LINKED_LEARNER_MATCH("Linked learner match"),
   TOO_MANY_RESULTS("Too many results"),
   ;
 
