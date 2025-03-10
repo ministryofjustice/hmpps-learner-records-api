@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
 enum class MatchType(val description: String) {
-  NO_MATCH_RETURNED_FROM_LRS("No match returned from LRS"),
-  EXACT_MATCH("Exact match"),
-  POSSIBLE_MATCH("Possible match"),
-  LINKED_LEARNER_MATCH("Linked learner match"),
-  TOO_MANY_RESULTS("Too many results"),
+  NO_MATCH_RETURNED_FROM_LRS("No Match"),
+  EXACT_MATCH("Exact Match"),
+  POSSIBLE_MATCH("Possible Match"),
+  LINKED_LEARNER_MATCH("Linked Learner Match"),
+  TOO_MANY_RESULTS("Too Many Matches"),
   ;
 
   @JsonValue
