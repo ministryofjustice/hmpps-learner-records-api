@@ -90,7 +90,7 @@ class MatchResource(
     @PathVariable(name = "nomisId", required = true) nomisId: String,
     @RequestBody @Valid confirmNoMatchRequest: ConfirmNoMatchRequest,
   ): ResponseEntity<Void> {
-    logger.log("Received a post request to confirm bo match endpoint")
+    logger.log("Received a post request to confirm no match endpoint")
     matchService.saveNoMatch(nomisId, confirmNoMatchRequest)
     return ResponseEntity.status(HttpStatus.CREATED).build()
   }
