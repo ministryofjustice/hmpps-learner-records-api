@@ -25,9 +25,9 @@ changes should consider the use case of these consumers.
 To develop and build the application locally you will need JDK 21 installed and configured.
 
 ### Ktlint formatting
-Ktlint is used to format the source code and a task runs in the Circle build to check the formatting.
+Ktlint is used to format the source code and a task runs in the GitHub build action to check the formatting.
 
-You should run the following commands to make sure that the source code is formatted locally before it breaks the Circle build.
+You should run the following commands to make sure that the source code is formatted locally before it breaks the GitHub build action.
 
 #### Apply ktlint formatting rules to Intellij
 `./gradlew ktlintApplyToIdea`
