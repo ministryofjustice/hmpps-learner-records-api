@@ -50,6 +50,7 @@ This service is available at:
 
 ### Health
 The application has a health endpoint found at `/health` which indicates if the app is running and is healthy.
+The application has a ping endpoint found at `health/ping` which indicates that the app is responding to requests.
 
 ---
 
@@ -91,7 +92,8 @@ The service provides the following endpoints to consumers and requires the role 
 The following endpoints are used by the [hmpps-match-learner-record-ui](https://github.com/ministryofjustice/hmpps-match-learner-record-ui] only) (uses the role **ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI**):
 * `POST /learners` - Search for a learner's ULN via their demographic data
 * `POST /learner-events` - Request a learner's personal learning record (PLR) via their ULN
-* `POST /match/:nomisId` - Confirm a match (or no match) between a learner's NOMIS ID and ULN
+* `POST /match/:nomisId` - Confirm a match between a learner's NOMIS ID and ULN
+* `POST /match/:nomisId/no-match` - Confirm a no match for a learner's NOMIS ID
 
 ### `POST:/learners`
 This endpoint searches for a learner's ULN by their demographic information.
@@ -251,7 +253,55 @@ Response codes:
 * 403 - Forbidden
 
 ### `POST:/match/:nomisId`
-This endpoint is to confirm a match (or no match) between a learner's NOMIS ID and ULN.
+This endpoint is to confirm a match between a learner's NOMIS ID and ULN.
+The givenName and familyName should be as per the LRS data for a match.
+The match will be saved as a `MatchEntity` in the database.
+
+<details>
+<summary>Example request body for a match:</summary>
+<br>
+<pre>
+{
+  "matchingUln": "1234567890",
+  "givenName": "John",
+  "familyName": "Smith",
+  "matchType": "POSSIBLE_MATCH",
+  "countOfReturnedULNs": "2"
+}
+</pre>
+</details>
+
+Response codes:
+* 201 - Created
+* 400 - Bad Request, malformed ULN or json body
+* 401 - Unauthorised
+* 403 - Forbidden
+* 500 - Likely that the database is unreachable
+
+### `POST:/match/:nomisId/no-match`
+This endpoint is to confirm a no match for a learner's NOMIS ID.
+The match will be saved as a `MatchEntity` in the database.
+
+<details>
+<summary>Example request body for a no match:</summary>
+<br>
+<pre>
+{
+  "matchType": "NO_MATCH_RETURNED_FROM_LRS",
+  "countOfReturnedULNs": "0"
+}
+</pre>
+</details>
+
+Response codes:
+* 201 - Created
+* 400 - Bad Request, malformed json body
+* 401 - Unauthorised
+* 403 - Forbidden
+* 500 - Likely that the database is unreachable
+
+### `POST:/match/:nomisId`
+This endpoint is to confirm a match between a learner's NOMIS ID and ULN.
 The givenName and familyName should be as per the LRS data for a match.
 The match will be saved as a `MatchEntity` in the database.
 
@@ -385,6 +435,12 @@ Response codes:
 * 401 - Unauthorised
 * 403 - Forbidden
 * 404 - Not Found
+
+---
+
+## Database
+
+The service uses a postgres database alongside flyaway migrations to create and populate the database. Any changes made to the [MatchEntity](https://github.com/ministryofjustice/hmpps-learner-records-api/blob/main/src/main/kotlin/uk/gov/justice/digital/hmpps/learnerrecordsapi/models/db/MatchEntity.kt) need to be applied to the database too using a flyway migration script (see the SQL files [here](https://github.com/ministryofjustice/hmpps-learner-records-api/tree/main/src/main/resources/db/migration)).
 
 ---
 
