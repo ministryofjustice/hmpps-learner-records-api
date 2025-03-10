@@ -16,7 +16,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 @Operation(
-  summary = "Confirm a that a match is not possible",
+  summary = "Confirm that a match is not possible",
   description = "Confirm a no match for a NomisID",
   parameters = [
     Parameter(name = "X-Username", `in` = ParameterIn.HEADER, required = true),
