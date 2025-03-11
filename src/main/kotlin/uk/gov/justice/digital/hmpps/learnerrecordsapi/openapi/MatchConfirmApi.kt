@@ -37,32 +37,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                 "matchingUln": "1026893096",
                 "givenName": "Darcie",
                 "familyName": "Tucker",
-                "matchType": "EXACT_MATCH",
+                "matchType": "Exact Match",
                 "countOfReturnedUlns": "1"
-              }
-              """,
-          ),
-          ExampleObject(
-            name = "Confirm no match selected Request",
-            value = """
-              {
-                "matchingUln": "",
-                "givenName": "",
-                "familyName": "",
-                "matchType": "NO_MATCH_SELECTED",
-                "countOfReturnedUlns": "2"
-              }
-              """,
-          ),
-          ExampleObject(
-            name = "Confirm no match found Request",
-            value = """
-              {
-                "matchingUln": "",
-                "givenName": "",
-                "familyName": "",
-                "matchType": "NO_MATCH_RETURNED_FROM_LRS",
-                "countOfReturnedUlns": "0"
               }
               """,
           ),

@@ -34,7 +34,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
             name = "Confirm no match Request",
             value = """
               {
-                "matchType": "NO_MATCH_RETURNED_FROM_LRS",
+                "matchType": "No Match",
                 "countOfReturnedUlns": "0"
               }
               """,

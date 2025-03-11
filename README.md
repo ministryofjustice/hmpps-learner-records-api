@@ -265,8 +265,8 @@ The match will be saved as a `MatchEntity` in the database.
   "matchingUln": "1234567890",
   "givenName": "John",
   "familyName": "Smith",
-  "matchType": "POSSIBLE_MATCH",
-  "countOfReturnedULNs": "2"
+  "matchType": "Possible match",
+  "countOfReturnedUlns": "2"
 }
 </pre>
 </details>
@@ -287,8 +287,8 @@ The match will be saved as a `MatchEntity` in the database.
 <br>
 <pre>
 {
-  "matchType": "NO_MATCH_RETURNED_FROM_LRS",
-  "countOfReturnedULNs": "0"
+  "matchType": "No match returned from LRS",
+  "countOfReturnedUlns": "0"
 }
 </pre>
 </details>
@@ -296,43 +296,6 @@ The match will be saved as a `MatchEntity` in the database.
 Response codes:
 * 201 - Created
 * 400 - Bad Request, malformed json body
-* 401 - Unauthorised
-* 403 - Forbidden
-* 500 - Likely that the database is unreachable
-
-### `POST:/match/:nomisId`
-This endpoint is to confirm a match between a learner's NOMIS ID and ULN.
-The givenName and familyName should be as per the LRS data for a match.
-The match will be saved as a `MatchEntity` in the database.
-
-<details>
-<summary>Example request body for a match:</summary>
-<br>
-<pre>
-{
-  "matchingUln": "1234567890",
-  "givenName": "John",
-  "familyName": "Smith",
-  "matchType": "POSSIBLE_MATCH",
-  "countOfReturnedULNs": "2"
-}
-</pre>
-</details>
-
-<details>
-<summary>Example request body for a no match:</summary>
-<br>
-<pre>
-{
-  "matchType": "NO_MATCH_SELECTED",
-  "countOfReturnedULNs": "6"
-}
-</pre>
-</details>
-
-Response codes:
-* 201 - Created
-* 400 - Bad Request, malformed ULN or json body
 * 401 - Unauthorised
 * 403 - Forbidden
 * 500 - Likely that the database is unreachable
