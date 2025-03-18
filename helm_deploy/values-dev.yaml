@@ -15,15 +15,6 @@ generic-service:
     LRS_PFX_PATH: "/certs/WebServiceClientCert.pfx"
     HMPPS_SQS_USE_WEB_TOKEN: "true"
 
-  namespace_secrets:
-    app-config-variables:
-      HMPPS_SQS_QUEUES_AUDIT_QUEUE_NAME: "SQS_QUEUE_NAME"
-    rds-postgresql-instance-output:
-      RDS_INSTANCE_ENDPOINT: "rds_instance_endpoint"
-      DATABASE_NAME: "database_name"
-      DATABASE_USERNAME: "database_username"
-      DATABASE_PASSWORD: "database_password"
-
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
 generic-prometheus-alerts:
