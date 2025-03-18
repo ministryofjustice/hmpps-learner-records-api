@@ -3,7 +3,6 @@
 
 generic-service:
   replicaCount: 2
-  serviceAccountName: hmpps-learner-records
 
   ingress:
     host: learner-records-api-dev.hmpps.service.justice.gov.uk

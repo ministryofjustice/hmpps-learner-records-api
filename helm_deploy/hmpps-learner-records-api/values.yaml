@@ -3,6 +3,7 @@ generic-service:
   productId: "DPS121" # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
   replicaCount: 4
+  serviceAccountName: hmpps-learner-records
 
   image:
     repository: ghcr.io/ministryofjustice/hmpps-learner-records-api
