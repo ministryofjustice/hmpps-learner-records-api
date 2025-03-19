@@ -240,6 +240,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
         "Some Family Name",
         "EXACT_MATCH",
         "1",
+        "",
         null,
       ),
     )
@@ -282,6 +283,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
         "Some Family Name",
         "EXACT_MATCH",
         "1",
+        "",
         null,
       ),
     )
