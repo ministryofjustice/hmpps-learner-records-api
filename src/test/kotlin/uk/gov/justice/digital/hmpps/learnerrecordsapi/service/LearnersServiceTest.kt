@@ -250,7 +250,7 @@ class LearnersServiceTest {
     val errorText = InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()
 
     val expectedException = DFEApiDownException(
-      errorText
+      errorText,
     )
 
     `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(
