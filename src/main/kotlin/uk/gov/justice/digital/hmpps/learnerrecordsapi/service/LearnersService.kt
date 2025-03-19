@@ -35,14 +35,17 @@ class LearnersService(
 
     val lrsResponse = httpClientConfiguration.lrsClient().findLearnerByDemographics(requestBody)
     val lrsResponseBody = lrsResponse.body()?.body?.findLearnerResponse
+    val errorBody = lrsResponse.errorBody()?.string().toString()
 
     if (lrsResponse.isSuccessful && lrsResponseBody != null) {
       return convertLrsResponseToOurResponse(findLearnerByDemographicsRequest, lrsResponseBody)
-    } else if (lrsResponse.body()?.body.toString().contains("UnsupportedHttpVerb")) {
-      throw DFEApiDownException(lrsResponse.body()?.body.toString())
-    } else {
-      throw LRSException(parseError(lrsResponse.errorBody()?.string().toString()))
     }
+
+    if (errorBody.contains("UnsupportedHttpVerb")) {
+      throw DFEApiDownException(errorBody)
+    }
+
+    throw LRSException(parseError(errorBody))
   }
 
   private fun computeMismatchedFields(

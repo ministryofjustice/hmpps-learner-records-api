@@ -8,6 +8,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.LRSConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil.debugLog
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.DFEApiDownException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
@@ -30,12 +31,17 @@ class LearnerEventsService(
 
     val learningEventsResponse = httpClientConfiguration.lrsClient().getLearnerLearningEvents(requestBody)
     val learningEventsObject = learningEventsResponse.body()?.body?.learningEventsResponse
+    val errorBody = learningEventsResponse.errorBody()?.string().toString()
 
     if (learningEventsResponse.isSuccessful && learningEventsObject != null) {
       return formatLRSResponse(learnerEventsRequest, learningEventsObject)
-    } else {
-      throw LRSException(parseError(learningEventsResponse.errorBody()?.string().toString()))
     }
+
+    if (errorBody.contains("UnsupportedHttpVerb")) {
+      throw DFEApiDownException(errorBody)
+    }
+
+    throw LRSException(parseError(errorBody))
   }
 
   private fun formatLRSResponse(
