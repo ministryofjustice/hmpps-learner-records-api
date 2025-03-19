@@ -23,6 +23,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Fin
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.FindLearnerResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.DFEApiDownException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
@@ -222,6 +223,44 @@ class LearnersServiceTest {
     )
 
     val actualException = assertThrows<LRSException> {
+      learnersService.getLearners(requestBody, "SomePerson")
+    }
+
+    verify(lrsApiInterfaceMock).findLearnerByDemographics(any())
+    assertEquals(expectedException.toString(), actualException.toString())
+  }
+
+  @Test
+  fun `should throw a DFEApiDownException when the API is down`(): Unit = runTest {
+    val requestBody = LearnersRequest(
+      givenName = "Some",
+      familyName = "Person",
+      dateOfBirth = "1990-01-01",
+      gender = Gender.MALE,
+      lastKnownPostCode = "ABCDEF",
+      previousFamilyName = "Test",
+      schoolAtAge16 = "Test High School",
+      placeOfBirth = "Some place",
+      emailAddress = "test_email@test.com",
+    )
+
+    val inputStream = javaClass.classLoader.getResourceAsStream("error_down_ful.xml")
+      ?: throw IllegalArgumentException("File not found in resources: error_down_ful.xml")
+
+    val errorText = InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()
+
+    val expectedException = DFEApiDownException(
+      errorText,
+    )
+
+    `when`(lrsApiInterfaceMock.findLearnerByDemographics(any())).thenReturn(
+      Response.error(
+        405,
+        errorText.toResponseBody("text/xml".toMediaTypeOrNull()),
+      ),
+    )
+
+    val actualException = assertThrows<DFEApiDownException> {
       learnersService.getLearners(requestBody, "SomePerson")
     }
 

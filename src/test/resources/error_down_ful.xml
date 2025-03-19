@@ -1,0 +1,17 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body>
+        <soapenv:Fault>
+            <faultcode>soapenv:Server</faultcode>
+            <faultstring>uk.gov.miap.lrs.api.exceptions.MIAPAPIException</faultstring>
+            <detail>
+                <ns10:MIAPAPIException xmlns:ns10="http://api.lrs.miap.gov.uk/exceptions">
+                    <ErrorCode>WSEC0001</ErrorCode>
+                    <ErrorActor>uk.gov.miap.lrs.api.learner.utils.MSGValidator.validateSOAPMSG()</ErrorActor>
+                    <Description>UnsupportedHttpVerb</Description>
+                    <FurtherDetails>UnsupportedHttpVerb GET</FurtherDetails>
+                    <ErrorTimestamp>2025-01-14 15:23:47</ErrorTimestamp>
+                </ns10:MIAPAPIException>
+            </detail>
+        </soapenv:Fault>
+    </soapenv:Body>
+</soapenv:Envelope>

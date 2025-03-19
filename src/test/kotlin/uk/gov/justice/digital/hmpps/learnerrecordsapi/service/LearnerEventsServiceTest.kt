@@ -20,6 +20,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.LRSConfiguration
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.interfaces.LRSApiInterface
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.LearningEventsEnvelope
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.MIAPAPIException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.DFEApiDownException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.LRSException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
@@ -113,6 +114,40 @@ class LearnerEventsServiceTest {
     )
 
     val actualException = assertThrows<LRSException> {
+      learnerEventsService.getLearningEvents(body, "TestTest")
+    }
+
+    verify(lrsApiInterfaceMock).getLearnerLearningEvents(any())
+    assertEquals(expectedException.toString(), actualException.toString())
+  }
+
+  @Test
+  fun `should throw a DFEApiDownException when the API is down`(): Unit = runTest {
+    val body = LearnerEventsRequest(
+      givenName = "test",
+      familyName = "test",
+      uln = "test",
+      dateOfBirth = "1990-01-01",
+      gender = Gender.MALE,
+    )
+
+    val inputStream = javaClass.classLoader.getResourceAsStream("error_down_ful.xml")
+      ?: throw IllegalArgumentException("File not found in resources: error_down_ful.xml")
+
+    val errorText = InputStreamReader(inputStream, StandardCharsets.UTF_8).readText()
+
+    val expectedException = DFEApiDownException(
+      errorText,
+    )
+
+    `when`(lrsApiInterfaceMock.getLearnerLearningEvents(any())).thenReturn(
+      Response.error(
+        405,
+        errorText.toResponseBody("text/xml".toMediaTypeOrNull()),
+      ),
+    )
+
+    val actualException = assertThrows<DFEApiDownException> {
       learnerEventsService.getLearningEvents(body, "TestTest")
     }
 
