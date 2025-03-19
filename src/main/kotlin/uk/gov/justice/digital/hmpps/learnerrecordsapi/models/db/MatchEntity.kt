@@ -34,6 +34,7 @@ data class MatchEntity(
   @Column(nullable = false)
   val countOfReturnedUlns: String = "",
 
+  @Column(nullable = false)
   val matchStatus: String = "",
 
   @Column(nullable = false, updatable = false)
