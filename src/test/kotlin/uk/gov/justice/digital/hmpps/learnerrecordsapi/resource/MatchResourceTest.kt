@@ -16,8 +16,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.security.core.GrantedAuthority
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.MatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotFoundException
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.exceptions.MatchNotPossibleException
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmNoMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
@@ -139,8 +141,25 @@ class MatchResourceTest {
   }
 
   @Test
+  fun `should save the Match`(): Unit = runTest {
+    `when`(mockMatchService.saveMatch(any(), any())).thenReturn(MatchStatus.MATCHED)
+    val actual = matchResource.confirmMatch(
+      "",
+      nomisId,
+      ConfirmMatchRequest(
+        matchType = MatchType.EXACT_MATCH,
+        countOfReturnedUlns = "1",
+        matchingUln = "1234567890",
+        givenName = "John",
+        familyName = "Smith",
+      ),
+    )
+    assertThat(actual.statusCode).isEqualTo(HttpStatus.CREATED)
+  }
+
+  @Test
   fun `should save No Match`(): Unit = runTest {
-    `when`(mockMatchService.saveNoMatch(any(), any())).thenReturn(1L)
+    `when`(mockMatchService.saveNoMatch(any(), any())).thenReturn(MatchStatus.MATCH_NOT_POSSIBLE)
     val actual = matchResource.confirmNoMatch(
       "",
       nomisId,
@@ -148,6 +167,16 @@ class MatchResourceTest {
         matchType = MatchType.NO_MATCH_RETURNED_FROM_LRS,
         countOfReturnedUlns = "1",
       ),
+    )
+    assertThat(actual.statusCode).isEqualTo(HttpStatus.CREATED)
+  }
+
+  @Test
+  fun `should save Unmatch`(): Unit = runTest {
+    `when`(mockMatchService.unMatch(any())).thenReturn(MatchStatus.UNMATCHED)
+    val actual = matchResource.confirmUnmatch(
+      "",
+      nomisId,
     )
     assertThat(actual.statusCode).isEqualTo(HttpStatus.CREATED)
   }

@@ -95,6 +95,19 @@ class MatchResource(
     return ResponseEntity.status(HttpStatus.CREATED).build()
   }
 
+  @PreAuthorize("hasRole('$ROLE_LEARNERS_UI')")
+  @PostMapping(value = ["/{nomisId}/unmatch"])
+  @Tag(name = "Match")
+  @NoMatchConfirmApi
+  suspend fun confirmUnmatch(
+    @RequestHeader("X-Username", required = true) userName: String,
+    @PathVariable(name = "nomisId", required = true) nomisId: String,
+  ): ResponseEntity<Void> {
+    logger.log("Received a post request to confirm un-match endpoint")
+    matchService.unMatch(nomisId)
+    return ResponseEntity.status(HttpStatus.CREATED).build()
+  }
+
   @PreAuthorize("hasRole('$ROLE_LEARNERS_RO')")
   @GetMapping(value = ["/{nomisId}/learner-events"], produces = ["application/json"])
   @Tag(name = "Learning Events By Nomis ID")

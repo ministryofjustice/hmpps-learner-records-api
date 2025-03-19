@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request
 
 import jakarta.validation.constraints.Pattern
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.MatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 
 open class ConfirmNoMatchRequest(
@@ -13,7 +14,8 @@ open class ConfirmNoMatchRequest(
   open fun asMatchEntity(nomisId: String): MatchEntity = MatchEntity(
     nomisId = nomisId,
     matchType = matchType.toString(),
-    countOfReturnedUlns = countOfReturnedUlns.orEmpty(),
+    countOfReturnedUlns = countOfReturnedUlns,
+    matchStatus = MatchStatus.MATCH_NOT_POSSIBLE.toString(),
   )
 }
 
@@ -38,5 +40,6 @@ class ConfirmMatchRequest(
     matchedUln = matchingUln,
     givenName = givenName,
     familyName = familyName,
+    matchStatus = MatchStatus.MATCHED.toString(),
   )
 }
