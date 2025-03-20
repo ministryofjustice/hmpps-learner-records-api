@@ -94,6 +94,7 @@ The following endpoints are used by the [hmpps-match-learner-record-ui](https://
 * `POST /learner-events` - Request a learner's personal learning record (PLR) via their ULN
 * `POST /match/:nomisId` - Confirm a match between a learner's NOMIS ID and ULN
 * `POST /match/:nomisId/no-match` - Confirm a no match for a learner's NOMIS ID
+* `POST /match/:nomisId/unmatch` - Confirm an un-match for a learner's NOMIS ID
 
 ### `POST:/learners`
 This endpoint searches for a learner's ULN by their demographic information.
@@ -280,7 +281,7 @@ Response codes:
 
 ### `POST:/match/:nomisId/no-match`
 This endpoint is to confirm a no match for a learner's NOMIS ID.
-The match will be saved as a `MatchEntity` in the database.
+This will be saved as a `MatchEntity` in the database.
 
 <details>
 <summary>Example request body for a no match:</summary>
@@ -292,6 +293,19 @@ The match will be saved as a `MatchEntity` in the database.
 }
 </pre>
 </details>
+
+Response codes:
+* 201 - Created
+* 400 - Bad Request, malformed json body
+* 401 - Unauthorised
+* 403 - Forbidden
+* 500 - Likely that the database is unreachable
+
+### `POST:/match/:nomisId/unmatch`
+This endpoint is to confirm an un-match for a learner's NOMIS ID.
+This will be saved as a `MatchEntity` in the database.
+
+There is no request body for this end-point.
 
 Response codes:
 * 201 - Created

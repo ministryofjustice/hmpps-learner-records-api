@@ -1,6 +1,8 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.service
 
 import org.springframework.stereotype.Service
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.MatchStatus
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmNoMatchRequest
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
@@ -16,12 +18,15 @@ class MatchService(
 
   fun findMatch(nomisId: String): CheckMatchResponse? {
     val entity = matchRepository.findFirstByNomisIdOrderByIdDesc(nomisId)
-    return entity?.let {
+    if (entity == null || entity.matchStatus == MatchStatus.UNMATCHED.toString()) {
+      return null
+    }
+    return entity.let {
       CheckMatchResponse(
         matchedUln = it.matchedUln,
         givenName = it.givenName,
         familyName = it.familyName,
-        status = if (it.matchedUln.isEmpty() || it.matchedUln.isBlank()) {
+        status = if (it.matchStatus == MatchStatus.MATCH_NOT_POSSIBLE.toString()) {
           CheckMatchStatus.NoMatch
         } else {
           CheckMatchStatus.Found
@@ -30,14 +35,22 @@ class MatchService(
     }
   }
 
-  fun saveMatch(nomisId: String, confirmMatchRequest: ConfirmMatchRequest): Long? {
+  fun saveMatch(nomisId: String, confirmMatchRequest: ConfirmMatchRequest): MatchStatus? {
     val entity = confirmMatchRequest.asMatchEntity(nomisId)
-    return matchRepository.save(entity).id
+    return MatchStatus.fromString(matchRepository.save(entity).matchStatus)
   }
 
-  fun saveNoMatch(nomisId: String, confirmNoMatchRequest: ConfirmNoMatchRequest): Long? {
+  fun saveNoMatch(nomisId: String, confirmNoMatchRequest: ConfirmNoMatchRequest): MatchStatus? {
     val entity = confirmNoMatchRequest.asMatchEntity(nomisId)
-    return matchRepository.save(entity).id
+    return MatchStatus.fromString(matchRepository.save(entity).matchStatus)
+  }
+
+  fun unMatch(nomisId: String): MatchStatus? {
+    val entity = MatchEntity(
+      nomisId = nomisId,
+      matchStatus = MatchStatus.UNMATCHED.toString(),
+    )
+    return MatchStatus.fromString(matchRepository.save(entity).matchStatus)
   }
 
   fun getDataForSubjectAccessRequest(

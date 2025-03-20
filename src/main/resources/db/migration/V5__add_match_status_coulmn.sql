@@ -1,0 +1,1 @@
+ALTER TABLE matches ADD COLUMN match_status VARCHAR(255) NOT NULL;

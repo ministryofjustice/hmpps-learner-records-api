@@ -56,9 +56,9 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
       @Test
       fun `should return all data if prisoner exists and no timeframe is specified`() {
         val entitiesToSave = listOf(
-          MatchEntity(null, "A12345", "765", "Jon", "Test", "EXACT_MATCH", "1", null),
-          MatchEntity(null, "A12345", "3213", "John", "Test", "EXACT_MATCH", "1", null),
-          MatchEntity(null, "B54321", "3213", "Someone", "Else", "EXACT_MATCH", "1", null),
+          MatchEntity(null, "A12345", "765", "Jon", "Test", "EXACT_MATCH", "1", "", null),
+          MatchEntity(null, "A12345", "3213", "John", "Test", "EXACT_MATCH", "1", "", null),
+          MatchEntity(null, "B54321", "3213", "Someone", "Else", "EXACT_MATCH", "1", "", null),
         )
 
         matchRepository.saveAll(entitiesToSave)
@@ -93,6 +93,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
+            "",
             invalidBefore,
           ),
           MatchEntity(
@@ -103,6 +104,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
+            "",
             validExact,
           ),
           MatchEntity(
@@ -113,6 +115,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
+            "",
             invalidAfter,
           ),
           MatchEntity(
@@ -123,6 +126,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Else",
             "EXACT_MATCH",
             "1",
+            "",
             validExact,
           ),
         )
@@ -157,6 +161,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
+            "",
             invalidBefore,
           ),
           MatchEntity(
@@ -167,6 +172,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
+            "",
             validExact,
           ),
           MatchEntity(
@@ -177,6 +183,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
+            "",
             validExact.plusDays(5),
           ),
         )
@@ -212,6 +219,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
+            "",
             validExact.minusDays(5),
           ),
           MatchEntity(
@@ -222,6 +230,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
+            "",
             validExact,
           ),
           MatchEntity(
@@ -232,6 +241,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             "Test",
             "EXACT_MATCH",
             "1",
+            "",
             invalidAfter,
           ),
         )

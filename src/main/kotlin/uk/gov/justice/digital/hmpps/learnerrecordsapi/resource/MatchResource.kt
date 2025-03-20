@@ -28,6 +28,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.LearnerEventsByNom
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchCheckApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.MatchConfirmApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.NoMatchConfirmApi
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.openapi.UnmatchConfirmApi
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnerEventsService
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
 import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
@@ -92,6 +93,19 @@ class MatchResource(
   ): ResponseEntity<Void> {
     logger.log("Received a post request to confirm no match endpoint")
     matchService.saveNoMatch(nomisId, confirmNoMatchRequest)
+    return ResponseEntity.status(HttpStatus.CREATED).build()
+  }
+
+  @PreAuthorize("hasRole('$ROLE_LEARNERS_UI')")
+  @PostMapping(value = ["/{nomisId}/unmatch"])
+  @Tag(name = "Match")
+  @UnmatchConfirmApi
+  suspend fun confirmUnmatch(
+    @RequestHeader("X-Username", required = true) userName: String,
+    @PathVariable(name = "nomisId", required = true) nomisId: String,
+  ): ResponseEntity<Void> {
+    logger.log("Received a post request to confirm un-match endpoint")
+    matchService.unMatch(nomisId)
     return ResponseEntity.status(HttpStatus.CREATED).build()
   }
 
