@@ -36,16 +36,25 @@ class MatchService(
   }
 
   fun saveMatch(nomisId: String, confirmMatchRequest: ConfirmMatchRequest): MatchStatus? {
+    if (findMatch(nomisId)?.matchedUln == confirmMatchRequest.matchingUln) {
+      return MatchStatus.MATCHED
+    }
     val entity = confirmMatchRequest.asMatchEntity(nomisId)
     return MatchStatus.fromString(matchRepository.save(entity).matchStatus)
   }
 
   fun saveNoMatch(nomisId: String, confirmNoMatchRequest: ConfirmNoMatchRequest): MatchStatus? {
+    if (findMatch(nomisId)?.status == CheckMatchStatus.NoMatch) {
+      return MatchStatus.MATCH_NOT_POSSIBLE
+    }
     val entity = confirmNoMatchRequest.asMatchEntity(nomisId)
     return MatchStatus.fromString(matchRepository.save(entity).matchStatus)
   }
 
   fun unMatch(nomisId: String): MatchStatus? {
+    if (findMatch(nomisId) == null) {
+      return MatchStatus.UNMATCHED
+    }
     val entity = MatchEntity(
       nomisId = nomisId,
       matchStatus = MatchStatus.UNMATCHED.toString(),

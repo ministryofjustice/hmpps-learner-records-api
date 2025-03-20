@@ -426,10 +426,12 @@ class MatchResourceIntTest : IntegrationTestBase() {
     .expectStatus()
     .isEqualTo(expectedStatus)
 
-  private fun checkSavedUlnAndStatus(nomisId: String, expected: String, status: MatchStatus) {
+  private fun checkSavedUlnAndStatus(nomisId: String, expected: String?, status: MatchStatus) {
     val entity = matchRepository.findFirstByNomisIdOrderByIdDesc(nomisId)
-    assertThat(entity?.matchedUln).isEqualTo(expected)
-    assertThat(entity?.matchStatus).isEqualTo(status.toString())
+    if (expected != null) {
+      assertThat(entity?.matchedUln).isEqualTo(expected)
+    }
+    assertThat(entity?.matchStatus ?: MatchStatus.UNMATCHED.toString()).isEqualTo(status.toString())
   }
 
   @Test
@@ -438,7 +440,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
     val actualResponse = postNoMatch(nomisId, 201)
     verify(matchService, times(1)).saveNoMatch(any(), any())
     actualResponse.expectStatus().isCreated
-    checkSavedUlnAndStatus(nomisId, "", MatchStatus.MATCH_NOT_POSSIBLE)
+    checkSavedUlnAndStatus(nomisId, null, MatchStatus.MATCH_NOT_POSSIBLE)
   }
 
   private fun postUnmatch(nomisId: String, expectedStatus: Int): WebTestClient.ResponseSpec = webTestClient.post()
@@ -456,6 +458,6 @@ class MatchResourceIntTest : IntegrationTestBase() {
     val actualResponse = postUnmatch(nomisId, 201)
     verify(matchService, times(1)).unMatch(any())
     actualResponse.expectStatus().isCreated
-    checkSavedUlnAndStatus(nomisId, "", MatchStatus.UNMATCHED)
+    checkSavedUlnAndStatus(nomisId, null, MatchStatus.UNMATCHED)
   }
 }

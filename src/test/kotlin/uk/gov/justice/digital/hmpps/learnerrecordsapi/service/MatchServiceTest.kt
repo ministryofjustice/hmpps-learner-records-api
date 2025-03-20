@@ -8,6 +8,8 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.MatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
@@ -91,6 +93,7 @@ class MatchServiceTest {
   fun `saveMatch should return a status of matched`() {
     val id = 1L
 
+    `when`(mockMatchRepository.findFirstByNomisIdOrderByIdDesc(any())).thenReturn(null)
     `when`(mockMatchRepository.save(any())).thenReturn(
       MatchEntity(
         id = id,
@@ -113,12 +116,14 @@ class MatchServiceTest {
       ),
     )
     assertThat(savedId).isEqualTo(MatchStatus.MATCHED)
+    verify(mockMatchRepository, times(1)).save(any())
   }
 
   @Test
   fun `saveNoMatch should return a status of match not possible`() {
     val id = 1L
 
+    `when`(mockMatchRepository.findFirstByNomisIdOrderByIdDesc(any())).thenReturn(null)
     `when`(mockMatchRepository.save(any())).thenReturn(
       MatchEntity(
         id = id,
@@ -136,12 +141,20 @@ class MatchServiceTest {
       ),
     )
     assertThat(savedId).isEqualTo(MatchStatus.MATCH_NOT_POSSIBLE)
+    verify(mockMatchRepository, times(1)).save(any())
   }
 
   @Test
   fun `unMatch should return a status of unmatched`() {
     val id = 1L
 
+    `when`(mockMatchRepository.findFirstByNomisIdOrderByIdDesc(any())).thenReturn(
+      MatchEntity(
+        nomisId = nomisId,
+        matchedUln = matchedUln,
+        matchStatus = MatchStatus.MATCHED.toString(),
+      ),
+    )
     `when`(mockMatchRepository.save(any())).thenReturn(
       MatchEntity(
         id = id,
@@ -152,5 +165,72 @@ class MatchServiceTest {
 
     val savedId = matchService.unMatch(nomisId)
     assertThat(savedId).isEqualTo(MatchStatus.UNMATCHED)
+    verify(mockMatchRepository, times(1)).save(any())
+  }
+
+  @Test
+  fun `saveMatch should not save a duplicate record`() {
+    val id = 1L
+
+    `when`(mockMatchRepository.findFirstByNomisIdOrderByIdDesc(any())).thenReturn(
+      MatchEntity(
+        id = id,
+        nomisId = nomisId,
+        matchedUln = matchedUln,
+        givenName = givenName,
+        familyName = familyName,
+        matchStatus = MatchStatus.MATCHED.toString(),
+      ),
+    )
+
+    val savedId = matchService.saveMatch(
+      nomisId,
+      ConfirmMatchRequest(
+        matchingUln = matchedUln,
+        givenName = givenName,
+        familyName = familyName,
+        matchType = MatchType.EXACT_MATCH,
+        countOfReturnedUlns = "1",
+      ),
+    )
+    assertThat(savedId).isEqualTo(MatchStatus.MATCHED)
+    verify(mockMatchRepository, times(0)).save(any())
+  }
+
+  @Test
+  fun `saveNoMatch should not save a duplicate record`() {
+    val id = 1L
+
+    `when`(mockMatchRepository.findFirstByNomisIdOrderByIdDesc(any())).thenReturn(
+      MatchEntity(
+        id = id,
+        nomisId = nomisId,
+        matchStatus = MatchStatus.MATCH_NOT_POSSIBLE.toString(),
+      ),
+    )
+
+    val savedId = matchService.saveNoMatch(
+      nomisId,
+      ConfirmNoMatchRequest(
+        matchType = MatchType.NO_MATCH_RETURNED_FROM_LRS,
+        countOfReturnedUlns = "1",
+      ),
+    )
+    assertThat(savedId).isEqualTo(MatchStatus.MATCH_NOT_POSSIBLE)
+    verify(mockMatchRepository, times(0)).save(any())
+  }
+
+  @Test
+  fun `unMatch should not save a duplicate record`() {
+    `when`(mockMatchRepository.findFirstByNomisIdOrderByIdDesc(any())).thenReturn(
+      MatchEntity(
+        nomisId = nomisId,
+        matchStatus = MatchStatus.UNMATCHED.toString(),
+      ),
+    )
+
+    val savedId = matchService.unMatch(nomisId)
+    assertThat(savedId).isEqualTo(MatchStatus.UNMATCHED)
+    verify(mockMatchRepository, times(0)).save(any())
   }
 }
