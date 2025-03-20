@@ -116,7 +116,7 @@ class MatchServiceTest {
   }
 
   @Test
-  fun `saveNoMatch should return a status of matched`() {
+  fun `saveNoMatch should return a status of match not possible`() {
     val id = 1L
 
     `when`(mockMatchRepository.save(any())).thenReturn(
