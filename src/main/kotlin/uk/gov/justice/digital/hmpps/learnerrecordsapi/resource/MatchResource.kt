@@ -78,8 +78,11 @@ class MatchResource(
     @RequestBody @Valid confirmMatchRequest: ConfirmMatchRequest,
   ): ResponseEntity<Void> {
     logger.log("Received a post request to confirm match endpoint", confirmMatchRequest)
-    matchService.saveMatch(nomisId, confirmMatchRequest)
-    return ResponseEntity.status(HttpStatus.CREATED).build()
+    if (matchService.isUnmatched(nomisId, confirmMatchRequest.matchingUln)) {
+      matchService.saveMatch(nomisId, confirmMatchRequest)
+      return ResponseEntity.status(HttpStatus.CREATED).build()
+    }
+    return ResponseEntity.status(HttpStatus.CONFLICT).build()
   }
 
   @PreAuthorize("hasRole('$ROLE_LEARNERS_UI')")

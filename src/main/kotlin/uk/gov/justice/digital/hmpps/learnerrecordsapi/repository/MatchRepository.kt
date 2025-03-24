@@ -27,4 +27,16 @@ interface MatchRepository : JpaRepository<MatchEntity, Long> {
     @Param("fromDate") fromDate: LocalDateTime?,
     @Param("toDate") toDate: LocalDateTime?,
   ): List<MatchEntity>
+
+  @Query(
+    """
+      SELECT COUNT(m) FROM MatchEntity m 
+      WHERE m.nomisId <> :nomisId
+      AND m.matchedUln = :uln 
+    """,
+  )
+  fun countForUln(
+    @Param("nomisId") nomisId: String,
+    @Param("uln") uln: String,
+  ): Long
 }
