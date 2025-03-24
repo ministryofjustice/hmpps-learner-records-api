@@ -62,6 +62,8 @@ class MatchService(
     return MatchStatus.fromString(matchRepository.save(entity).matchStatus)
   }
 
+  fun isUnmatched(nomisId: String, uln: String): Boolean = matchRepository.countForUln(nomisId, uln) == 0L
+
   fun getDataForSubjectAccessRequest(
     nomisId: String,
     fromDate: LocalDate?,

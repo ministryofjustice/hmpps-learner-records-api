@@ -233,4 +233,20 @@ class MatchServiceTest {
     assertThat(savedId).isEqualTo(MatchStatus.UNMATCHED)
     verify(mockMatchRepository, times(0)).save(any())
   }
+
+  @Test
+  fun `isUnmatched should return true if given uln is not in the database`() {
+    `when`(mockMatchRepository.countForUln(any(), any())).thenReturn(0L)
+
+    val unmatched = matchService.isUnmatched(nomisId, matchedUln)
+    assertThat(unmatched).isTrue()
+  }
+
+  @Test
+  fun `isUnmatched should return false if given uln is in the database`() {
+    `when`(mockMatchRepository.countForUln(any(), any())).thenReturn(1L)
+
+    val unmatched = matchService.isUnmatched(nomisId, matchedUln)
+    assertThat(unmatched).isFalse()
+  }
 }

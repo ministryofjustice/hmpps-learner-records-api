@@ -142,6 +142,7 @@ class MatchResourceTest {
 
   @Test
   fun `should save the Match`(): Unit = runTest {
+    `when`(mockMatchService.isUnmatched(any(), any())).thenReturn(true)
     `when`(mockMatchService.saveMatch(any(), any())).thenReturn(MatchStatus.MATCHED)
     val actual = matchResource.confirmMatch(
       "",
@@ -155,6 +156,25 @@ class MatchResourceTest {
       ),
     )
     assertThat(actual.statusCode).isEqualTo(HttpStatus.CREATED)
+    verify(mockMatchService, times(1)).saveMatch(any(), any())
+  }
+
+  @Test
+  fun `should return COINFLICT and not save the Match if uln already in use`(): Unit = runTest {
+    `when`(mockMatchService.isUnmatched(any(), any())).thenReturn(false)
+    val actual = matchResource.confirmMatch(
+      "",
+      nomisId,
+      ConfirmMatchRequest(
+        matchType = MatchType.EXACT_MATCH,
+        countOfReturnedUlns = "1",
+        matchingUln = "1234567890",
+        givenName = "John",
+        familyName = "Smith",
+      ),
+    )
+    assertThat(actual.statusCode).isEqualTo(HttpStatus.CONFLICT)
+    verify(mockMatchService, times(0)).saveMatch(any(), any())
   }
 
   @Test
@@ -169,6 +189,7 @@ class MatchResourceTest {
       ),
     )
     assertThat(actual.statusCode).isEqualTo(HttpStatus.CREATED)
+    verify(mockMatchService, times(1)).saveNoMatch(any(), any())
   }
 
   @Test
@@ -179,6 +200,7 @@ class MatchResourceTest {
       nomisId,
     )
     assertThat(actual.statusCode).isEqualTo(HttpStatus.CREATED)
+    verify(mockMatchService, times(1)).unMatch(any())
   }
 }
 
