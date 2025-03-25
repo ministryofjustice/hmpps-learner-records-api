@@ -186,9 +186,24 @@ class MatchResourceIntTest : IntegrationTestBase() {
   fun `POST to confirm match should return 201 CREATED with a response confirming a match`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
     val actualResponse = postMatch(nomisId, uln, 201)
+    verify(matchService, times(1)).isUnmatched(any(), any())
     verify(matchService, times(1)).saveMatch(any(), any())
     actualResponse.expectStatus().isCreated
     checkSavedUlnAndStatus(nomisId, uln, MatchStatus.MATCHED)
+  }
+
+  @Test
+  fun `POST to confirm match should return 409 CONFLICT if ULN already used`() {
+    val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
+    matchRepository.save(
+      MatchEntity(
+        nomisId = "B1234CD",
+        matchedUln = uln,
+      ),
+    )
+    postMatch(nomisId, uln, 409)
+    verify(matchService, times(1)).isUnmatched(any(), any())
+    verify(matchService, times(0)).saveMatch(any(), any())
   }
 
   @Test
