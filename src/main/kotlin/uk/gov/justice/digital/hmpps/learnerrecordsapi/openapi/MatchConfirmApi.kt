@@ -62,6 +62,10 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
       description = "Forbidden to access this endpoint",
       content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
     ),
+    ApiResponse(
+      responseCode = "409",
+      description = "ULN is already matched",
+    ),
   ],
 )
 annotation class MatchConfirmApi

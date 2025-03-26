@@ -277,6 +277,7 @@ Response codes:
 * 400 - Bad Request, malformed ULN or json body
 * 401 - Unauthorised
 * 403 - Forbidden
+* 409 - Conflict, ULN is already matched
 * 500 - Likely that the database is unreachable
 
 ### `POST:/match/:nomisId/no-match`
