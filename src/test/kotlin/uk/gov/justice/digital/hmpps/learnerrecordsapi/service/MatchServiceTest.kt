@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.db.MockMatchRepository
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.MatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.db.MatchEntity
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmMatchRequest
@@ -17,6 +18,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.ConfirmNoMa
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.MatchType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchStatus
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.repository.MatchRepository
+import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)
 class MatchServiceTest {
@@ -234,19 +236,46 @@ class MatchServiceTest {
     verify(mockMatchRepository, times(0)).save(any())
   }
 
-  @Test
-  fun `isUnmatched should return true if given uln is not in the database`() {
-    `when`(mockMatchRepository.countForUln(any(), any())).thenReturn(0L)
+  val id1 = nomisId + "A"
+  val uln1 = matchedUln
 
-    val unmatched = matchService.isUnmatched(nomisId, matchedUln)
+  val id2 = id1 + "A"
+  val uln2 = uln1 + "A"
+
+  private fun createMatchService(): MatchService {
+    val entities = listOf(
+      MatchEntity(
+        nomisId = id1,
+        matchedUln = uln1,
+        dateCreated = LocalDateTime.now(),
+      ),
+      MatchEntity(
+        nomisId = id1,
+        matchedUln = "",
+        dateCreated = LocalDateTime.now().plusSeconds(1),
+      ),
+      MatchEntity(
+        nomisId = id2,
+        matchedUln = uln2,
+        dateCreated = LocalDateTime.now(),
+      ),
+    )
+    return MatchService(MockMatchRepository(entities))
+  }
+
+  @Test
+  fun `isUnmatched should return true if given uln is not matched to anything`() {
+    val matchService = createMatchService()
+
+    val unmatched = matchService.isUnmatched(nomisId, uln1)
     assertThat(unmatched).isTrue()
   }
 
   @Test
-  fun `isUnmatched should return false if given uln is in the database`() {
-    `when`(mockMatchRepository.countForUln(any(), any())).thenReturn(1L)
+  fun `isUnmatched should return false if given uln is matched to another nomisid`() {
+    val matchService = createMatchService()
 
-    val unmatched = matchService.isUnmatched(nomisId, matchedUln)
+    val unmatched = matchService.isUnmatched(nomisId, uln2)
     assertThat(unmatched).isFalse()
   }
 }

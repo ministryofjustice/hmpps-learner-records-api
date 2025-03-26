@@ -30,13 +30,11 @@ interface MatchRepository : JpaRepository<MatchEntity, Long> {
 
   @Query(
     """
-      SELECT COUNT(m) FROM MatchEntity m 
+      SELECT DISTINCT m.nomisId FROM MatchEntity m
       WHERE m.nomisId <> :nomisId
-      AND m.matchedUln = :uln 
     """,
   )
-  fun countForUln(
+  fun findAllNomisIdsExcept(
     @Param("nomisId") nomisId: String,
-    @Param("uln") uln: String,
-  ): Long
+  ): Set<String>
 }
