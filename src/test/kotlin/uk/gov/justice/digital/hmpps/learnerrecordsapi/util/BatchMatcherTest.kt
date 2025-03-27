@@ -40,148 +40,67 @@ class BatchMatcherTest {
   @BeforeEach
   fun setUp() {
     spyBatchMatcher = spy(batchMatcher)
+    doReturn(prisonerList).`when`(spyBatchMatcher).loadPrisonersFromCSV()
+    whenever(matchService.findMatch(any())).thenReturn(null)
   }
+
+  private val prisonerList = listOf(
+    arrayOf("nomisId123", "John", "Doe", "1980-01-01", "MALE", "AB1 2CD"),
+  )
+
+  private fun learnersResponse(responseType: LRSResponseType, postcode: String = "AB1 2CD", count: Int = 1): LearnersResponse {
+    val matchedLearners = List(count) {
+      Learner(
+        uln = "1234567890",
+        lastKnownPostCode = postcode
+      )
+    }
+
+    return LearnersResponse(
+      searchParameters = LearnersRequest("", "", "", Gender.NOT_SPECIFIED, ""),
+      matchedLearners = matchedLearners,
+      responseType = responseType
+    )
+  }
+
 
   @Test
   fun `creates match when LRS returns exact match`(): Unit = runBlocking {
-    val prisonerList = listOf(
-      arrayOf("nomisId123", "John", "Doe", "1980-01-01", "MALE", "AB1 2CD"),
-    )
-
-    doReturn(prisonerList).`when`(spyBatchMatcher).loadPrisonersFromCSV()
-
-    whenever(matchService.findMatch(any())).thenReturn(null)
-
-    val learnersResponse = LearnersResponse(
-      searchParameters = LearnersRequest("", "", "", Gender.NOT_SPECIFIED, ""),
-      matchedLearners = listOf(
-        Learner(
-          uln = "1234567890",
-          lastKnownPostCode = "AB1 2CD",
-        ),
-      ),
-      responseType = LRSResponseType.EXACT_MATCH,
-    )
-
-    whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse)
+    whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse(LRSResponseType.EXACT_MATCH))
     spyBatchMatcher.matchFromCSV()
     verify(matchService).saveMatch(any(), any())
   }
 
   @Test
   fun `creates match when LRS returns single linked learner`(): Unit = runBlocking {
-    val prisonerList = listOf(
-      arrayOf("nomisId123", "John", "Doe", "1980-01-01", "MALE", "AB1 2CD"),
-    )
-
-    doReturn(prisonerList).`when`(spyBatchMatcher).loadPrisonersFromCSV()
-
-    whenever(matchService.findMatch(any())).thenReturn(null)
-
-    val learnersResponse = LearnersResponse(
-      searchParameters = LearnersRequest("", "", "", Gender.NOT_SPECIFIED, ""),
-      matchedLearners = listOf(
-        Learner(
-          uln = "1234567890",
-          lastKnownPostCode = "AB1 2CD",
-        ),
-      ),
-      responseType = LRSResponseType.LINKED_LEARNER,
-    )
-
-    whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse)
+    whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse(LRSResponseType.LINKED_LEARNER))
     spyBatchMatcher.matchFromCSV()
     verify(matchService).saveMatch(any(), any())
   }
 
   @Test
   fun `creates match when LRS returns single possible match with matching postcode`(): Unit = runBlocking {
-    val prisonerList = listOf(
-      arrayOf("nomisId123", "John", "Doe", "1980-01-01", "MALE", "AB1 2CD"),
-    )
-
-    doReturn(prisonerList).`when`(spyBatchMatcher).loadPrisonersFromCSV()
-
-    whenever(matchService.findMatch(any())).thenReturn(null)
-
-    val learnersResponse = LearnersResponse(
-      searchParameters = LearnersRequest("", "", "", Gender.NOT_SPECIFIED, ""),
-      matchedLearners = listOf(
-        Learner(
-          uln = "1234567890",
-          lastKnownPostCode = "AB1 2CD",
-        ),
-      ),
-      responseType = LRSResponseType.POSSIBLE_MATCH,
-    )
-
-    whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse)
+    whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse(LRSResponseType.POSSIBLE_MATCH))
     spyBatchMatcher.matchFromCSV()
     verify(matchService).saveMatch(any(), any())
   }
 
   @Test
   fun `does not create match when LRS returns single possible match with mismatched postcode`(): Unit = runBlocking {
-    val prisonerList = listOf(
-      arrayOf("nomisId123", "John", "Doe", "1980-01-01", "MALE", "AB1 2CD"),
-    )
-
-    doReturn(prisonerList).`when`(spyBatchMatcher).loadPrisonersFromCSV()
-
-    whenever(matchService.findMatch(any())).thenReturn(null)
-
-    val learnersResponse = LearnersResponse(
-      searchParameters = LearnersRequest("", "", "", Gender.NOT_SPECIFIED, ""),
-      matchedLearners = listOf(
-        Learner(
-          uln = "1234567890",
-          lastKnownPostCode = "WX9 8YZ",
-        ),
-      ),
-      responseType = LRSResponseType.POSSIBLE_MATCH,
-    )
-
-    whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse)
+    whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse(LRSResponseType.POSSIBLE_MATCH, postcode = "XY2 Z91"))
     spyBatchMatcher.matchFromCSV()
     verify(matchService, never()).saveMatch(any(), any())
   }
 
   @Test
   fun `does not create match when LRS returns multiple possible matches`(): Unit = runBlocking {
-    val prisonerList = listOf(
-      arrayOf("nomisId123", "John", "Doe", "1980-01-01", "MALE", "AB1 2CD"),
-    )
-
-    doReturn(prisonerList).`when`(spyBatchMatcher).loadPrisonersFromCSV()
-
-    whenever(matchService.findMatch(any())).thenReturn(null)
-
-    val learnersResponse = LearnersResponse(
-      searchParameters = LearnersRequest("", "", "", Gender.NOT_SPECIFIED, ""),
-      matchedLearners = listOf(
-        Learner(
-          uln = "1234567890",
-          lastKnownPostCode = "AB1 2CD",
-        ),
-        Learner(
-          uln = "0987654321",
-          lastKnownPostCode = "AB1 2CD",
-        ),
-      ),
-      responseType = LRSResponseType.POSSIBLE_MATCH,
-    )
-
-    whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse)
+    whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse(LRSResponseType.POSSIBLE_MATCH, count = 2))
     spyBatchMatcher.matchFromCSV()
     verify(matchService, never()).saveMatch(any(), any())
   }
 
   @Test
   fun `skips prisoners that are already matched`(): Unit = runBlocking {
-    val prisonerList = listOf(
-      arrayOf("nomisId123", "John", "Doe", "1980-01-01", "MALE", "A1B 2C3"),
-    )
-    doReturn(prisonerList).`when`(spyBatchMatcher).loadPrisonersFromCSV()
     whenever(matchService.findMatch("nomisId123")).thenReturn(CheckMatchResponse())
     spyBatchMatcher.matchFromCSV()
     verify(matchService, never()).saveMatch(any(), any())
