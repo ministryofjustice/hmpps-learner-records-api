@@ -48,19 +48,16 @@ class BatchMatcherTest {
     arrayOf("nomisId123", "John", "Doe", "1980-01-01", "MALE", "AB1 2CD"),
   )
 
-  private fun learnersResponse(responseType: LRSResponseType, postcode: String = "AB1 2CD", count: Int = 1): LearnersResponse {
-    return LearnersResponse(
-      searchParameters = LearnersRequest("", "", "", Gender.NOT_SPECIFIED, ""),
-      matchedLearners = List(count) {
-        Learner(
-          uln = "1234567890",
-          lastKnownPostCode = postcode
-        )
-      },
-      responseType = responseType
-    )
-  }
-
+  private fun learnersResponse(responseType: LRSResponseType, postcode: String = "AB1 2CD", count: Int = 1): LearnersResponse = LearnersResponse(
+    searchParameters = LearnersRequest("", "", "", Gender.NOT_SPECIFIED, ""),
+    matchedLearners = List(count) {
+      Learner(
+        uln = "1234567890",
+        lastKnownPostCode = postcode,
+      )
+    },
+    responseType = responseType,
+  )
 
   @Test
   fun `creates match when LRS returns exact match`(): Unit = runBlocking {
