@@ -49,16 +49,14 @@ class BatchMatcherTest {
   )
 
   private fun learnersResponse(responseType: LRSResponseType, postcode: String = "AB1 2CD", count: Int = 1): LearnersResponse {
-    val matchedLearners = List(count) {
-      Learner(
-        uln = "1234567890",
-        lastKnownPostCode = postcode
-      )
-    }
-
     return LearnersResponse(
       searchParameters = LearnersRequest("", "", "", Gender.NOT_SPECIFIED, ""),
-      matchedLearners = matchedLearners,
+      matchedLearners = List(count) {
+        Learner(
+          uln = "1234567890",
+          lastKnownPostCode = postcode
+        )
+      },
       responseType = responseType
     )
   }
