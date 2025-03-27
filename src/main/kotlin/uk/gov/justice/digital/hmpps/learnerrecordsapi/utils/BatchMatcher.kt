@@ -24,25 +24,19 @@ class BatchMatcher(
 
   val logger: Logger = LoggerUtil.getLogger<LearnersService>()
 
-  // Runs once at startup
   @PostConstruct
   suspend fun matchFromCSV() {
-    // Load CSV
     val prisonerList = loadPrisonersFromCSV()
 
-    // Loop through CSV data
     for (prisoner in prisonerList) {
       val nomisId = prisoner[0]
       val (givenName, familyName, dateOfBirth, gender, lastKnownPostCode) = prisoner.slice(1..5).map { it.trim() }
 
-      // Skip if already matched
       if (matchService.findMatch(nomisId) != null) continue
 
-      // Perform search for matching learners
       val searchRequest = LearnersRequest(givenName, familyName, dateOfBirth, Gender.valueOf(gender), lastKnownPostCode)
       val result = learnersService.getLearners(searchRequest, "hmpps-learner-records-api-batch-match")
 
-      // Create match if exact or linked, if possible then only when the postcode matches.
       if (shouldCreateMatch(result, lastKnownPostCode)) {
         createMatch(result, givenName, familyName, nomisId)
       }
