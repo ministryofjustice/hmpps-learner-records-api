@@ -20,6 +20,7 @@ dependencies {
   implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
   implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:5.2.2")
   implementation("com.opencsv:opencsv:3.7")
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
 
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   runtimeOnly("org.flywaydb:flyway-database-postgresql")

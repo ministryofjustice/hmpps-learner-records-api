@@ -2,7 +2,9 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.utils
 
 import com.opencsv.CSVReader
 import jakarta.annotation.PostConstruct
+import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.logging.LoggerUtil
@@ -20,26 +22,39 @@ import java.nio.charset.StandardCharsets
 class BatchMatcher(
   private val matchService: MatchService,
   private val learnersService: LearnersService,
+  @Value("\${feature.enable-batch-matching:false}")
+  private val batchMatchingEnabled: Boolean,
 ) {
 
-  val logger: Logger = LoggerUtil.getLogger<LearnersService>()
+  val logger: Logger = LoggerUtil.getLogger<BatchMatcher>()
 
   @PostConstruct
-  suspend fun matchFromCSV() {
-    val prisonerList = loadPrisonersFromCSV()
+  fun matchFromCSV() = runBlocking {
+    if (batchMatchingEnabled) {
+      logger.info("Batch matching started...")
+      val prisonerList = loadPrisonersFromCSV()
 
-    for (prisoner in prisonerList) {
-      val nomisId = prisoner[0]
-      val (givenName, familyName, dateOfBirth, gender, lastKnownPostCode) = prisoner.slice(1..5).map { it.trim() }
+      for (prisoner in prisonerList) {
+        val nomisId = prisoner[0]
+        val (givenName, familyName, dateOfBirth, gender, lastKnownPostCode) = prisoner.slice(1..5).map { it.trim() }
 
-      if (matchService.findMatch(nomisId) != null) continue
+        if (matchService.findMatch(nomisId) != null) continue
 
-      val searchRequest = LearnersRequest(givenName, familyName, dateOfBirth, Gender.valueOf(gender), lastKnownPostCode)
-      val result = learnersService.getLearners(searchRequest, "hmpps-learner-records-api-batch-match")
+        val searchRequest = LearnersRequest(givenName, familyName, dateOfBirth, Gender.valueOf(gender), lastKnownPostCode)
+        val result = learnersService.getLearners(searchRequest, "hmpps-learner-records-api-batch-match")
 
-      if (shouldCreateMatch(result, lastKnownPostCode)) {
-        createMatch(result, givenName, familyName, nomisId)
+        if (shouldCreateMatch(result, lastKnownPostCode)) {
+          try {
+            logger.info("Attempting to auto match prisoner: $nomisId")
+            createMatch(result, givenName, familyName, nomisId)
+            logger.info("Auto matched match prisoner: $nomisId")
+          } catch (e: Exception) {
+            logger.error("Failed to auto-match match prisoner: $nomisId")
+          }
+        }
       }
+    } else {
+      logger.info("Batch matching is disabled.")
     }
   }
 
@@ -73,7 +88,16 @@ class BatchMatcher(
     val resource = ClassPathResource("prisoners.csv")
     resource.inputStream.bufferedReader(StandardCharsets.UTF_8).use { reader ->
       CSVReader(reader).readAll()
-        .filter { it.size == 6 }
+        .map { row -> row.map { it.trim() }.toTypedArray() }
+        .filter { row -> row.isNotEmpty() && row.any { it.isNotBlank() } }
+        .onEach { row ->
+          if (row.size != 6) {
+            throw IllegalArgumentException("CSV contains a row with ${row.size} columns instead of 6: ${row.contentToString()}")
+          }
+          if (row.any { it.isBlank() }) {
+            throw IllegalArgumentException("CSV contains a row with an empty column: ${row.contentToString()}")
+          }
+        }
     }
   } catch (e: Exception) {
     logger.error("Error reading prisoners CSV: ${e.message}")
