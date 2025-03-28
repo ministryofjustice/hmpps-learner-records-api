@@ -23,7 +23,7 @@ class BatchMatcher(
   private val matchService: MatchService,
   private val learnersService: LearnersService,
   @Value("\${feature.enable-batch-matching:false}")
-  private val batchMatchingEnabled: Boolean,
+  private val batchMatchingEnabled: Boolean = false,
 ) {
 
   val logger: Logger = LoggerUtil.getLogger<BatchMatcher>()

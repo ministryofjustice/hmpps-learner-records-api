@@ -4,7 +4,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
@@ -32,14 +31,11 @@ class BatchMatcherTest {
   @Mock
   lateinit var learnersService: LearnersService
 
-  @InjectMocks
-  lateinit var batchMatcher: BatchMatcher
-
   lateinit var spyBatchMatcher: BatchMatcher
 
   @BeforeEach
   fun setUp() {
-    spyBatchMatcher = spy(batchMatcher)
+    spyBatchMatcher = spy(BatchMatcher(matchService, learnersService, true))
     doReturn(prisonerList).`when`(spyBatchMatcher).loadPrisonersFromCSV()
     whenever(matchService.findMatch(any())).thenReturn(null)
   }
