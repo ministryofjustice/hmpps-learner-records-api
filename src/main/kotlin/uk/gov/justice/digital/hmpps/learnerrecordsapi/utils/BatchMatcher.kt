@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.utils
 import com.opencsv.CSVReader
 import jakarta.annotation.PostConstruct
 import kotlinx.coroutines.runBlocking
+import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
