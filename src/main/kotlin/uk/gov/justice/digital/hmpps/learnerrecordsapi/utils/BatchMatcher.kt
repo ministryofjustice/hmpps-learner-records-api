@@ -3,7 +3,6 @@ package uk.gov.justice.digital.hmpps.learnerrecordsapi.utils
 import com.opencsv.CSVReader
 import jakarta.annotation.PostConstruct
 import kotlinx.coroutines.runBlocking
-import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
@@ -45,14 +44,13 @@ class BatchMatcher(
 
         if (shouldCreateMatch(result, lastKnownPostCode)) {
           try {
-            logger.info("Attempting to auto match prisoner: $nomisId")
             createMatch(result, givenName, familyName, nomisId)
-            logger.info("Auto matched match prisoner: $nomisId")
           } catch (e: Exception) {
             logger.error("Failed to auto-match match prisoner: $nomisId")
           }
         }
       }
+      logger.info("Batch matching complete.")
     } else {
       logger.info("Batch matching is disabled.")
     }
@@ -85,7 +83,7 @@ class BatchMatcher(
   }
 
   fun loadPrisonersFromCSV(): List<Array<String>> = try {
-    val resource = ClassPathResource("prisoners.csv")
+    val resource = ClassPathResource("example.prisoners.csv")
     resource.inputStream.bufferedReader(StandardCharsets.UTF_8).use { reader ->
       CSVReader(reader).readAll()
         .map { row -> row.map { it.trim() }.toTypedArray() }
