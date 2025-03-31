@@ -44,9 +44,8 @@ Or to apply to all Intellij projects:
 This service is available at:
 * Local: http://localhost:8080/
 * Dev: https://learner-records-api-dev.hmpps.service.justice.gov.uk/
-* UAT: https://learner-records-api-uat.hmpps.service.justice.gov.uk/
-* Preprod: tbc
-* Prod: tbc
+* Preprod: https://learner-records-api-preprod.hmpps.service.justice.gov.uk/
+* Prod: https://learner-records-api.hmpps.service.justice.gov.uk/
 
 ### Health
 The application has a health endpoint found at `/health` which indicates if the app is running and is healthy.
@@ -89,7 +88,7 @@ The service provides the following endpoints to consumers and requires the role 
 * `GET /match/{nomisId}` - Search for a learner's ULN via their NOMIS ID
 * `GET /match/{nomisId}/learner-events` - Search for a learner's personal learning record (PLR) via their Nomis ID
 
-The following endpoints are used by the [hmpps-match-learner-record-ui](https://github.com/ministryofjustice/hmpps-match-learner-record-ui] only) (uses the role **ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI**):
+The following endpoints are used by the [hmpps-match-learner-record-ui](https://github.com/ministryofjustice/hmpps-match-learner-record-ui) only and uses the role **ROLE_LEARNER_RECORDS__LEARNER_RECORDS_MATCH_UI**:
 * `POST /learners` - Search for a learner's ULN via their demographic data
 * `POST /learner-events` - Request a learner's personal learning record (PLR) via their ULN
 * `POST /match/:nomisId` - Confirm a match between a learner's NOMIS ID and ULN
@@ -427,9 +426,8 @@ The service uses a postgres database alongside flyaway migrations to create and 
 OpenAPI documentation is available at:
 * Local: http://localhost:8080/swagger-ui/index.html
 * Dev: https://learner-records-api-dev.hmpps.service.justice.gov.uk/swagger-ui/index.html
-* UAT: https://learner-records-api-uat.hmpps.service.justice.gov.uk/swagger-ui/index.html
-* Preprod:  tbc 
-* Prod:  tbc
+* Preprod: https://learner-records-api-preprod.hmpps.service.justice.gov.uk/swagger-ui/index.html 
+* Prod: https://learner-records-api.hmpps.service.justice.gov.uk/swagger-ui/index.html
 
 ---
 

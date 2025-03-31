@@ -13,7 +13,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 @Operation(
-  summary = "Confirm that an un-match",
+  summary = "Confirm an un-match",
   description = "Confirm that a NomisID is to be un-matched",
   parameters = [
     Parameter(name = "X-Username", `in` = ParameterIn.HEADER, required = true),

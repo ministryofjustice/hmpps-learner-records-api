@@ -114,7 +114,7 @@ class MatchResource(
 
   @PreAuthorize("hasRole('$ROLE_LEARNERS_RO')")
   @GetMapping(value = ["/{nomisId}/learner-events"], produces = ["application/json"])
-  @Tag(name = "Learning Events By Nomis ID")
+  @Tag(name = "Match")
   @LearnerEventsByNomisIdApi
   suspend fun findLearnerEventsByNomisId(
     @PathVariable(name = "nomisId", required = true) nomisId: String,
