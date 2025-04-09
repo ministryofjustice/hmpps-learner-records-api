@@ -8,6 +8,12 @@ management.endpoint:
 hmpps-auth:
   url: "http://localhost:8090/auth"
 
+prisoner:
+  search:
+    api:
+      endpoint:
+        url: "https://prisoner-search-dev.prison.service.justice.gov.uk"
+
 lrs:
   baseUrl: "http://localhost:8082"
   pfxPath: "certificateForTest.pfx"
@@ -17,6 +23,12 @@ lrs:
   connectTimeout: ${LRS_CONNECT_TIMEOUT:1}
   writeTimeout: ${LRS_WRITE_TIMEOUT:1}
   readTimeout: ${LRS_READ_TIMEOUT:1}
+
+api:
+  client:
+    admin:
+      id: "test"
+      secret: "test"
 
 hmpps.sqs:
   provider: localstack
