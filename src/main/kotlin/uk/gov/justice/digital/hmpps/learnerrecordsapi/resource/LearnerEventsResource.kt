@@ -28,7 +28,7 @@ class LearnerEventsResource(
   val logger = LoggerUtil.getLogger<LearnerEventsResource>()
 
   @PostMapping
-  @Tag(name = "Learning Events")
+  @Tag(name = "Learner Events")
   @LearnerEventsApi
   suspend fun findByUln(
     @RequestBody @Valid learnerEventsRequest: LearnerEventsRequest,
