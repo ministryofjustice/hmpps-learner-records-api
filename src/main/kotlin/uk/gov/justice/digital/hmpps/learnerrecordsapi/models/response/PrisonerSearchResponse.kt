@@ -24,7 +24,7 @@ data class PrisonerSearchResponse(
       "Male" -> "MALE"
       "Female" -> "FEMALE"
       "Not Specified (Indeterminate)" -> "NOT_SPECIFIED"
-      else -> "UNKNOWN"
+      else -> "NOT_KNOWN"
     }
 }
 
