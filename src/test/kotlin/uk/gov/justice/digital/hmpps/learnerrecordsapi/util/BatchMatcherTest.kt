@@ -15,11 +15,14 @@ import org.mockito.kotlin.whenever
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.lrsapi.response.Learner
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.Address
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.CheckMatchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LRSResponseType
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersResponse
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.PrisonerSearchResponse
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.LearnersService
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.MatchService
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.service.PrisonerSearchService
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.utils.BatchMatcher
 
 @ExtendWith(MockitoExtension::class)
@@ -31,17 +34,34 @@ class BatchMatcherTest {
   @Mock
   lateinit var learnersService: LearnersService
 
+  @Mock
+  lateinit var prisonerSearchService: PrisonerSearchService
+
   lateinit var spyBatchMatcher: BatchMatcher
 
   @BeforeEach
   fun setUp() {
-    spyBatchMatcher = spy(BatchMatcher(matchService, learnersService, true))
-    doReturn(prisonerList).`when`(spyBatchMatcher).loadPrisonersFromCSV()
+    spyBatchMatcher = spy(BatchMatcher(matchService, learnersService, prisonerSearchService, true, "BXI", 100))
+    doReturn(prisonerList).`when`(prisonerSearchService).findPrisonersByPrisonId("BXI", 100)
     whenever(matchService.findMatch(any())).thenReturn(null)
   }
 
   private val prisonerList = listOf(
-    arrayOf("nomisId123", "John", "Doe", "1980-01-01", "MALE", "AB1 2CD"),
+    PrisonerSearchResponse(
+      prisonerNumber = "nomisId123",
+      firstName = "John",
+      lastName = "Doe",
+      dateOfBirth = "1980-01-01",
+      gender = "Male",
+      status = "ACTIVE IN",
+      addresses = listOf(
+        Address(
+          fullAddress = "AB1 2CD, England",
+          postalCode = "AB1 2CD",
+          primaryAddress = true,
+        ),
+      ),
+    ),
   )
 
   private fun learnersResponse(responseType: LRSResponseType, postcode: String = "AB1 2CD", count: Int = 1): LearnersResponse = LearnersResponse(
@@ -58,42 +78,49 @@ class BatchMatcherTest {
   @Test
   fun `creates match when LRS returns exact match`(): Unit = runBlocking {
     whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse(LRSResponseType.EXACT_MATCH))
-    spyBatchMatcher.matchFromCSV()
+    spyBatchMatcher.matchFromPrisonerSearchAPI()
     verify(matchService).saveMatch(any(), any())
   }
 
   @Test
   fun `creates match when LRS returns single linked learner`(): Unit = runBlocking {
     whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse(LRSResponseType.LINKED_LEARNER))
-    spyBatchMatcher.matchFromCSV()
+    spyBatchMatcher.matchFromPrisonerSearchAPI()
     verify(matchService).saveMatch(any(), any())
   }
 
   @Test
   fun `creates match when LRS returns single possible match with matching postcode`(): Unit = runBlocking {
     whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse(LRSResponseType.POSSIBLE_MATCH))
-    spyBatchMatcher.matchFromCSV()
+    spyBatchMatcher.matchFromPrisonerSearchAPI()
     verify(matchService).saveMatch(any(), any())
   }
 
   @Test
-  fun `does not create match when LRS returns single possible match with mismatched postcode`(): Unit = runBlocking {
+  fun `creates match when LRS returns single possible match with default postcode`(): Unit = runBlocking {
+    whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse(LRSResponseType.POSSIBLE_MATCH, postcode = "ZZ99 9ZZ"))
+    spyBatchMatcher.matchFromPrisonerSearchAPI()
+    verify(matchService).saveMatch(any(), any())
+  }
+
+  @Test
+  fun `does not create match when LRS returns single possible match with mismatched non-default postcode`(): Unit = runBlocking {
     whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse(LRSResponseType.POSSIBLE_MATCH, postcode = "XY2 Z91"))
-    spyBatchMatcher.matchFromCSV()
+    spyBatchMatcher.matchFromPrisonerSearchAPI()
     verify(matchService, never()).saveMatch(any(), any())
   }
 
   @Test
   fun `does not create match when LRS returns multiple possible matches`(): Unit = runBlocking {
     whenever(learnersService.getLearners(any(), any())).thenReturn(learnersResponse(LRSResponseType.POSSIBLE_MATCH, count = 2))
-    spyBatchMatcher.matchFromCSV()
+    spyBatchMatcher.matchFromPrisonerSearchAPI()
     verify(matchService, never()).saveMatch(any(), any())
   }
 
   @Test
   fun `skips prisoners that are already matched`(): Unit = runBlocking {
     whenever(matchService.findMatch("nomisId123")).thenReturn(CheckMatchResponse())
-    spyBatchMatcher.matchFromCSV()
+    spyBatchMatcher.matchFromPrisonerSearchAPI()
     verify(matchService, never()).saveMatch(any(), any())
   }
 }

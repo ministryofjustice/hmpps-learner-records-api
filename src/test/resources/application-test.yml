@@ -27,8 +27,8 @@ lrs:
 api:
   client:
     admin:
-      id: "test"
-      secret: "test"
+      id: ${API_CLIENT_ADMIN_ID}
+      secret: ${API_CLIENT_ADMIN_SECRET}
 
 hmpps.sqs:
   provider: localstack

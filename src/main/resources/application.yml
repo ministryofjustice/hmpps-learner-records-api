@@ -90,3 +90,5 @@ lrs:
 
 feature:
   enable-batch-matching: false
+  prisonCode: BXI
+  pageSize: 100

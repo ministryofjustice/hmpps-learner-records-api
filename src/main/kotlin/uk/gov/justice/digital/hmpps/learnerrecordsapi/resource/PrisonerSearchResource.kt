@@ -1,3 +1,5 @@
+// NOTE THAT THIS RESOURCE ISN'T ACTUALLY NEEDED AS WE DON'T NEED THIS AS AN ENDPOINT IN THE BACKEND CURRENTLY
+
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.resource
 
 import org.springframework.security.access.prepost.PreAuthorize
