@@ -50,6 +50,8 @@ services:
       - ORG_PASSWORD=${ORG_PASSWORD}
       - VENDOR_ID=${VENDOR_ID}
       - PFX_FILE_PASSWORD=${PFX_FILE_PASSWORD}
+      - API_CLIENT_ADMIN_ID=${API_CLIENT_ADMIN_ID}
+      - API_CLIENT_ADMIN_SECRET=${API_CLIENT_ADMIN_SECRET}
 
   localstack:
     image: localstack/localstack:3

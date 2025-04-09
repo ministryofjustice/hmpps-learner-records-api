@@ -10,6 +10,7 @@ generic-service:
     LRS_BASE_URL: "https://ws.lrs.education.gov.uk"
     LRS_PFX_PATH: "/certs/WebServiceClientCert.pfx"
     HMPPS_SQS_USE_WEB_TOKEN: "true"
+    PRISONER_SEARCH_API_ENDPOINT_URL: "https://prisoner-search.prison.service.justice.gov.uk"
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts

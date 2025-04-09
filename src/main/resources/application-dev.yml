@@ -1,6 +1,12 @@
 hmpps-auth:
   url: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
 
+prisoner:
+  search:
+    api:
+      endpoint:
+        url: "https://prisoner-search-dev.prison.service.justice.gov.uk"
+
 lrs:
   base-url: "https://cmp-ws.dev.lrs.education.gov.uk"
   pfx-path: "WebServiceClientCert.pfx"
@@ -10,6 +16,12 @@ lrs:
   connectTimeout: ${LRS_CONNECT_TIMEOUT:20}
   writeTimeout: ${LRS_WRITE_TIMEOUT:20}
   readTimeout: ${LRS_READ_TIMEOUT:20}
+
+api:
+  client:
+    admin:
+      id: ${API_CLIENT_ADMIN_ID:}
+      secret: ${API_CLIENT_ADMIN_SECRET:}
 
 hmpps.sqs:
   provider: localstack

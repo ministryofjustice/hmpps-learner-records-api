@@ -10,6 +10,22 @@ spring:
 
   security:
     oauth2:
+      client:
+        registration:
+          hmpps-auth:
+            provider: hmpps-auth
+            client-id: ${api.client.admin.id}
+            client-secret: ${api.client.admin.secret}
+            authorization-grant-type: client_credentials
+          prisoner-search-api:
+            provider: hmpps-auth
+            client-id: ${api.client.admin.id}
+            client-secret: ${api.client.admin.secret}
+            authorization-grant-type: client_credentials
+            scope: read
+        provider:
+          hmpps-auth:
+            token-uri: ${hmpps-auth.url}/oauth/token
       resourceserver:
         jwt:
           jwk-set-uri: ${hmpps-auth.url}/.well-known/jwks.json
@@ -71,3 +87,8 @@ lrs:
   connectTimeout: ${LRS_CONNECT_TIMEOUT:20}
   writeTimeout: ${LRS_WRITE_TIMEOUT:20}
   readTimeout: ${LRS_READ_TIMEOUT:20}
+
+feature:
+  enable-batch-matching: false
+  prisonCode: BXI
+  pageSize: 100
