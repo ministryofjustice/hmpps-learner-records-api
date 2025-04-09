@@ -57,5 +57,7 @@ tasks {
     environment("UK_PRN", "TEST")
     environment("ORG_PASSWORD", "TEST")
     environment("VENDOR_ID", "TEST")
+    environment("API_CLIENT_ADMIN_ID", "TEST")
+    environment("API_CLIENT_ADMIN_SECRET", "TEST")
   }
 }
