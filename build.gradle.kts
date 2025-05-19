@@ -8,6 +8,7 @@ configurations {
 }
 
 dependencies {
+  implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.3")
   implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.1.0")
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
