@@ -35,8 +35,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
             value = """
               {
                 "matchingUln": "1026893096",
-                "givenName": "Darcie",
-                "familyName": "Tucker",
+                "givenName": "Sample",
+                "familyName": "Testname",
                 "matchType": "Exact Match",
                 "countOfReturnedUlns": "1"
               }

@@ -29,8 +29,8 @@ class ValidationTest : IntegrationTestBase() {
 
     val findLearnerByDemographicsRequest =
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
-        "Darcie",
-        "Tucker",
+        "Sample",
+        "Testname",
         "2024-01-01",
         Gender.MALE,
         "ABC123",
@@ -71,8 +71,8 @@ class ValidationTest : IntegrationTestBase() {
 
     val findLearnerByDemographicsRequest =
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
-        "DarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcie",
-        "Tucker",
+        "SampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSample",
+        "Testname",
         "2024-01-01",
         Gender.MALE,
         "CV49EE",
@@ -113,8 +113,8 @@ class ValidationTest : IntegrationTestBase() {
 
     val learnerEventsRequest =
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest(
-        "DarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcieDarcie",
-        "Tucker",
+        "SampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSample",
+        "Testname",
         "1234567890",
         "2024-01-01",
         Gender.MALE,
@@ -150,8 +150,8 @@ class ValidationTest : IntegrationTestBase() {
     )
     val findLearnerByDemographicsRequest =
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
-        "Darcie",
-        "TuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTucker",
+        "Sample",
+        "TestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestname",
         "2024-01-01",
         Gender.MALE,
         "CV49EE",
@@ -191,8 +191,8 @@ class ValidationTest : IntegrationTestBase() {
     )
     val findLearnerByDemographicsRequest =
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
-        "Darcie",
-        "Tucker",
+        "Sample",
+        "Testname",
         "2024-01-01",
         Gender.MALE,
         "CV49EE",
@@ -232,8 +232,8 @@ class ValidationTest : IntegrationTestBase() {
     )
     val findLearnerByDemographicsRequest =
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
-        "Darcie",
-        "Tucker",
+        "Sample",
+        "Testname",
         "2024-01-01",
         Gender.MALE,
         "CV49EE",
@@ -273,8 +273,8 @@ class ValidationTest : IntegrationTestBase() {
     )
     val learnerEventsRequest =
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest(
-        "Darcie",
-        "TuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTuckerTucker",
+        "Sample",
+        "TestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestname",
         "1234567890",
         "2024-01-01",
         Gender.MALE,
@@ -310,8 +310,8 @@ class ValidationTest : IntegrationTestBase() {
     )
     val learnerEventsRequest =
       uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest(
-        "Darcie",
-        "Tucker",
+        "Sample",
+        "Testname",
         "12345678901234567890",
         "2024-01-01",
         Gender.MALE,
@@ -348,8 +348,8 @@ class ValidationTest : IntegrationTestBase() {
 
     val findLearnerByDemographicsRequest =
       """{
-        "givenName":"Darcie", 
-        "familyName": "Tucker",
+        "givenName":"Sample", 
+        "familyName": "Testname",
         "dateOfBirth": "2024-01-01",
         "gender": "TESTINGENUM",
         "postcode": "CV49EE"
@@ -385,8 +385,8 @@ class ValidationTest : IntegrationTestBase() {
 
     val findLearnerByDemographicsRequest =
       """{
-        "givenName":"Darcie", 
-        "familyName": "Tucker",
+        "givenName":"Sample", 
+        "familyName": "Testname",
         "dateOfBirth": "2024-01-01",
         "gender": "TESTINGENUM",
         "uln": "1234567890"
@@ -424,7 +424,7 @@ class ValidationTest : IntegrationTestBase() {
 
     val requestJsonWithoutGivenName = """
       {
-        "lastName": "Tucker",
+        "lastName": "Testname",
         "dateOfBirth": "2024-01-01",
         "gender": "FEMALE",
         "postcode": "CV49EE"
@@ -466,7 +466,7 @@ class ValidationTest : IntegrationTestBase() {
 
     val requestJsonWithoutGivenName = """
       {
-        "lastName": "Tucker",
+        "lastName": "Testname",
         "dateOfBirth": "2024-01-01",
         "uln": "1234567890",
         "gender": "MALE"

@@ -75,8 +75,8 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   val nomisId = "A1234BC"
   val matchedUln = "A"
-  val givenName = "John"
-  val familyName = "Smith"
+  val givenName = "Test"
+  val familyName = "Tester"
 
   private fun checkGetWebCall(
     nomisId: String,
@@ -330,7 +330,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
           id = "28538264",
           achievementProviderUkprn = "90000051",
           achievementProviderName = "TEST90000051",
-          awardingOrganisationName = "Pearson Education Ltd",
+          awardingOrganisationName = "Test Provider Ltd",
           qualificationType = "",
           subjectCode = "K/501/5773",
           achievementAwardDate = "2010-01-01",

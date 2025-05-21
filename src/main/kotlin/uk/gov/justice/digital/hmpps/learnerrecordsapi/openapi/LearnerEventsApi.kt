@@ -67,8 +67,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
             name = "Linked Learner",
             value = """
               {
-                "givenName": "Connor",
-                "familyName": "Carrol",
+                "givenName": "Sample",
+                "familyName": "Testsurname",
                 "uln": "4444599390",
                 "dateOfBirth": "2000-07-19",
                 "gender": "MALE"
@@ -135,8 +135,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
               value = """
               {
                 "searchParameters": {
-                    "givenName": "Connor",
-                    "familyName": "Carroll",
+                    "givenName": "Sample",
+                    "familyName": "Test",
                     "uln": "4444599390"
                 },
                 "responseType": "Linked Learner Match",

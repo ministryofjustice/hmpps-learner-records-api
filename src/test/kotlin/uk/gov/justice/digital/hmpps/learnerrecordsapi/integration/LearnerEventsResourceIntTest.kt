@@ -77,7 +77,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
             id = "28538264",
             achievementProviderUkprn = "90000051",
             achievementProviderName = "TEST90000051",
-            awardingOrganisationName = "Pearson Education Ltd",
+            awardingOrganisationName = "Test Provider Ltd",
             qualificationType = "",
             subjectCode = "K/501/5773",
             achievementAwardDate = "2010-01-01",
