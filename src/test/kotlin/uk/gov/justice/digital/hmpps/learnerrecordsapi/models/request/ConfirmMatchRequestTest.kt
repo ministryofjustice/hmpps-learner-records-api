@@ -28,7 +28,7 @@ class ConfirmMatchRequestTest {
     val request = ConfirmMatchRequest(
       matchingUln = "1234567890abcdedf",
       givenName = "Test123",
-      familyName = "Smith321",
+      familyName = "Tester321",
       matchType = MatchType.EXACT_MATCH,
       countOfReturnedUlns = "1",
     )

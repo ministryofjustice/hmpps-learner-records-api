@@ -256,8 +256,8 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     fun `should return 400 with an appropriate error response if additional unknown parameters are passed`() {
       lrsApiMock.stubLearningEventsExactMatchFull()
       val extendedRequestBody = mutableMapOf<String, String>()
-      extendedRequestBody["givenName"] = "Sean"
-      extendedRequestBody["familyName"] = "Findlay"
+      extendedRequestBody["givenName"] = "TestOne"
+      extendedRequestBody["familyName"] = "TesterOne"
       extendedRequestBody["uln"] = "1174112637"
       extendedRequestBody["unknownValue"] = "1234"
 

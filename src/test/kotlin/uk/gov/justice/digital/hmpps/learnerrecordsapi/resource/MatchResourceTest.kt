@@ -151,7 +151,7 @@ class MatchResourceTest {
         matchType = MatchType.EXACT_MATCH,
         countOfReturnedUlns = "1",
         matchingUln = "1234567890",
-        givenName = "John",
+        givenName = "Sample",
         familyName = "Tester",
       ),
     )
@@ -169,7 +169,7 @@ class MatchResourceTest {
         matchType = MatchType.EXACT_MATCH,
         countOfReturnedUlns = "1",
         matchingUln = "1234567890",
-        givenName = "John",
+        givenName = "Sample",
         familyName = "Tester",
       ),
     )

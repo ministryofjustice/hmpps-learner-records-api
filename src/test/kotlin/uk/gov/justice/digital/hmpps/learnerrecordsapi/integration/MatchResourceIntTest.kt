@@ -164,7 +164,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `GET match should return NOT_FOUND record marked as such`() {
-    matchRepository.save(MatchEntity(null, nomisId, "", "John", "Smith", "EXACT_MATCH", "1", MatchStatus.UNMATCHED.toString()))
+    matchRepository.save(MatchEntity(null, nomisId, "", "Sample", "Tester", "EXACT_MATCH", "1", MatchStatus.UNMATCHED.toString()))
     checkGetWebCall(
       nomisId,
       404,
@@ -174,7 +174,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `GET match should return no match if record marked as such`() {
-    matchRepository.save(MatchEntity(null, nomisId, "", "John", "Smith", "EXACT_MATCH", "1", MatchStatus.MATCH_NOT_POSSIBLE.toString()))
+    matchRepository.save(MatchEntity(null, nomisId, "", "Sample", "Tester", "EXACT_MATCH", "1", MatchStatus.MATCH_NOT_POSSIBLE.toString()))
     checkGetWebCall(
       nomisId,
       200,
