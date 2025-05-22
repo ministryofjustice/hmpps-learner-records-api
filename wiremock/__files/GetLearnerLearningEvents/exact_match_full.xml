@@ -8,7 +8,7 @@
                 <a:LearnerRecord>
                     <a:LearningEvent>
                         <a:AchievementAwardDate>2011-10-24</a:AchievementAwardDate>
-                        <a:AchievementProviderName>LUTON PENTECOSTAL CHURCH</a:AchievementProviderName>
+                        <a:AchievementProviderName>SAMPLE CHURCH</a:AchievementProviderName>
                         <a:AchievementProviderUkprn>10030488</a:AchievementProviderUkprn>
                         <a:AwardingOrganisationName>UNKNOWN</a:AwardingOrganisationName>
                         <a:AwardingOrganisationUkprn>UNKNWN</a:AwardingOrganisationUkprn>
@@ -54,7 +54,7 @@
                     </a:LearningEvent>
                     <a:LearningEvent>
                         <a:AchievementAwardDate>2010-07-01</a:AchievementAwardDate>
-                        <a:AchievementProviderName>LUTON PENTECOSTAL CHURCH</a:AchievementProviderName>
+                        <a:AchievementProviderName>SAMPLE CHURCH</a:AchievementProviderName>
                         <a:AchievementProviderUkprn>10030488</a:AchievementProviderUkprn>
                         <a:AwardingOrganisationName>EDEXCEL Foundation</a:AwardingOrganisationName>
                         <a:AwardingOrganisationUkprn>100060</a:AwardingOrganisationUkprn>

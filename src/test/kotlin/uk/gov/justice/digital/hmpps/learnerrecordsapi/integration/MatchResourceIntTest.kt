@@ -75,8 +75,8 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   val nomisId = "A1234BC"
   val matchedUln = "A"
-  val givenName = "John"
-  val familyName = "Smith"
+  val givenName = "Test"
+  val familyName = "Tester"
 
   private fun checkGetWebCall(
     nomisId: String,
@@ -164,7 +164,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `GET match should return NOT_FOUND record marked as such`() {
-    matchRepository.save(MatchEntity(null, nomisId, "", "John", "Smith", "EXACT_MATCH", "1", MatchStatus.UNMATCHED.toString()))
+    matchRepository.save(MatchEntity(null, nomisId, "", "Sample", "Tester", "EXACT_MATCH", "1", MatchStatus.UNMATCHED.toString()))
     checkGetWebCall(
       nomisId,
       404,
@@ -174,7 +174,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
 
   @Test
   fun `GET match should return no match if record marked as such`() {
-    matchRepository.save(MatchEntity(null, nomisId, "", "John", "Smith", "EXACT_MATCH", "1", MatchStatus.MATCH_NOT_POSSIBLE.toString()))
+    matchRepository.save(MatchEntity(null, nomisId, "", "Sample", "Tester", "EXACT_MATCH", "1", MatchStatus.MATCH_NOT_POSSIBLE.toString()))
     checkGetWebCall(
       nomisId,
       200,
@@ -330,7 +330,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
           id = "28538264",
           achievementProviderUkprn = "90000051",
           achievementProviderName = "TEST90000051",
-          awardingOrganisationName = "Pearson Education Ltd",
+          awardingOrganisationName = "Test Provider Ltd",
           qualificationType = "",
           subjectCode = "K/501/5773",
           achievementAwardDate = "2010-01-01",

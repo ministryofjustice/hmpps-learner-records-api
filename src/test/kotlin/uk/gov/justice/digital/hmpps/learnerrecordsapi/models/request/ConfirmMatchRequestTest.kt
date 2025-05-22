@@ -14,8 +14,8 @@ class ConfirmMatchRequestTest {
   fun `valid data should pass validation`() {
     val request = ConfirmMatchRequest(
       matchingUln = "1234567890",
-      givenName = "John",
-      familyName = "Smith",
+      givenName = "Test",
+      familyName = "Tester",
       matchType = MatchType.EXACT_MATCH,
       countOfReturnedUlns = "1",
     )
@@ -27,8 +27,8 @@ class ConfirmMatchRequestTest {
   fun `invalid data should fail validation`() {
     val request = ConfirmMatchRequest(
       matchingUln = "1234567890abcdedf",
-      givenName = "John123",
-      familyName = "Smith321",
+      givenName = "Test123",
+      familyName = "Tester321",
       matchType = MatchType.EXACT_MATCH,
       countOfReturnedUlns = "1",
     )

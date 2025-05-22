@@ -24,8 +24,8 @@ import java.time.LocalDateTime
 class MatchServiceTest {
   private val nomisId = "A1234BC"
   private val matchedUln = "a1234"
-  private val givenName = "John"
-  private val familyName = "Smith"
+  private val givenName = "Test"
+  private val familyName = "Tester"
 
   private lateinit var mockMatchRepository: MatchRepository
   private lateinit var matchService: MatchService

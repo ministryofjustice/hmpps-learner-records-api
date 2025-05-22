@@ -31,8 +31,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
             name = "Exact Match",
             value = """
               {
-                "givenName": "Sean",
-                "familyName": "Findlay",
+                "givenName": "TestOne",
+                "familyName": "TesterOne",
                 "uln": "1174112637",
                 "dateOfBirth": "1980-11-01",
                 "gender": "MALE"
@@ -55,8 +55,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
             name = "Learner Not Sharing Data",
             value = """
               {
-                "givenName": "Rebecca",
-                "familyName": "Brennan-Ace",
+                "givenName": "tester",
+                "familyName": "Super-Tester",
                 "uln": "1026922983",
                 "dateOfBirth": "1992-03-27",
                 "gender": "FEMALE"
@@ -67,8 +67,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
             name = "Linked Learner",
             value = """
               {
-                "givenName": "Connor",
-                "familyName": "Carrol",
+                "givenName": "Sample",
+                "familyName": "Testsurname",
                 "uln": "4444599390",
                 "dateOfBirth": "2000-07-19",
                 "gender": "MALE"
@@ -94,8 +94,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
               value = """
                 {
                   "searchParameters": {
-                      "givenName": "Sean",
-                      "familyName": "Findlay",
+                      "givenName": "TestOne",
+                      "familyName": "TesterOne",
                       "uln": "1174112637",
                       "dateOfBirth": "1980-11-01",
                       "gender": "MALE"
@@ -107,7 +107,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                       {
                           "id": "2931",
                           "achievementProviderUkprn": "10030488",
-                          "achievementProviderName": "LUTON PENTECOSTAL CHURCH",
+                          "achievementProviderName": "SAMPLE CHURCH",
                           "awardingOrganisationName": "UNKNOWN",
                           "qualificationType": "GCSE",
                           "subjectCode": "50079116",
@@ -135,8 +135,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
               value = """
               {
                 "searchParameters": {
-                    "givenName": "Connor",
-                    "familyName": "Carroll",
+                    "givenName": "Sample",
+                    "familyName": "Test",
                     "uln": "4444599390"
                 },
                 "responseType": "Linked Learner Match",
@@ -146,7 +146,7 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
                     {
                         "id": "4284",
                         "achievementProviderUkprn": "10032743",
-                        "achievementProviderName": "PRIORSLEE PRIMARY SCHOOL ACADEMY TRUST",
+                        "achievementProviderName": "TESTER PRIMARY SCHOOL ACADEMY TRUST",
                         "awardingOrganisationName": "UNKNOWN",
                         "qualificationType": "NVQ/GNVQ Key Skills Unit",
                         "subjectCode": "1000323X",
@@ -174,8 +174,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
               value = """
                 {
                   "searchParameters": {
-                      "givenName": "John",
-                      "familyName": "Smith",
+                      "givenName": "Sample",
+                      "familyName": "Tester",
                       "uln": "1026922983"
                   },
                   "responseType": "Learner opted to not share data",
@@ -190,8 +190,8 @@ import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
               value = """
                 {
                   "searchParameters": {
-                      "givenName": "John",
-                      "familyName": "Smith",
+                      "givenName": "Sample",
+                      "familyName": "Tester",
                       "uln": "1174112637"
                   },
                   "responseType": "Learner could not be verified",

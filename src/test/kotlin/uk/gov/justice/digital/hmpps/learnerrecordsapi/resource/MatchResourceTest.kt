@@ -34,10 +34,10 @@ import java.time.LocalDate
 class MatchResourceTest {
   private val nomisId = "A1234BC"
   private val matchedUln = "q1234"
-  private val familyName = "Smith"
+  private val familyName = "Tester"
   private val dateOfBirth = LocalDate.of(1980, 1, 1).toString()
   private val gender = "Male"
-  private val givenName = "John Smith"
+  private val givenName = "Test Tester"
 
   private lateinit var mockMatchService: MatchService
   private lateinit var matchResource: MatchResource
@@ -151,8 +151,8 @@ class MatchResourceTest {
         matchType = MatchType.EXACT_MATCH,
         countOfReturnedUlns = "1",
         matchingUln = "1234567890",
-        givenName = "John",
-        familyName = "Smith",
+        givenName = "Sample",
+        familyName = "Tester",
       ),
     )
     assertThat(actual.statusCode).isEqualTo(HttpStatus.CREATED)
@@ -169,8 +169,8 @@ class MatchResourceTest {
         matchType = MatchType.EXACT_MATCH,
         countOfReturnedUlns = "1",
         matchingUln = "1234567890",
-        givenName = "John",
-        familyName = "Smith",
+        givenName = "Sample",
+        familyName = "Tester",
       ),
     )
     assertThat(actual.statusCode).isEqualTo(HttpStatus.CONFLICT)

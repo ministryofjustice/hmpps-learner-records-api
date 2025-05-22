@@ -57,7 +57,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
       fun `should return all data if prisoner exists and no timeframe is specified`() {
         val entitiesToSave = listOf(
           MatchEntity(null, "A12345", "765", "Jon", "Test", "EXACT_MATCH", "1", "", null),
-          MatchEntity(null, "A12345", "3213", "John", "Test", "EXACT_MATCH", "1", "", null),
+          MatchEntity(null, "A12345", "3213", "Sample", "Test", "EXACT_MATCH", "1", "", null),
           MatchEntity(null, "B54321", "3213", "Someone", "Else", "EXACT_MATCH", "1", "", null),
         )
 
@@ -111,7 +111,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             null,
             "A12345",
             "3213",
-            "John",
+            "Sample",
             "Test",
             "EXACT_MATCH",
             "1",
@@ -179,7 +179,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             null,
             "A12345",
             "3213",
-            "John",
+            "Sample",
             "Test",
             "EXACT_MATCH",
             "1",
@@ -197,7 +197,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
           .expectBody()
           .jsonPath("$.content").isArray
           .jsonPath("$.content[0].givenName").isEqualTo("Jonathan")
-          .jsonPath("$.content[1].givenName").isEqualTo("John")
+          .jsonPath("$.content[1].givenName").isEqualTo("Sample")
           .jsonPath("$.content[2]").doesNotExist()
       }
 
@@ -226,7 +226,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
             null,
             "A12345",
             "3213",
-            "John",
+            "Sample",
             "Test",
             "EXACT_MATCH",
             "1",
@@ -255,7 +255,7 @@ class SubjectAccessRequestIntegrationTest : IntegrationTestBase() {
           .expectBody()
           .jsonPath("$.content").isArray
           .jsonPath("$.content[0].givenName").isEqualTo("Jonathan")
-          .jsonPath("$.content[1].givenName").isEqualTo("John")
+          .jsonPath("$.content[1].givenName").isEqualTo("Sample")
           .jsonPath("$.content[2]").doesNotExist()
       }
     }
