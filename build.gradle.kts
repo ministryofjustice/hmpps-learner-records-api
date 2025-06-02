@@ -16,7 +16,7 @@ dependencies {
   implementation("com.google.code.gson:gson")
   implementation("com.squareup.okhttp3:okhttp")
   implementation("javax.xml.bind:jaxb-api:2.3.1")
-  implementation("org.glassfish.jaxb:jaxb-runtime")
+  implementation("org.glassfish.jaxb:jaxb-runtime:2.3.5")
   implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
   implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:5.4.5")
 
