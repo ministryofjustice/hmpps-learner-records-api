@@ -8,7 +8,9 @@ configurations {
 }
 
 dependencies {
-  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.4.10")
+  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.4.10") {
+    implementation("org.apache.commons:commons-compress:1.27.1")
+  }
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8")
   implementation("com.squareup.retrofit2:retrofit:2.11.0")
