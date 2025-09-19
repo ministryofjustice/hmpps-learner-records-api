@@ -1,6 +1,6 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "9.0.1"
-  kotlin("plugin.spring") version "2.2.10"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "9.0.2"
+  kotlin("plugin.spring") version "2.2.20"
 }
 
 configurations {
@@ -8,7 +8,7 @@ configurations {
 }
 
 dependencies {
-  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.6.0") {
+  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.7.0") {
     implementation("org.apache.commons:commons-compress:1.27.1")
   }
   implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -20,7 +20,7 @@ dependencies {
   implementation("javax.xml.bind:jaxb-api:2.3.1")
   implementation("org.glassfish.jaxb:jaxb-runtime:2.3.5")
   implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:5.4.10")
+  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:5.4.11")
 
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   runtimeOnly("org.flywaydb:flyway-database-postgresql")
@@ -28,7 +28,7 @@ dependencies {
   implementation("com.h2database:h2")
   testImplementation("com.h2database:h2")
 
-  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:1.6.0")
+  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:1.7.0")
   testImplementation("org.wiremock:wiremock-standalone:3.13.0")
   testImplementation("io.swagger.parser.v3:swagger-parser:2.1.29") {
     exclude(group = "io.swagger.core.v3")
