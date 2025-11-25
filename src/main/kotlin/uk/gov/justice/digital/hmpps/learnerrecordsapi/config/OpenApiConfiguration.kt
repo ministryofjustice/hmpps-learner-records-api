@@ -19,7 +19,8 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
   fun customOpenAPI(): OpenAPI = OpenAPI()
     .servers(
       listOf(
-        Server().url("https://learner-records-api-dev.hmpps.service.justice.gov.uk").description("Development"),
+        Server().url("https://learner-records-api-dev.hmpps.service.justice.gov.uk")
+          .description("Development"),
         Server().url("https://learner-records-api-preprod.hmpps.service.justice.gov.uk")
           .description("Pre-Production"),
         Server().url("https://learner-records-api.hmpps.service.justice.gov.uk").description("Production"),
