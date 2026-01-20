@@ -1,4 +1,9 @@
 # hmpps-learner-records-api
+[![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/hmpps-learner-records-api/badge?style=flat)](https://github-community.service.justice.gov.uk/repository-standards/hmpps-learner-records-api)
+[![Docker Repository on ghcr](https://img.shields.io/badge/ghcr.io-repository-2496ED.svg?logo=docker)](https://ghcr.io/ministryofjustice/hmpps-learner-records-api)
+[![API docs](https://img.shields.io/badge/API_docs_-view-85EA2D.svg?logo=swagger)](https://learner-records-api-dev.hmpps.service.justice.gov.uk/swagger-ui/index.html)
+[![Pipeline [test -> build -> deploy]](https://github.com/ministryofjustice/hmpps-learner-records-api/actions/workflows/pipeline.yml/badge.svg?branch=main)](https://github.com/ministryofjustice/hmpps-learner-records-api/actions/workflows/pipeline.yml)
+
 The hmpps-learner-records-api retrieves Unique Learner Number (ULN) and Personal Learning Record (PLR) for matching
 individuals from the Learning Records Service (LRS) data held by the Education and Skills Funding Agency (EFSA) at Department
 for Education (DfE), and stores match data in a database for downstream use.
