@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -20,6 +19,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import software.amazon.awssdk.services.sqs.model.PurgeQueueRequest
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
+import tools.jackson.databind.json.JsonMapper
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.AuditEvent.MATCH_LE
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
@@ -56,7 +56,7 @@ class MockitoSpyConfig {
 class MatchResourceIntTest : IntegrationTestBase() {
 
   @Autowired
-  protected lateinit var objectMapper: ObjectMapper
+  protected lateinit var jsonMapper: JsonMapper
 
   @Autowired
   lateinit var matchRepository: MatchRepository
@@ -95,7 +95,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
         .exchange()
         .expectStatus()
 
-      val checkMatchResponse = objectMapper.readValue(
+      val checkMatchResponse = jsonMapper.readValue(
         executedRequest
           .isEqualTo(expectedResponseStatus)
           .expectBody()
@@ -209,7 +209,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
   @Test
   fun `POST to confirm match should return 400 if ULN is malformed`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890abcdef")
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       postMatch(nomisId, uln, 400).expectBody().returnResult().responseBody,
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
@@ -230,7 +230,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
   fun `POST to confirm match should return 500 if match service fails to save`() {
     val (nomisId, uln) = arrayOf("A1417AE", "1234567890")
     doThrow(RuntimeException("Database error")).`when`(matchService).saveMatch(any(), any())
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       postMatch(nomisId, uln, 500).expectBody().returnResult().responseBody,
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
@@ -283,7 +283,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
       .returnResult()
       .responseBody
 
-    val receivedEvent = objectMapper.readValue(
+    val receivedEvent = jsonMapper.readValue(
       auditSqsClient.receiveMessage(
         ReceiveMessageRequest.builder().queueUrl(auditQueueUrl).build(),
       ).get().messages()[0].body(),
@@ -347,7 +347,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
       ),
     )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.get()
         .uri("/match/{nomisId}/learner-events", "123456")
         .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
@@ -374,7 +374,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
       moreInfo = "Individual with this NomisId has not been matched to a ULN yet",
     )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.get()
         .uri("/match/{nomisId}/learner-events", "123456")
         .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
@@ -414,7 +414,7 @@ class MatchResourceIntTest : IntegrationTestBase() {
       ),
     )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.get()
         .uri("/match/{nomisId}/learner-events", "456789")
         .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))

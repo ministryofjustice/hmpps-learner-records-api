@@ -1,12 +1,12 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import tools.jackson.databind.json.JsonMapper
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
@@ -22,7 +22,7 @@ import uk.gov.justice.hmpps.sqs.MissingQueueException
 class LearnerEventsResourceIntTest : IntegrationTestBase() {
 
   @Autowired
-  lateinit var objectMapper: ObjectMapper
+  lateinit var jsonMapper: JsonMapper
 
   @Autowired
   protected lateinit var hmppsQueueService: HmppsQueueService
@@ -44,7 +44,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     fun `should return 500 with an appropriate error response if LRS returns an InternalServerError`() {
       lrsApiMock.stubPostServerError()
 
-      val actualResponse = objectMapper.readValue(
+      val actualResponse = jsonMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
           .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
@@ -94,7 +94,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         ),
       )
 
-      val actualResponse = objectMapper.readValue(
+      val actualResponse = jsonMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
           .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
@@ -148,7 +148,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         ),
       )
 
-      val actualResponse = objectMapper.readValue(
+      val actualResponse = jsonMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
           .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
@@ -179,7 +179,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         emptyList(),
       )
 
-      val actualResponse = objectMapper.readValue(
+      val actualResponse = jsonMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
           .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
@@ -210,7 +210,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
         emptyList(),
       )
 
-      val actualResponse = objectMapper.readValue(
+      val actualResponse = jsonMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
           .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
@@ -233,7 +233,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
     fun `should return 400 with an appropriate error response if X-Username header is missing`() {
       lrsApiMock.stubLearningEventsExactMatchFull()
 
-      val actualResponse = objectMapper.readValue(
+      val actualResponse = jsonMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
           .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
@@ -261,7 +261,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       extendedRequestBody["uln"] = "1174112637"
       extendedRequestBody["unknownValue"] = "1234"
 
-      val actualResponse = objectMapper.readValue(
+      val actualResponse = jsonMapper.readValue(
         webTestClient.post()
           .uri("/learner-events")
           .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_UI)))
@@ -278,7 +278,7 @@ class LearnerEventsResourceIntTest : IntegrationTestBase() {
       )
 
       val actualResponseString = actualResponse?.toString()
-      assertThat(actualResponseString).contains("Unrecognized field \"unknownValue\"")
+      assertThat(actualResponseString).contains("Unrecognized property \"unknownValue\"")
     }
   }
 

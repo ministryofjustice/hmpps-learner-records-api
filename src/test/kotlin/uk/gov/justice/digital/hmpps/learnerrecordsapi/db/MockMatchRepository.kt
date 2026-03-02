@@ -30,19 +30,19 @@ class MockMatchRepository(val entities: List<MatchEntity>) : MatchRepository {
     TODO("Not yet implemented")
   }
 
-  override fun <S : MatchEntity?> save(entity: S): S {
+  override fun <S : MatchEntity> save(entity: S): S {
     TODO("Not yet implemented")
   }
 
-  override fun <S : MatchEntity?> saveAll(entities: MutableIterable<S>): MutableList<S> {
+  override fun <S : MatchEntity> saveAll(entities: MutableIterable<S>): MutableList<S> {
     TODO("Not yet implemented")
   }
 
-  override fun <S : MatchEntity?> findAll(example: Example<S>): MutableList<S> {
+  override fun <S : MatchEntity> findAll(example: Example<S>): MutableList<S> {
     TODO("Not yet implemented")
   }
 
-  override fun <S : MatchEntity?> findAll(example: Example<S>, sort: Sort): MutableList<S> {
+  override fun <S : MatchEntity> findAll(example: Example<S>, sort: Sort): MutableList<S> {
     TODO("Not yet implemented")
   }
 
@@ -58,7 +58,7 @@ class MockMatchRepository(val entities: List<MatchEntity>) : MatchRepository {
     TODO("Not yet implemented")
   }
 
-  override fun <S : MatchEntity?> findAll(example: Example<S>, pageable: Pageable): Page<S> {
+  override fun <S : MatchEntity> findAll(example: Example<S>, pageable: Pageable): Page<S> {
     TODO("Not yet implemented")
   }
 
@@ -70,7 +70,7 @@ class MockMatchRepository(val entities: List<MatchEntity>) : MatchRepository {
     TODO("Not yet implemented")
   }
 
-  override fun <S : MatchEntity?> count(example: Example<S>): Long {
+  override fun <S : MatchEntity> count(example: Example<S>): Long {
     TODO("Not yet implemented")
   }
 
@@ -90,15 +90,15 @@ class MockMatchRepository(val entities: List<MatchEntity>) : MatchRepository {
     TODO("Not yet implemented")
   }
 
-  override fun <S : MatchEntity?> findOne(example: Example<S>): Optional<S> {
+  override fun <S : MatchEntity> findOne(example: Example<S>): Optional<S> {
     TODO("Not yet implemented")
   }
 
-  override fun <S : MatchEntity?> exists(example: Example<S>): Boolean {
+  override fun <S : MatchEntity> exists(example: Example<S>): Boolean {
     TODO("Not yet implemented")
   }
 
-  override fun <S : MatchEntity?, R : Any?> findBy(
+  override fun <S : MatchEntity, R : Any?> findBy(
     example: Example<S>,
     queryFunction: Function<FluentQuery.FetchableFluentQuery<S>, R>,
   ): R {
@@ -109,11 +109,11 @@ class MockMatchRepository(val entities: List<MatchEntity>) : MatchRepository {
     TODO("Not yet implemented")
   }
 
-  override fun <S : MatchEntity?> saveAndFlush(entity: S): S {
+  override fun <S : MatchEntity> saveAndFlush(entity: S): S {
     TODO("Not yet implemented")
   }
 
-  override fun <S : MatchEntity?> saveAllAndFlush(entities: MutableIterable<S>): MutableList<S> {
+  override fun <S : MatchEntity> saveAllAndFlush(entities: MutableIterable<S>): MutableList<S> {
     TODO("Not yet implemented")
   }
 
@@ -133,10 +133,12 @@ class MockMatchRepository(val entities: List<MatchEntity>) : MatchRepository {
     TODO("Not yet implemented")
   }
 
+  @Deprecated("Deprecated in Java")
   override fun getById(id: Long): MatchEntity {
     TODO("Not yet implemented")
   }
 
+  @Deprecated("Deprecated in Java")
   override fun getOne(id: Long): MatchEntity {
     TODO("Not yet implemented")
   }
