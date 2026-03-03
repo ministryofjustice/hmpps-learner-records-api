@@ -1,21 +1,24 @@
-package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
+package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase
+import tools.jackson.databind.json.JsonMapper
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.Gender
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest
 
-// Tests that HmppsBoldLrsExceptionHandler works as expected when actually calling our endpoints.
-
+/**
+ * Tests that HmppsBoldLrsExceptionHandler works as expected when actually calling our endpoints.
+ */
 class ValidationTest : IntegrationTestBase() {
 
   @Autowired
-  lateinit var objectMapper: ObjectMapper
+  lateinit var jsonMapper: JsonMapper
 
   @Test
   fun `learners endpoint should return validation errors when user postcode is invalid`() {
@@ -28,7 +31,7 @@ class ValidationTest : IntegrationTestBase() {
     )
 
     val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
+      LearnersRequest(
         "Sample",
         "Testname",
         "2024-01-01",
@@ -40,10 +43,10 @@ class ValidationTest : IntegrationTestBase() {
         "test_email@test.com",
       )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -56,7 +59,7 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -70,7 +73,7 @@ class ValidationTest : IntegrationTestBase() {
     )
 
     val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
+      LearnersRequest(
         "SampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSample",
         "Testname",
         "2024-01-01",
@@ -82,10 +85,10 @@ class ValidationTest : IntegrationTestBase() {
         "test_email@test.com",
       )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -98,7 +101,7 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -112,7 +115,7 @@ class ValidationTest : IntegrationTestBase() {
     )
 
     val learnerEventsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest(
+      LearnerEventsRequest(
         "SampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSampleSample",
         "Testname",
         "1234567890",
@@ -120,10 +123,10 @@ class ValidationTest : IntegrationTestBase() {
         Gender.MALE,
       )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(learnerEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -136,7 +139,7 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -149,7 +152,7 @@ class ValidationTest : IntegrationTestBase() {
       "Validation(s) failed for [familyName] with reason(s): [must match \"^[A-Za-z' ,.-]{3,35}\$\"]",
     )
     val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
+      LearnersRequest(
         "Sample",
         "TestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestname",
         "2024-01-01",
@@ -161,10 +164,10 @@ class ValidationTest : IntegrationTestBase() {
         "test_email@test.com",
       )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -177,7 +180,7 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -190,7 +193,7 @@ class ValidationTest : IntegrationTestBase() {
       "Validation(s) failed for [previousFamilyName] with reason(s): [must match \"^[A-Za-z' ,.-]{3,35}\$\"]",
     )
     val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
+      LearnersRequest(
         "Sample",
         "Testname",
         "2024-01-01",
@@ -202,10 +205,10 @@ class ValidationTest : IntegrationTestBase() {
         "test_email@test.com",
       )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -218,7 +221,7 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -231,7 +234,7 @@ class ValidationTest : IntegrationTestBase() {
       "Validation(s) failed for [emailAddress] with reason(s): [must match \"^[A-Za-z0-9._'%+-]{1,64}@(?:(?=[A-Za-z0-9-]{1,63}\\.)[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\.){1,8}[A-Za-z]{2,63}\$\"]",
     )
     val findLearnerByDemographicsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest(
+      LearnersRequest(
         "Sample",
         "Testname",
         "2024-01-01",
@@ -243,10 +246,10 @@ class ValidationTest : IntegrationTestBase() {
         "test_email@@test.com",
       )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(findLearnerByDemographicsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -259,7 +262,7 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -272,7 +275,7 @@ class ValidationTest : IntegrationTestBase() {
       "Validation(s) failed for [familyName] with reason(s): [must match \"^[A-Za-z' ,.-]{3,35}\$\"]",
     )
     val learnerEventsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest(
+      LearnerEventsRequest(
         "Sample",
         "TestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestnameTestname",
         "1234567890",
@@ -280,10 +283,10 @@ class ValidationTest : IntegrationTestBase() {
         Gender.MALE,
       )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(learnerEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -296,7 +299,7 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -309,7 +312,7 @@ class ValidationTest : IntegrationTestBase() {
       "Validation(s) failed for [uln] with reason(s): [must match \"^[0-9]{1,10}\$\"]",
     )
     val learnerEventsRequest =
-      uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest(
+      LearnerEventsRequest(
         "Sample",
         "Testname",
         "12345678901234567890",
@@ -317,10 +320,10 @@ class ValidationTest : IntegrationTestBase() {
         Gender.MALE,
       )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .bodyValue(learnerEventsRequest)
         .accept(MediaType.parseMediaType("application/json"))
@@ -333,7 +336,7 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -354,10 +357,10 @@ class ValidationTest : IntegrationTestBase() {
         "gender": "TESTINGENUM",
         "postcode": "CV49EE"
         }"""
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(findLearnerByDemographicsRequest)
@@ -370,7 +373,7 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -391,10 +394,10 @@ class ValidationTest : IntegrationTestBase() {
         "gender": "TESTINGENUM",
         "uln": "1234567890"
         }"""
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser").contentType(MediaType.APPLICATION_JSON)
         .bodyValue(findLearnerByDemographicsRequest)
         .exchange()
@@ -406,7 +409,7 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -415,10 +418,9 @@ class ValidationTest : IntegrationTestBase() {
       HttpStatus.BAD_REQUEST,
       "Unreadable HTTP message",
       "Unreadable HTTP message",
-      "JSON parse error: Instantiation of " +
-        "[simple type, class uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest] " +
-        "value failed for JSON property givenName due to missing (therefore NULL) value " +
-        "for creator parameter givenName which is a non-nullable type",
+      """
+        JSON parse error: Cannot construct instance of `uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest`, problem: Parameter specified as non-null is null: method uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnersRequest.<init>, parameter givenName
+      """.trimIndent(),
       "Unreadable HTTP message",
     )
 
@@ -431,10 +433,10 @@ class ValidationTest : IntegrationTestBase() {
       }
     """
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learners")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(requestJsonWithoutGivenName)
@@ -448,7 +450,7 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -457,11 +459,11 @@ class ValidationTest : IntegrationTestBase() {
       HttpStatus.BAD_REQUEST,
       "Unreadable HTTP message",
       "Unreadable HTTP message",
-      "JSON parse error: Instantiation of " +
-        "[simple type, class uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest] " +
-        "value failed for JSON property givenName due to missing (therefore NULL) value " +
-        "for creator parameter givenName which is a non-nullable type",
+      """
+        JSON parse error: Cannot construct instance of `uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest`, problem: Parameter specified as non-null is null: method uk.gov.justice.digital.hmpps.learnerrecordsapi.models.request.LearnerEventsRequest.<init>, parameter givenName
+      """.trimIndent(),
       "Unreadable HTTP message",
+      //
     )
 
     val requestJsonWithoutGivenName = """
@@ -473,10 +475,10 @@ class ValidationTest : IntegrationTestBase() {
       }
     """
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/learner-events")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .header("X-Username", "TestUser")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(requestJsonWithoutGivenName)
@@ -490,6 +492,6 @@ class ValidationTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 }

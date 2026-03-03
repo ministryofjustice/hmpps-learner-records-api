@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit
 
 @RestController
 class TestExceptionResource(
-  @Autowired
+  @field:Autowired
   private val httpClientConfiguration: HttpClientConfiguration,
 ) {
 

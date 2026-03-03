@@ -18,9 +18,9 @@ import kotlin.reflect.full.declaredMemberProperties
 
 @Service
 class LearnersService(
-  @Autowired
+  @param:Autowired
   private val httpClientConfiguration: HttpClientConfiguration,
-  @Autowired
+  @param:Autowired
   private val lrsConfiguration: LRSConfiguration,
 ) : BaseService() {
 
@@ -67,7 +67,7 @@ class LearnersService(
         val neitherAreNull = (learnerValue != null && requestValue != null)
         if (requestValue.orEmpty().trim().lowercase() != learnerValue.orEmpty().trim().lowercase() && neitherAreNull) {
           mismatchedFields.computeIfAbsent(fieldName) { mutableListOf() }
-            .add(learnerValue.orEmpty())
+            .add(learnerValue)
         }
       }
     }

@@ -205,7 +205,7 @@ class MatchResourceTest {
 }
 
 fun CheckMatchResponse.setStatus() = this.copy(
-  status = if (this.matchedUln.isNullOrEmpty() || this.matchedUln!!.isBlank()) {
+  status = if (this.matchedUln.isNullOrEmpty() || this.matchedUln.isBlank()) {
     CheckMatchStatus.NoMatch
   } else {
     CheckMatchStatus.Found

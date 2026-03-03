@@ -44,7 +44,7 @@ data class LearnersRequest(
   fun extractFromRequest(): LearnersLRSRequest = LearnersLRSRequest(
     givenName = givenName,
     familyName = familyName,
-    dateOfBirth = dateOfBirth?.let { LocalDate.parse(it) },
+    dateOfBirth = LocalDate.parse(dateOfBirth),
     gender = gender.code,
     lastKnownPostCode = lastKnownPostCode,
     previousFamilyName = previousFamilyName,

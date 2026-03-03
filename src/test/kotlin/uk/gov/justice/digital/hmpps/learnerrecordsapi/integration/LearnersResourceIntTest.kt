@@ -1,12 +1,12 @@
 package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import tools.jackson.databind.json.JsonMapper
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_UI
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.wiremock.LRSApiExtension.Companion.lrsApiMock
@@ -19,7 +19,7 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnersRe
 class LearnersResourceIntTest : IntegrationTestBase() {
 
   @Autowired
-  protected lateinit var objectMapper: ObjectMapper
+  protected lateinit var jsonMapper: JsonMapper
 
   @Nested
   @DisplayName("POST /learners")
@@ -53,7 +53,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
 
       return when (expectedStatus) {
         200 ->
-          objectMapper.readValue(
+          jsonMapper.readValue(
             executedRequest
               .isOk
               .expectBody()
@@ -63,7 +63,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
           )
 
         500 ->
-          objectMapper.readValue(
+          jsonMapper.readValue(
             executedRequest
               .is5xxServerError
               .expectBody()
@@ -326,7 +326,7 @@ class LearnersResourceIntTest : IntegrationTestBase() {
         .responseBody
 
       val actualResponseString = executedRequest?.toString(Charsets.UTF_8)
-      assertThat(actualResponseString).contains("Unrecognized field \\\"unknownValue\\\"")
+      assertThat(actualResponseString).contains("Unrecognized property \\\"unknownValue\\\"")
     }
   }
 }

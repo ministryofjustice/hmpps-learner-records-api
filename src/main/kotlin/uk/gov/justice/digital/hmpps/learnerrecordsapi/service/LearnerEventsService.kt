@@ -16,9 +16,9 @@ import uk.gov.justice.digital.hmpps.learnerrecordsapi.models.response.LearnerEve
 
 @Service
 class LearnerEventsService(
-  @Autowired
+  @param:Autowired
   private val httpClientConfiguration: HttpClientConfiguration,
-  @Autowired
+  @param:Autowired
   private val lrsConfiguration: LRSConfiguration,
 ) : BaseService() {
   private val logger: Logger = LoggerUtil.getLogger<LearnerEventsService>()

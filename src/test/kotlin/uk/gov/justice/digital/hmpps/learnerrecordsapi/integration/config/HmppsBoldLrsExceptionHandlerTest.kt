@@ -1,12 +1,13 @@
-package uk.gov.justice.digital.hmpps.learnerrecordsapi.config
+package uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles.ROLE_LEARNERS_RO
+import tools.jackson.databind.json.JsonMapper
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.HmppsBoldLrsExceptionHandler
+import uk.gov.justice.digital.hmpps.learnerrecordsapi.config.Roles
 import uk.gov.justice.digital.hmpps.learnerrecordsapi.integration.IntegrationTestBase
 import java.time.Duration
 
@@ -16,7 +17,7 @@ import java.time.Duration
 class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
 
   @Autowired
-  lateinit var objectMapper: ObjectMapper
+  lateinit var jsonMapper: JsonMapper
 
   @BeforeEach
   fun setUp() {
@@ -30,10 +31,10 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     expectedResponse: HmppsBoldLrsExceptionHandler.ErrorResponse,
     expectedStatus: HttpStatus,
   ) {
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri(uri)
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .exchange()
         .expectStatus()
         .isEqualTo(expectedStatus)
@@ -43,7 +44,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse).isEqualTo(expectedResponse)
   }
 
   @Test
@@ -64,7 +65,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
     val expectedResponse = HmppsBoldLrsExceptionHandler.ErrorResponse(
       HttpStatus.NOT_FOUND,
       "No Resource Found",
-      "No resource found failure: No static resource someUnknownEndpoint.",
+      "No resource found failure: No static resource someUnknownEndpoint for request '/someUnknownEndpoint'.",
       "Requested Resource not found on the server",
       moreInfo = "Requested Resource not found on the server",
     )
@@ -134,10 +135,10 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       moreInfo = "A request timed out while waiting for a response from an upstream service.",
     )
 
-    val actualResponse = objectMapper.readValue(
+    val actualResponse = jsonMapper.readValue(
       webTestClient.post()
         .uri("/test/okhttp-timeout")
-        .headers(setAuthorisation(roles = listOf(ROLE_LEARNERS_RO)))
+        .headers(setAuthorisation(roles = listOf(Roles.ROLE_LEARNERS_RO)))
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.REQUEST_TIMEOUT)
@@ -147,7 +148,7 @@ class HmppsBoldLrsExceptionHandlerTest : IntegrationTestBase() {
       HmppsBoldLrsExceptionHandler.ErrorResponse::class.java,
     )
 
-    assertThat(actualResponse.copy(developerMessage = "dev message can vary")).isEqualTo(expectedResponse)
+    Assertions.assertThat(actualResponse.copy(developerMessage = "dev message can vary")).isEqualTo(expectedResponse)
   }
 
   @Test
