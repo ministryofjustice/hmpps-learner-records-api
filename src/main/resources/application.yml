@@ -73,5 +73,3 @@ lrs:
   connectTimeout: ${LRS_CONNECT_TIMEOUT:20}
   writeTimeout: ${LRS_WRITE_TIMEOUT:20}
   readTimeout: ${LRS_READ_TIMEOUT:20}
-
-springdoc.swagger-ui.version: 5.32.1
