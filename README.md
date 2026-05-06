@@ -54,7 +54,7 @@ This service is available at:
 
 ### Health
 The application has a health endpoint found at `/health` which indicates if the app is running and is healthy.
-The application has a ping endpoint found at `health/ping` which indicates that the app is responding to requests.
+The application has a ping endpoint found at `/health/ping` which indicates that the app is responding to requests.
 
 ---
 
@@ -479,10 +479,13 @@ In order to make a connection to the LRS Development environment (achieved when 
 
 Reach out to the development team if you don't have this. Once downloaded, add the `WebServiceClientCert.pfx` to the project root directory.
 
-Uncomment this line in the Dockerfile when running locally:
+### Build app before docker
+Run this to create app version for docker builds
+```shell
+BUILD_NUMBER=1_0_0 ./gradlew clean assemble && cp ./build/libs/*.jar .
 ```
-COPY WebServiceClientCert.pfx /app/WebServiceClientCert.pfx
-```
+`WebServiceClientCert.pfx` shall be ready at project root.
+It will be mounted to backend at docker compose.
 
 ### Starting the service
 
@@ -490,17 +493,16 @@ Use the docker compose file to start the services including your chosen profile.
 
 Run:
 ```bash
-docker-compose down
-docker-compose --profile=<local/development> --env-file .env.<dev/local> up --build
+docker compose down
 ```
-
-Local:
+then either:
+- Local:
 ```bash
-docker-compose --profile=local --env-file .env.local up --build
+docker compose --profile=local --env-file .env.local up --build
 ```
-Development:
+- Development:
 ```bash
-docker-compose --profile=development --env-file .env.development up --build
+docker compose --profile=development --env-file .env.development up --build
 ```
 
 ---
@@ -559,3 +561,35 @@ Select the ‘hmpps-learner-records-api.test’ configuration, ensure that `Run`
 Again, right click the `test` package and select `run ‘Tests in ‘hmpps-temp…’ - They should now be running in IntelliJ.
 
 Other steps may be required to enable debugging within IntelliJ.
+
+## Run docker image on local
+
+### Build a local docker image
+1. Build the app jar
+2. Copy jar to project root
+3. Build docker image
+
+```shell
+BUILD_NUMBER=1_0_0 ./gradlew clean assemble && cp ./build/libs/*.jar .
+```
+```shell
+BUILD_NUMBER=1_0_0 docker build --build-arg BUILD_NUMBER=$BUILD_NUMBER . -t "hmpps-learner-records-api:local"
+```
+
+### Run a local docker image
+* In `.env.docker` (with `dev` profile)
+    ```dotenv
+    UK_PRN=...
+    ORG_PASSWORD=...
+    VENDOR_ID=...
+    PFX_FILE_PASSWORD=...
+    SPRING_PROFILES_ACTIVE=dev
+    # `host.docker.internal` (instead of `localhost`) for connecting the container to host 
+    HMPPS_SQS_LOCALSTACKURL=http://host.docker.internal:4566
+    LRS_PFX_PATH=/certs/WebServiceClientCert.pfx
+    ```
+
+then run this
+```shell
+docker run --name hmpps-learner-records-api-app --env-file .env.docker -p 8080:8080 -v "./WebServiceClientCert.pfx:/certs/WebServiceClientCert.pfx" -d "hmpps-learner-records-api:local"
+```
