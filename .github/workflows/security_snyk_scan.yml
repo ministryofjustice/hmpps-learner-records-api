@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '27 5 * * 1-5' # every weekday at 5:27 AM
+
 jobs:
   security-snyk-check:
     permissions:
