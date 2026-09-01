@@ -54,7 +54,7 @@ interface MatchRepository : JpaRepository<MatchEntity, Long> {
             THEN TRUE
             ELSE FALSE
             END
-      """
+      """,
   )
   fun existsMatchWithDifferentId(@Param("nomisId") nomisId: String, @Param("uln") uln: String): Boolean
 }
