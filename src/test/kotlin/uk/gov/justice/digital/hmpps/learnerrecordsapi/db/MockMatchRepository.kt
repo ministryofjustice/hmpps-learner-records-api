@@ -25,9 +25,9 @@ class MockMatchRepository(val entities: List<MatchEntity>) : MatchRepository {
   override fun existsMatchWithDifferentId(nomisId: String, uln: String): Boolean = entities
     .map { it.nomisId }
     .filter { it != nomisId }
-    .any { id ->
+    .any { otherNomisId ->
       entities
-        .filter { it.nomisId == id }
+        .filter { it.nomisId == otherNomisId }
         .maxByOrNull { it.id!! }
         ?.matchedUln == uln
     }
