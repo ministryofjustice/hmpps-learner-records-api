@@ -36,7 +36,7 @@ dependencies {
   testImplementation("org.testcontainers:testcontainers-localstack")
   testImplementation("org.awaitility:awaitility-kotlin")
   testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
-  testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+  testImplementation("com.squareup.okhttp3:mockwebserver:5.5.0")
 }
 
 kotlin {
