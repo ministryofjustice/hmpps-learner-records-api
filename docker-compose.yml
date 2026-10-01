@@ -55,7 +55,7 @@ services:
       - PFX_FILE_PASSWORD=${PFX_FILE_PASSWORD}
 
   localstack:
-    image: localstack/localstack:3
+    image: localstack/localstack:4
     profiles:
       - local
       - development
