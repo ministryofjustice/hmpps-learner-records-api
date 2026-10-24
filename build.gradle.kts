@@ -1,6 +1,6 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.10"
-  kotlin("plugin.spring") version "2.4.20"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.13"
+  kotlin("plugin.spring") version "2.4.21"
 }
 
 configurations {
@@ -11,14 +11,14 @@ dependencies {
   implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.3")
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springframework.boot:spring-boot-starter-flyway")
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0")
   implementation("com.squareup.retrofit2:retrofit:2.12.0")
   implementation("com.squareup.retrofit2:converter-jaxb:2.12.0")
   implementation("com.google.code.gson:gson")
   implementation("com.squareup.okhttp3:okhttp")
   implementation("javax.xml.bind:jaxb-api:2.3.1")
   implementation("org.glassfish.jaxb:jaxb-runtime:2.3.9")
-  implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+  implementation("com.squareup.okhttp3:logging-interceptor:4.12.1")
   implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.4.1")
 
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -36,7 +36,7 @@ dependencies {
   testImplementation("org.testcontainers:testcontainers-localstack")
   testImplementation("org.awaitility:awaitility-kotlin")
   testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
-  testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+  testImplementation("com.squareup.okhttp3:mockwebserver:4.12.1")
 }
 
 kotlin {
