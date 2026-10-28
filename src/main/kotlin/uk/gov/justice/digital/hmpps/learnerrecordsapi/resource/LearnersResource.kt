@@ -34,7 +34,7 @@ class LearnersResource(
     @RequestBody @Valid findLearnerByDemographicsRequest: LearnersRequest,
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<LearnersResponse> {
-    logger.log("Received a post request to learners endpoint", findLearnerByDemographicsRequest)
+    logger.log("Received a post request to learners endpoint")
     val learnersResponse = learnersService.getLearners(findLearnerByDemographicsRequest, userName)
     return ResponseEntity.status(HttpStatus.OK).body(learnersResponse)
   }

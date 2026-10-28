@@ -34,7 +34,7 @@ class LearnerEventsResource(
     @RequestBody @Valid learnerEventsRequest: LearnerEventsRequest,
     @RequestHeader("X-Username", required = true) userName: String,
   ): ResponseEntity<LearnerEventsResponse> {
-    logger.log("Received a post request to learner events endpoint", learnerEventsRequest)
+    logger.log("Received a post request to learner events endpoint")
     val learnerEventsResponse = learnerEventsService.getLearningEvents(learnerEventsRequest, userName)
     return ResponseEntity.status(HttpStatus.OK).body(learnerEventsResponse)
   }
